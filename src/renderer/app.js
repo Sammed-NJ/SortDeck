@@ -58,7 +58,7 @@ function chipInput(values, placeholder, onChange, { split = /[,;\s]+/, normalize
   const wrap = h('div', { class: 'chips', onclick: () => input.focus() });
   const draw = (focus) => {
     wrap.replaceChildren(...list.map((v, i) => h('span', { class: 'chip' }, v,
-      h('button', { type: 'button', class: 'chip-x', title: `Remove ${v}`, 'aria-label': `Remove ${v}`, onclick: (e) => { e.stopPropagation(); list.splice(i, 1); draw(); onChange([...list]); } }, '×'))), input);
+      h('button', { type: 'button', class: 'chip-x', title: `Remove ${v}`, 'aria-label': `Remove ${v}`, onclick: (e) => { e.stopPropagation(); list.splice(i, 1); draw(); onChange([...list]); } }, icon('x-mark')))), input);
     if (focus) input.focus();
   };
   const commit = (focus) => {

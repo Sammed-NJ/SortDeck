@@ -19,7 +19,8 @@ Rules for anyone changing SortDeck - people and AI agents alike. Break one only 
 8. `src/main/engine.js` and `src/main/config.js` must **not** import Electron.
 9. All renderer input is re-validated in main (`buildConfig`, `validateRule`, `isAllowedPath`).
 10. Renderer DOM is built with `h()` and text nodes. **No `innerHTML` with data.**
-11. Keep the CSP strict: no inline scripts, no remote resources.
+11. Keep the CSP strict: no inline scripts, no remote resources. Icons come from Heroicons, copied into
+    `src/renderer/icons.js`, never from a CDN.
 12. No framework, no bundler, no new runtime dependencies without a decision entry.
 13. Keep files under **500 lines**. Split by feature (as with `folders.js` / `rules.js`), not by layer.
 14. Match the surrounding style:

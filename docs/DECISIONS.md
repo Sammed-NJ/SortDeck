@@ -138,3 +138,11 @@ consequences*. Never rewrite an accepted entry; supersede it with a new one.
   - The update check and website read the version from the tag, or from the beta release's title.
 - **Consequences:** The download link always resolves to a real file. There is no per-beta history on GitHub; the
   CHANGELOG is the history.
+
+### D18 - Heroicons, stored locally · 2026-10-19 · Accepted
+- **Context:** Icons were hand-drawn SVG paths of mixed style. The owner wants Heroicons, without a CDN.
+- **Decision:** Copy the needed SVGs from the official `heroicons` npm package (v2.2.0, 24px outline, MIT) into
+  `src/renderer/icons.js`, with the licence notice. No runtime dependency and no network.
+- **Consequences:**
+  - Consistent icons that work offline, and the CSP stays `'self'`.
+  - New icons are added by copying their SVG into `ICONS`.

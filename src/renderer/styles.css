@@ -243,6 +243,8 @@ input[type="text"], input[type="number"], input[type="time"], .cat-name {
   background: transparent; color: var(--muted); cursor: pointer; font-size: 14px; line-height: 1;
 }
 .chip-x:hover { background: var(--hover); color: var(--text); }
+.chip-x { display: inline-grid; place-items: center; }
+.ico, .ico svg { display: inline-block; width: 12px; height: 12px; }
 .chip-input { flex: 1; min-width: 120px; height: 24px; border: 0; outline: 0; background: transparent; color: var(--text); font: inherit; user-select: text; }
 
 /* settings */

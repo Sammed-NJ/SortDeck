@@ -9,8 +9,7 @@ const SUGGEST = {
   documents: ['Documents', 'File documents with your own rules', false],
   pictures: ['Pictures', 'Group photos and screenshots', false],
 };
-const ICON_FOLDER = '<svg viewBox="0 0 24 24"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h4l2 2h7A2.5 2.5 0 0 1 21 8.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/></svg>';
-function folderIcon() { const s = h('span', { class: 'ficon' }); s.innerHTML = ICON_FOLDER; return s; } // constant markup
+const folderIcon = () => icon('folder', 'ficon');
 
 // ---------- welcome ----------
 let suggestionsDrawn = false;
@@ -61,7 +60,7 @@ function openAddDialog(p, sortByType) {
       toast(choice === 'setup' ? `${baseName(p)} added - nothing moves until you choose when to organize.` : `Now organizing ${baseName(p)}.`);
     }
   } },
-    h('header', {}, h('h1', {}, `Add ${baseName(p)}`), h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Close', onclick: () => d.close() }, '×')),
+    h('header', {}, h('h1', {}, `Add ${baseName(p)}`), iconBtn('x', 'Close', () => d.close())),
     h('div', { class: 'dlg-body' },
       h('p', { class: 'path' }, p),
       h('div', { class: 'choices' }, card('setup'), card('quick'))),

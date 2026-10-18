@@ -60,6 +60,8 @@ itself, and never surprises the user by moving files.
   - chip inputs for extensions (Enter / comma / space commits, Backspace removes)
   - radio "choice" cards
   - icon buttons with `title` and `aria-label`
+- **Icons:** [Heroicons](https://heroicons.com) v2.2.0, 24px outline, stored locally in `src/renderer/icons.js` (MIT,
+  Tailwind Labs). Never load icons from a CDN. To add one, copy its SVG from the `heroicons` package into `ICONS`.
 - **Status dot:** green = organizing, amber = paused, grey = no folders on.
 
 ## Copy rules

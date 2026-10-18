@@ -3,6 +3,12 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
+## [0.1.0-beta.9] - 2026-10-19
+
+### Changed
+- All icons are now [Heroicons](https://heroicons.com) (outline), stored inside the app, so nothing loads from the
+  internet. The sidebar, the title-bar ? button, folder cards, rule arrows, delete and close buttons are covered.
+
 ## [0.1.0-beta.8] - 2026-10-19
 
 ### Added
@@ -106,7 +112,8 @@ First public beta.
 - Overview with status, per-folder counts and recent activity.
 - Light and dark theme following Windows.
 
-[0.1.0-beta.8]: https://github.com/Sammed-NJ/SortDeck/releases/tag/beta
+[0.1.0-beta.9]: https://github.com/Sammed-NJ/SortDeck/releases/tag/beta
+[0.1.0-beta.8]: https://github.com/Sammed-NJ/SortDeck/blob/master/CHANGELOG.md
 [0.1.0-beta.7]: https://github.com/Sammed-NJ/SortDeck/blob/master/CHANGELOG.md
 [0.1.0-beta.6]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.6
 [0.1.0-beta.5]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.5
