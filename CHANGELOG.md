@@ -3,10 +3,14 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
-## [Unreleased]
+## [0.1.0-beta.6] - 2026-10-19
+
+### Added
+- Releases now build automatically: pushing a version tag builds the installer on GitHub and publishes the release
+  with the .exe attached, so **Download** always gets a file.
 
 ### Changed
-- Shorter installer names: `SortDeck-Setup-beta.5.exe` for betas, `SortDeck-Setup-v1.0.0.exe` for official releases
+- Shorter installer names: `SortDeck-Setup-beta.6.exe` for betas, `SortDeck-Setup-v1.0.0.exe` for official releases
   (`npm run dist` runs `scripts/dist.js`).
 
 ## [0.1.0-beta.5] - 2026-10-19
@@ -82,6 +86,7 @@ First public beta.
 - Overview with status, per-folder counts and recent activity.
 - Light and dark theme following Windows.
 
+[0.1.0-beta.6]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.6
 [0.1.0-beta.5]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.5
 [0.1.0-beta.4]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.4
 [0.1.0-beta.3]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.3

@@ -1,0 +1,63 @@
+# Push a tag like v0.1.0-beta.6 or v1.0.0 -> builds the Windows installer and publishes the
+# GitHub release with SortDeck-Setup-*.exe attached. Notes come from that version's CHANGELOG section.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to (re)build, e.g. v0.1.0-beta.6
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run dist
+
+      - name: Release notes from CHANGELOG
+        shell: bash
+        run: |
+          version="${TAG#v}"
+          awk -v v="$version" '
+            /^## \[/ { if (on) exit; if (index($0, "[" v "]")) { on = 1; next } }
+            on { print }
+          ' CHANGELOG.md > notes.md
+          {
+            echo
+            echo "**Install:** download the .exe below and double-click it - no admin rights needed."
+            echo "Windows may say \"Windows protected your PC\" because the app isn't code-signed yet: click **More info -> Run anyway**."
+            echo
+            echo "Website: https://www.sammednj.in/sortdeck"
+          } >> notes.md
+
+      - name: Publish release with installer
+        shell: bash
+        run: |
+          exe=$(ls dist/SortDeck-Setup-*.exe)
+          pre=""; [[ "$TAG" == *-* ]] && pre="--prerelease"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$exe" --clobber
+            gh release edit "$TAG" --notes-file notes.md --draft=false $pre
+          else
+            gh release create "$TAG" "$exe" --title "SortDeck ${TAG#v}" --notes-file notes.md $pre
+          fi

@@ -32,6 +32,7 @@ Delivery plan. ✅ done · 🔄 in progress · ⬜ planned.
 - [x] Check for updates + download and install (manual)
 - [x] Themes: System / Light / Dark + accent colors
 - [x] Docs diagrams as images
+- [x] Automatic release builds (tag push -> installer attached to the GitHub release)
 - [ ] GitHub Release with the installer attached
 - [ ] License file
 - [ ] Undo for recent moves (from the activity log)

@@ -14,7 +14,7 @@ if (require.main === module) {
   console.log(`Building ${name}`);
   const env = { ...process.env };
   delete env.ELECTRON_RUN_AS_NODE; // VS Code's terminal sets it and breaks electron-builder
-  execFileSync(process.execPath, [require.resolve('electron-builder/cli.js'), '--win', `-c.nsis.artifactName=${name}`], {
+  execFileSync(process.execPath, [require.resolve('electron-builder/cli.js'), '--win', '--publish', 'never', `-c.nsis.artifactName=${name}`], {
     stdio: 'inherit', env, cwd: path.join(__dirname, '..'),
   });
 }

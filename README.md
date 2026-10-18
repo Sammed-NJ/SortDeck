@@ -21,7 +21,7 @@ or by rules you build from name, size, age and even the website it came from.
 ![Platform](https://img.shields.io/badge/platform-windows%2010%20%7C%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![Electron](https://img.shields.io/badge/built%20with-electron%2044-47848F?style=for-the-badge&logo=electron&logoColor=white)
 ![Status](https://img.shields.io/badge/status-beta-F59E0B?style=for-the-badge)
-![Version](https://img.shields.io/badge/version-0.1.0--beta.5-0E7490?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.1.0--beta.6-0E7490?style=for-the-badge)
 <br>
 ![Install](https://img.shields.io/badge/install-one%20click-22C55E?style=for-the-badge&logo=windowsterminal&logoColor=white)
 ![Admin](https://img.shields.io/badge/admin%20rights-not%20required-22C55E?style=for-the-badge)
@@ -30,7 +30,7 @@ or by rules you build from name, size, age and even the website it came from.
 
 <br>
 
-<a href="https://www.sammednj.in/sortdeck/download"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.5-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
+<a href="https://www.sammednj.in/sortdeck/download"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.6-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
 
 <sub>Windows 10 / 11 · 64-bit · no admin rights · <a href="https://www.sammednj.in/sortdeck">website</a> · <a href="https://github.com/Sammed-NJ/SortDeck/releases">all releases</a></sub>
 
