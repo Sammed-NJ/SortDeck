@@ -1,0 +1,46 @@
+{
+  "name": "sortdeck",
+  "productName": "SortDeck",
+  "version": "0.1.0-beta.1",
+  "description": "SortDeck keeps any folder organized automatically with Outlook-style rules",
+  "main": "src/main/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node tests/config.test.js && node tests/engine.test.js",
+    "dist": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.sortdeck.app",
+    "productName": "SortDeck",
+    "files": [
+      "src/**",
+      "build/icon.png",
+      "build/icon.ico",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SortDeck",
+      "artifactName": "SortDeck-Setup-${version}.exe",
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^44.9.0",
+    "electron-builder": "^26.15.3"
+  }
+}

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'">
+  <title>SortDeck</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-state="loading">
+  <header class="titlebar">
+    <img class="logo" src="../../build/icon.png" alt="">
+    <span class="app-name">SortDeck</span>
+    <span class="beta" title="SortDeck is in beta - things may change">BETA</span>
+  </header>
+
+  <div class="shell">
+    <nav class="sidebar" aria-label="Sections">
+      <button class="nav active" data-view="overview">
+        <svg viewBox="0 0 24 24"><path d="M4 13h6V4H4zm0 7h6v-5H4zm10 0h6v-9h-6zm0-16v5h6V4z"/></svg>
+        Overview
+      </button>
+      <button class="nav" data-view="folders">
+        <svg viewBox="0 0 24 24"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h4l2 2h7A2.5 2.5 0 0 1 21 8.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/></svg>
+        Folders &amp; rules
+      </button>
+      <button class="nav" data-view="settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-1.7-1L15 3.5h-4L10.7 6a7.4 7.4 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 1.7 1l.3 2.5h4l.3-2.5a7.4 7.4 0 0 0 1.7-1l2.4 1 2-3.4z"/></svg>
+        Settings
+      </button>
+      <div class="sidebar-foot"><span class="dot"></span><span id="navStatus">Starting...</span></div>
+    </nav>
+
+    <main>
+      <!-- Overview -->
+      <section id="view-overview" class="view">
+        <div id="welcome" class="welcome" hidden>
+          <img src="../../build/icon.png" alt="" class="welcome-icon">
+          <h1>What should we organize first?</h1>
+          <p class="muted">Pick a folder. Anything that lands in it is sorted automatically - by file type, or by rules you create, just like Outlook rules.</p>
+          <div id="suggestions" class="suggestions"></div>
+        </div>
+
+        <div id="dashboard" hidden>
+          <div class="hero card">
+            <div class="hero-text">
+              <div class="status-line"><span class="dot big"></span><h1 id="statusTitle"></h1></div>
+              <p id="statusSub" class="muted"></p>
+            </div>
+            <div class="actions">
+              <button id="btnPause" class="btn"></button>
+              <button id="btnSweep" class="btn primary">Organize now</button>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="card stat"><span class="label">Folders watched</span><b id="statFolders">-</b><span id="statFoldersSub" class="muted small"></span></div>
+            <div class="card stat"><span class="label">Organized today</span><b id="statToday">-</b><span class="muted small">files and folders</span></div>
+            <div class="card stat"><span class="label">Last activity</span><b id="statLast">-</b><span id="statLastSub" class="muted small"></span></div>
+          </div>
+          <div class="grid2">
+            <div class="card">
+              <div class="card-head"><h2>Folders</h2><button id="btnAddFolder2" class="link">+ Add folder</button></div>
+              <div id="folderCards" class="folders"></div>
+            </div>
+            <div class="card">
+              <h2>Recent activity</h2>
+              <div id="activityList" class="recent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Folders & rules -->
+      <section id="view-folders" class="view wide" hidden>
+        <div class="folders-layout">
+          <aside class="folder-nav">
+            <div id="folderNav"></div>
+            <button id="btnAddFolder" class="btn add-folder">+ Add folder</button>
+          </aside>
+          <div id="folderDetail" class="folder-detail"></div>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section id="view-settings" class="view" hidden>
+        <div class="view-head"><div><h1>Settings</h1><p class="muted">Apply to every folder.</p></div></div>
+        <div class="card settings">
+          <div class="setting">
+            <div><h3>Start with Windows</h3><p class="muted">Runs quietly in the tray after you sign in, so folders stay organized.</p></div>
+            <label class="switch"><input id="setLogin" type="checkbox"><span></span></label>
+          </div>
+          <div class="setting">
+            <div><h3>Notifications</h3><p class="muted">Tell me when files are organized (grouped, never one per file).</p></div>
+            <label class="switch"><input id="setNotify" type="checkbox"><span></span></label>
+          </div>
+          <div class="setting">
+            <div><h3>Quiet hours</h3><p class="muted">Don't organize automatically during this window. It may cross midnight.</p></div>
+            <div class="inline">
+              <input id="quietStart" type="time"><span class="muted">to</span><input id="quietEnd" type="time">
+              <label class="switch"><input id="setQuiet" type="checkbox"><span></span></label>
+            </div>
+          </div>
+          <div class="setting">
+            <div><h3>Safety check every</h3><p class="muted">New files are picked up instantly; this re-check catches anything that was busy.</p></div>
+            <div class="inline"><input id="setInterval" type="number" min="5" max="3600" class="num"><span class="muted">seconds</span></div>
+          </div>
+          <div class="setting">
+            <div><h3>Config file</h3><p class="muted" id="configPath"></p></div>
+            <button id="btnEditJson" class="btn">Open</button>
+          </div>
+        </div>
+        <p class="muted small center" id="version"></p>
+      </section>
+    </main>
+  </div>
+
+  <div id="savebar" class="savebar" hidden>
+    <div class="savebar-text"><b>Unsaved changes</b><span id="saveErrors"></span></div>
+    <button id="btnRevert" class="btn">Revert</button>
+    <button id="btnSave" class="btn primary">Save <kbd>Ctrl+S</kbd></button>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+
+  <dialog id="addDialog" class="dialog"></dialog>
+  <dialog id="ruleDialog" class="dialog wide"></dialog>
+  <dialog id="runDialog" class="dialog"></dialog>
+  <datalist id="folderOptions"></datalist>
+
+  <script src="app.js"></script>
+  <script src="folders.js"></script>
+  <script src="rules.js"></script>
+</body>
+</html>
