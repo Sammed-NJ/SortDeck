@@ -8,7 +8,7 @@
   "scripts": {
     "start": "electron .",
     "test": "node tests/config.test.js && node tests/engine.test.js && node tests/doctor.test.js && node tests/update.test.js",
-    "dist": "electron-builder --win"
+    "dist": "node scripts/dist.js"
   },
   "build": {
     "appId": "com.sortdeck.app",
@@ -44,7 +44,6 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "SortDeck",
-      "artifactName": "SortDeck-Setup-${version}.exe",
       "deleteAppDataOnUninstall": false
     }
   },

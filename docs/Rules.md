@@ -49,5 +49,7 @@ Rules for anyone changing SortDeck - people and AI agents alike. Break one only 
     1. Bump `package.json` to `0.y.z-beta.n`.
     2. Update CHANGELOG.md and the README version badge.
     3. Run `npm test`, then `npm run dist`.
+       This makes `dist/SortDeck-Setup-beta.N.exe` (betas) or `dist/SortDeck-Setup-vX.Y.Z.exe` (official).
+    3b. Publish a GitHub release for the tag **with that .exe attached**. Without the file, download links fall back to the Releases page.
     4. Commit, tag `v<version>`, then push the branch and the tag.
 22. Never commit `node_modules/`, `dist/`, secrets or 0-byte junk files.

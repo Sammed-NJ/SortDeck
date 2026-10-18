@@ -19,7 +19,7 @@ SortDeck is a Windows Electron app that organizes any folder with Outlook-style 
 npm install
 npm test          # engine + config tests, plain node (~2 s)
 npm start         # run the app from source
-npm run dist      # build dist/SortDeck-Setup-<version>.exe
+npm run dist      # build dist/SortDeck-Setup-beta.N.exe or SortDeck-Setup-vX.Y.Z.exe (scripts/dist.js)
 ```
 Unset `ELECTRON_RUN_AS_NODE` first. VS Code's terminal sets it, and Electron then runs as Node.
 - bash: `env -u ELECTRON_RUN_AS_NODE npm start`

@@ -160,7 +160,7 @@ cd SortDeck
 npm install
 npm start          :: run from source
 npm test           :: engine + config tests
-npm run dist       :: build dist\SortDeck-Setup-<version>.exe
+npm run dist       :: build dist\SortDeck-Setup-beta.N.exe (or -vX.Y.Z.exe)
 ```
 
 > If `npm start` prints Node output instead of opening a window, your terminal has

@@ -26,5 +26,11 @@ const { compareVersions: cmp, checkForUpdate, isTrustedDownload } = require('../
   assert.ok(!isTrustedDownload('https://evil.com/Sammed-NJ/SortDeck/releases/download/x.exe'));
   assert.ok(!isTrustedDownload('http://github.com/Sammed-NJ/SortDeck/releases/download/x.exe'));
   assert.ok(!isTrustedDownload('https://github.com/someone/else/releases/download/x.exe'));
+  // installer names: short for betas, v-prefixed for official releases
+  const { artifactName } = require('../scripts/dist');
+  assert.equal(artifactName('0.1.0-beta.5'), 'SortDeck-Setup-beta.5.exe');
+  assert.equal(artifactName('1.0.0'), 'SortDeck-Setup-v1.0.0.exe');
+  assert.ok(/^SortDeck-Setup-.+\.exe$/i.test(artifactName('2.3.1-rc.2')), 'update check still recognises the installer');
+
   console.log('update.test.js: all checks passed');
 })().catch((e) => { console.error(e); process.exit(1); });

@@ -3,6 +3,12 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+
+### Changed
+- Shorter installer names: `SortDeck-Setup-beta.5.exe` for betas, `SortDeck-Setup-v1.0.0.exe` for official releases
+  (`npm run dist` runs `scripts/dist.js`).
+
 ## [0.1.0-beta.5] - 2026-10-19
 
 ### Added

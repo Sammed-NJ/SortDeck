@@ -91,5 +91,6 @@ the **main** process, which owns the window, the tray and the file-system engine
 
 ## Build
 `electron-builder --win` produces an NSIS one-click per-user installer:
-`dist/SortDeck-Setup-<version>.exe`. The `appId` (`com.sortdeck.app`) must equal the AppUserModelId set in
+`dist/SortDeck-Setup-beta.N.exe` for betas or `dist/SortDeck-Setup-vX.Y.Z.exe` for official releases (named by
+`scripts/dist.js`; run it with `npm run dist`). The `appId` (`com.sortdeck.app`) must equal the AppUserModelId set in
 `main.js`, or the taskbar shows the wrong icon. Dev runs use `com.sortdeck.app.dev`.
