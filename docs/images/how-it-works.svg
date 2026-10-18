@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="770" viewBox="0 0 960 770" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif">
+  <title>How SortDeck handles a new item</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7d8590"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#34d399"/>
+    </marker>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22a6c3"/>
+      <stop offset="1" stop-color="#0e7490"/>
+    </linearGradient>
+  </defs>
+
+  <!-- card -->
+  <rect width="960" height="770" rx="18" fill="#17191c"/>
+
+
+
+  <!-- 1. new item -->
+  <rect x="290" y="30" width="380" height="56" rx="14" fill="url(#accent)"/>
+  <text x="480" y="64" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">New item lands in a watched folder</text>
+
+  <!-- 2. still being written? -->
+  <rect x="280" y="120" width="400" height="64" rx="14" fill="#1f2226" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="480" y="149" text-anchor="middle" font-size="16" font-weight="600" fill="#e6e8eb">Still downloading or being written?</text>
+  <text x="480" y="170" text-anchor="middle" font-size="12.5" fill="#9aa1ab">.crdownload, .part, files changed in the last few seconds</text>
+
+  <rect x="730" y="124" width="200" height="56" rx="12" fill="#3a2e12"/>
+  <text x="830" y="148" text-anchor="middle" font-size="14" font-weight="600" fill="#fbbf24">Wait a moment</text>
+  <text x="830" y="167" text-anchor="middle" font-size="12.5" fill="#d6c08a">then check it again</text>
+
+  <!-- 3. rules panel -->
+  <rect x="96" y="220" width="768" height="312" rx="16" fill="#1b1e22" stroke="#2c3036" stroke-width="1.5"/>
+  <text x="480" y="250" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="1.6" fill="#22a6c3">RULES  ·  CHECKED TOP TO BOTTOM, LIKE OUTLOOK</text>
+
+  <rect x="140" y="268" width="320" height="60" rx="12" fill="#1f2226" stroke="#3a4048"/>
+  <text x="300" y="294" text-anchor="middle" font-size="15" font-weight="600" fill="#e6e8eb">Conditions match?</text>
+  <text x="300" y="314" text-anchor="middle" font-size="13" fill="#9aa1ab">and no exception applies</text>
+
+  <rect x="540" y="268" width="280" height="60" rx="12" fill="#1f2226" stroke="#3a4048"/>
+  <text x="680" y="294" text-anchor="middle" font-size="15" font-weight="600" fill="#e6e8eb">Run copy / notify</text>
+  <text x="680" y="314" text-anchor="middle" font-size="13" fill="#9aa1ab">actions, if the rule has any</text>
+
+  <rect x="140" y="368" width="320" height="60" rx="12" fill="#1f2226" stroke="#3a4048" stroke-dasharray="5 4"/>
+  <text x="300" y="394" text-anchor="middle" font-size="15" font-weight="600" fill="#e6e8eb">Try the next rule</text>
+  <text x="300" y="414" text-anchor="middle" font-size="13" fill="#9aa1ab">until none are left, or one says stop</text>
+
+  <rect x="540" y="368" width="280" height="60" rx="12" fill="#1f2226" stroke="#3a4048"/>
+  <text x="680" y="394" text-anchor="middle" font-size="15" font-weight="600" fill="#e6e8eb">Move · Recycle · Keep</text>
+  <text x="680" y="414" text-anchor="middle" font-size="13" fill="#9aa1ab">the item is handled</text>
+
+  <rect x="600" y="460" width="160" height="42" rx="21" fill="#10302a" stroke="#34d399" stroke-width="1.5"/>
+  <text x="680" y="487" text-anchor="middle" font-size="15" font-weight="700" fill="#34d399">Done ✓</text>
+
+  <!-- 4. sort by type -->
+  <rect x="280" y="590" width="400" height="56" rx="14" fill="#1f2226" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="480" y="616" text-anchor="middle" font-size="16" font-weight="600" fill="#e6e8eb">Sort by file type</text>
+  <text x="480" y="635" text-anchor="middle" font-size="12.5" fill="#9aa1ab">optional, per folder - groups are editable</text>
+
+  <g stroke="#7d8590" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <path d="M480,86 V116"/>
+    <path d="M680,152 H726"/>
+    <path d="M480,184 V216"/>
+    <path d="M460,298 H536"/>
+    <path d="M680,328 V364"/>
+    <path d="M300,328 V364"/>
+    <path d="M140,398 H116 V298 H136"/>
+    <path d="M300,428 V560 H480 V586"/>
+    <path d="M480,646 V680"/>
+    <path d="M540,398 H464"/>
+  </g>
+  <path d="M680,428 V456" stroke="#34d399" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+  <!-- arrow labels -->
+  <g font-size="13" fill="#9aa1ab" font-weight="600">
+    <text x="703" y="144" text-anchor="middle">yes</text>
+    <text x="492" y="206">no</text>
+    <text x="498" y="290" text-anchor="middle">yes</text>
+    <text x="312" y="352">no</text>
+    <text x="312" y="512">no rule handled it</text>
+    <text x="502" y="390" text-anchor="middle">none</text>
+  </g>
+
+  <!-- category chips -->
+  <g font-size="13" font-weight="600" text-anchor="middle">
+    <rect x="75" y="690" width="90" height="34" rx="9" fill="#0b2e3d"/><text x="120" y="712" fill="#0ea5e9">Images</text>
+    <rect x="175" y="690" width="115" height="34" rx="9" fill="#2a2045"/><text x="232" y="712" fill="#a78bfa">Documents</text>
+    <rect x="300" y="690" width="105" height="34" rx="9" fill="#3a2a10"/><text x="352" y="712" fill="#f59e0b">Installers</text>
+    <rect x="415" y="690" width="100" height="34" rx="9" fill="#0f3127"/><text x="465" y="712" fill="#10b981">Archives</text>
+    <rect x="525" y="690" width="80" height="34" rx="9" fill="#3a1630"/><text x="565" y="712" fill="#ec4899">Video</text>
+    <rect x="615" y="690" width="80" height="34" rx="9" fill="#0d3330"/><text x="655" y="712" fill="#14b8a6">Audio</text>
+    <rect x="705" y="690" width="80" height="34" rx="9" fill="#272b30"/><text x="745" y="712" fill="#94a3b8">Other</text>
+    <rect x="795" y="690" width="90" height="34" rx="9" fill="#272b30"/><text x="840" y="712" fill="#94a3b8">Folders</text>
+  </g>
+  <text x="480" y="752" text-anchor="middle" font-size="12" fill="#6b7280">unknown types go to Other · loose folders go to Folders</text>
+</svg>

@@ -115,22 +115,9 @@ Each watched folder has its own list of rules, checked **top to bottom** for eve
 
 ## How it works
 
-```
-  new item lands in a watched folder
-                │
-                ▼
-     still downloading / being written? ──yes──► wait, check again in a few seconds
-                │ no
-                ▼
-  ┌──────── rules, top to bottom ────────┐
-  │  conditions match?  exceptions don't? │──► copy / notify actions run
-  │  move · recycle · keep  → done        │
-  │  "stop processing more rules" → stop  │
-  └──────────────────┬────────────────────┘
-                     │ no rule handled it
-                     ▼
-        sort by file type (if on) ──► Images · Documents · ... · Other · Folders
-```
+<div align="center">
+<img src="docs/images/how-it-works.svg" alt="Flowchart: a new item waits until it is fully written, then rules are checked top to bottom - a matching rule runs its copy/notify actions and, if it moves, recycles or keeps the item, it is done; otherwise the next rule is tried. Items no rule handled are sorted by file type into Images, Documents, Installers, Archives, Video, Audio, Other or Folders." width="85%">
+</div>
 
 A safety re-check runs every 30 seconds (configurable) to catch anything that was locked.
 Quiet hours and **Pause** stop automatic organizing; manual runs still work.
