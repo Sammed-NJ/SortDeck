@@ -1,5 +1,8 @@
 node_modules/
 dist/
-.foglamp/
-.claude/
 *.tmp
+*.log
+
+# local tool state
+.claude/
+.foglamp/
