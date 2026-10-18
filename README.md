@@ -171,11 +171,14 @@ src/
     engine.js    watches folders, matches rules, moves / copies / recycles
     config.js    config shape, validation, load / save (+ .bak backup)
     doctor.js    troubleshoot: check + repair
+    update.js    check GitHub Releases for a newer version
   preload.js     the page's only bridge to the main process
   renderer/      the UI - app.js (overview, settings), folders.js, rules.js, tutorial.js
-tests/           engine, config, doctor tests  (plain node, no framework)
+tests/           engine, config, doctor, update tests  (plain node, no framework)
 build/           app icon
-docs/images/     screenshots
+docs/            PRD, ARCHITECTURE, Design, DECISIONS, Rules, Phases
+docs/images/     screenshots, how-it-works diagram
+AGENTS.md        guide for AI coding agents
 ```
 
 The engine has no Electron dependency, so its tests run against real temporary folders with plain `node`.

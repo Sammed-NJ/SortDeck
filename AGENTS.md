@@ -7,12 +7,12 @@ SortDeck is a Windows Electron app that organizes any folder with Outlook-style 
 
 | Doc | Read it for |
 | --- | --- |
-| [PRD.md](PRD.md) | What the product must do |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Processes, files, config shape, engine flow, IPC |
-| [Design.md](Design.md) | UI layout, flows, copy and visual rules |
-| [DECISIONS.md](DECISIONS.md) | Why things are the way they are |
-| [Rules.md](Rules.md) | Hard rules: safety, code, tests, git |
-| [Phases.md](Phases.md) | What's done and what's next |
+| [PRD.md](docs/PRD.md) | What the product must do |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Processes, files, config shape, engine flow, IPC |
+| [Design.md](docs/Design.md) | UI layout, flows, copy and visual rules |
+| [DECISIONS.md](docs/DECISIONS.md) | Why things are the way they are |
+| [Rules.md](docs/Rules.md) | Hard rules: safety, code, tests, git |
+| [Phases.md](docs/Phases.md) | What's done and what's next |
 
 ## Commands
 ```bash
@@ -34,12 +34,12 @@ Unset `ELECTRON_RUN_AS_NODE` first. VS Code's terminal sets it, and Electron the
 | New main-process capability | `main.js` `ipcMain.handle` → `preload.js` → renderer |
 | Look and feel | `renderer/styles.css` tokens on `:root` |
 
-## Must-follow rules (full list in Rules.md)
+## Must-follow rules (full list in [docs/Rules.md](docs/Rules.md))
 - Never delete permanently, never overwrite, never move files without user consent.
 - Preview has no side effects.
 - No Electron imports in `engine.js` / `config.js`.
 - No `innerHTML` with data. Keep the CSP strict.
-- Files stay under 500 lines. No new dependencies or frameworks without a DECISIONS.md entry.
+- Files stay under 500 lines. No new dependencies or frameworks without a docs/DECISIONS.md entry.
 - Run `npm test` after changes. Add an engine assert for new behaviour.
 - When testing the UI, use a scratch `--user-data-dir`. Never touch the real `%APPDATA%\SortDeck`.
 - Commits: conventional style, **no AI attribution / Co-Authored-By lines**.
