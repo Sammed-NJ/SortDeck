@@ -12,16 +12,7 @@ itself, and never surprises the user by moving files.
 
 ## Layout
 
-```
-┌ titlebar: logo · SortDeck · BETA ───────────────── [native window controls] ┐
-│ sidebar          │ main view                                                 │
-│  Overview        │  Overview: status hero · 3 stats · Folders | Activity     │
-│  Folders & rules │  Folders: folder nav | folder detail                      │
-│  Settings        │  Settings: one card of setting rows                       │
-│  ● Organizing    │                                                           │
-└──────────────────┴───────────────────────────────────────────────────────────┘
-                     savebar (only when dirty) · toast (bottom)
-```
+<p align="center"><img src="images/design-layout.svg" alt="Window layout: custom titlebar with logo and BETA badge, sidebar with Overview, Folders and rules, Settings, Tutorial and a status dot, and the main view showing the status hero, three stats, Folders and Recent activity cards, with a toast at the bottom." width="100%"></p>
 
 **Folder detail, top to bottom:**
 - header: name, path, Open, Remove, **Organize now...**
@@ -54,6 +45,8 @@ itself, and never surprises the user by moving files.
 
 ## Visual language
 - **Tokens** live on `:root` in `styles.css`. Light and dark themes follow Windows (`prefers-color-scheme`).
+- **Themes:** Settings → Appearance sets System / Light / Dark (`nativeTheme.themeSource`, so the title bar follows) and
+  one of six accents (`<html data-accent>`, colors in `theme.css`).
 - **Brand color:** teal, `#0e7490` family. The icon is a teal folder with sorted lines.
 - **Category colors:** each name hashes into `PALETTE` (no red, which reads as an error). *Other* and
   *Folders* are slate.

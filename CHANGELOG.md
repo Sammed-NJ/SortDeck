@@ -3,11 +3,17 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
-## [Unreleased]
+## [0.1.0-beta.5] - 2026-10-19
+
+### Added
+- **Appearance** in Settings:
+  - **Theme**: System, Light or Dark. It switches instantly, including the title bar.
+  - **Accent color**: Teal, Blue, Purple, Green, Orange or Pink.
 
 ### Changed
-- README download links go through [samnj.fyi/sortdeck/download](https://samnj.fyi/sortdeck/download), which always
-  points to the newest installer. The product page is at [samnj.fyi/sortdeck](https://samnj.fyi/sortdeck).
+- Architecture, engine-flow and window-layout diagrams in the docs are now images, not ASCII art.
+- README download links go through [sammednj.in/sortdeck/download](https://www.sammednj.in/sortdeck/download), which always
+  points to the newest installer. The product page is at [sammednj.in/sortdeck](https://www.sammednj.in/sortdeck).
 
 ## [0.1.0-beta.4] - 2026-10-19
 
@@ -70,6 +76,7 @@ First public beta.
 - Overview with status, per-folder counts and recent activity.
 - Light and dark theme following Windows.
 
+[0.1.0-beta.5]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.5
 [0.1.0-beta.4]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.4
 [0.1.0-beta.3]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.3
 [0.1.0-beta.2]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.2

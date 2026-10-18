@@ -5,6 +5,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'">
   <title>SortDeck</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body data-state="loading">
   <header class="titlebar">
@@ -108,6 +109,30 @@
           </div>
         </div>
 
+        <h2 class="section-title">Appearance</h2>
+        <div class="card settings">
+          <div class="setting">
+            <div><h3>Theme</h3><p class="muted">Follow Windows, or always use light or dark.</p></div>
+            <div class="segmented" role="radiogroup" aria-label="Theme">
+              <label><input type="radio" name="theme" value="system"><span>System</span></label>
+              <label><input type="radio" name="theme" value="light"><span>Light</span></label>
+              <label><input type="radio" name="theme" value="dark"><span>Dark</span></label>
+            </div>
+          </div>
+          <div class="setting">
+            <div><h3>Accent color</h3><p class="muted">Used for buttons, links and highlights.</p></div>
+            <div class="swatches" role="radiogroup" aria-label="Accent color">
+              <label title="Teal"><input type="radio" name="accent" value="teal" aria-label="Teal"><span data-accent="teal"></span></label>
+              <label title="Blue"><input type="radio" name="accent" value="blue" aria-label="Blue"><span data-accent="blue"></span></label>
+              <label title="Purple"><input type="radio" name="accent" value="purple" aria-label="Purple"><span data-accent="purple"></span></label>
+              <label title="Green"><input type="radio" name="accent" value="green" aria-label="Green"><span data-accent="green"></span></label>
+              <label title="Orange"><input type="radio" name="accent" value="orange" aria-label="Orange"><span data-accent="orange"></span></label>
+              <label title="Pink"><input type="radio" name="accent" value="pink" aria-label="Pink"><span data-accent="pink"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="section-title">General</h2>
         <div class="card settings">
           <div class="setting">
             <div><h3>Start with Windows</h3><p class="muted">Runs quietly in the tray after you sign in, so folders stay organized.</p></div>

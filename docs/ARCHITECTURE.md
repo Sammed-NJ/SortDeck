@@ -3,22 +3,7 @@
 SortDeck is an Electron app with three layers: a sandboxed **renderer** (UI), a tiny **preload** bridge, and
 the **main** process, which owns the window, the tray and the file-system engine.
 
-```
-┌──────────────── Renderer (sandboxed, contextIsolation, CSP) ────────────────┐
-│ app.js      helpers h()/toast, nav, overview, settings, save (Ctrl+S)      │
-│ folders.js  folder list, add dialog, schedule card, categories              │
-│ rules.js    rule list, rule editor, Organize now / preview dialog           │
-│ tutorial.js walk-through dialog + starter rules for Downloads               │
-└───────────────────────────────┬─────────────────────────────────────────────┘
-                                │ window.api.*  (preload.js, contextBridge)
-┌───────────────────────────────▼──────────── Main process ───────────────────┐
-│ main.js    window, tray, single instance, login item, IPC handlers         │
-│ config.js  shape, defaults, normalize, validate, load/save, toForm/build    │
-│ engine.js  Organizer: watchers, timers, rule matching, move/copy/recycle    │
-└───────────────────────────────┬─────────────────────────────────────────────┘
-                                │ fs, shell.trashItem, Notification
-                          Windows file system
-```
+<p align="center"><img src="images/architecture.svg" alt="Architecture: the sandboxed renderer (app.js, folders.js, rules.js, tutorial.js) talks only through preload.js to the main process (main.js, config.js, engine.js, doctor.js, update.js), which works with your folders, the Recycle Bin, notifications and GitHub Releases." width="100%"></p>
 
 ## Files
 
@@ -46,7 +31,8 @@ the **main** process, which owns the window, the tray and the file-system engine
 ```js
 {
   settings: { notifications, launchAtLogin, paused, trayHintShown,
-              intervalSeconds /*5..3600*/, quietHours: {start,end} | null },
+              intervalSeconds /*5..3600*/, quietHours: {start,end} | null,
+              theme: 'system'|'light'|'dark', accent: 'teal'|'blue'|'purple'|'green'|'orange'|'pink' },
   folders: [{
     id, path, enabled,
     trigger: 'instant' | 'interval' | 'manual',   // "Off" = enabled:false
@@ -66,24 +52,7 @@ the **main** process, which owns the window, the tray and the file-system engine
 
 ## Engine flow
 
-```
-fs.watch event ─► debounce 1.5s ─► sweep(folder)
-safety interval (instant folders) ─┘        │
-per-folder setInterval (interval folders) ──┘
-                                            ▼
-                  listItems: skip system/hidden, ignored ext, destination subfolders,
-                             files modified < 3s ago (re-scheduled)
-                                            ▼
-                  processItem, for each enabled+auto rule, top to bottom:
-                    match? ─► copy/notify actions ─► terminal action (move/recycle/keep) ─► done
-                           └► no terminal + stop ─► break
-                  fallback: sortByType ─► category folder / Other / Folders
-                                            ▼
-                  act(): transfer (rename, EXDEV ─► copy+rm, collision ─► "name (1)")
-                         recycle ─► shell.trashItem; EBUSY/EPERM ─► retry next sweep, warn once
-                                            ▼
-                  finish(): activity log + grouped notification
-```
+<p align="center"><img src="images/engine-flow.svg" alt="Engine flow: a new item, safety re-check, schedule or Organize now starts a run; the folder is listed (recently changed files wait); each item goes through enabled rules top to bottom; unhandled items are sorted by type; actions are done safely; the run ends with an activity log entry and one grouped notification." width="100%"></p>
 
 - **Manual runs** (`Organizer.run`) use the same `processItem`, skip the settle check, support `preview`
   (no side effects) and can target a subfolder. When a subfolder is targeted, the sort-by-type fallback is
@@ -97,6 +66,7 @@ per-folder setInterval (interval folders) ──┘
 | --- | --- |
 | `getConfig` / `saveConfig(form)` | Load the form; validate and save it, then re-apply to the engine |
 | `status` | Per-folder exists/error/today/nextRun, activity, totals |
+| `previewTheme(theme)` | Sets `nativeTheme.themeSource` live while choosing; saved with the config |
 | `pause(bool)` / `sweep()` | Tray-equivalent controls |
 | `validateRule` / `runRules(folder, rules, target, preview, sortByType)` | Rule editor and Organize now |
 | `suggestFolders` / `newFolder(path, opts)` / `pickFolder(base)` | Adding folders, picking destinations |

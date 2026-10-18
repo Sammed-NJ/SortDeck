@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif">
+  <title>SortDeck window layout: titlebar, sidebar, main view, save bar and toast</title>
+  <defs>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22a6c3"/>
+      <stop offset="1" stop-color="#0e7490"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="600" rx="18" fill="#101214"/>
+
+  <!-- window -->
+  <rect x="40" y="30" width="880" height="470" rx="12" fill="#17191c" stroke="#2c3036" stroke-width="1.5"/>
+  <!-- titlebar -->
+  <path d="M40 42 a12 12 0 0 1 12 -12 h856 a12 12 0 0 1 12 12 v28 h-880 z" fill="#141619"/>
+  <rect x="58" y="41" width="18" height="18" rx="4" fill="url(#accent)"/>
+  <text x="86" y="55" font-size="13" font-weight="600" fill="#c9ced6">SortDeck</text>
+  <rect x="150" y="43" width="38" height="15" rx="4" fill="#3a2e12"/>
+  <text x="169" y="54" text-anchor="middle" font-size="9" font-weight="700" fill="#fbbf24">BETA</text>
+  <g stroke="#9aa1ab" stroke-width="1.4" fill="none">
+    <line x1="836" y1="50" x2="846" y2="50"/>
+    <rect x="862" y="45" width="10" height="10"/>
+    <path d="M888 45 l10 10 M898 45 l-10 10"/>
+  </g>
+
+  <!-- sidebar -->
+  <rect x="40" y="70" width="190" height="430" fill="#141619"/>
+  <g font-size="13">
+    <rect x="52" y="86" width="166" height="32" rx="8" fill="#1f2226"/>
+    <rect x="52" y="94" width="3" height="16" rx="1.5" fill="#22a6c3"/>
+    <text x="70" y="107" font-weight="600" fill="#e6e8eb">Overview</text>
+    <text x="70" y="147" fill="#9aa1ab">Folders &amp; rules</text>
+    <text x="70" y="183" fill="#9aa1ab">Settings</text>
+    <text x="70" y="219" fill="#9aa1ab">Tutorial</text>
+    <circle cx="62" cy="478" r="4" fill="#34d399"/>
+    <text x="74" y="482" font-size="12" fill="#9aa1ab">Organizing</text>
+  </g>
+
+  <!-- main: overview wireframe -->
+  <rect x="250" y="88" width="650" height="70" rx="10" fill="#1f2226"/>
+  <circle cx="272" cy="112" r="5" fill="#34d399"/>
+  <text x="286" y="117" font-size="15" font-weight="600" fill="#e6e8eb">Organizing is on</text>
+  <text x="268" y="140" font-size="12" fill="#9aa1ab">status hero</text>
+  <rect x="728" y="106" width="64" height="30" rx="7" fill="#272b30"/>
+  <text x="760" y="126" text-anchor="middle" font-size="12" fill="#e6e8eb">Pause</text>
+  <rect x="802" y="106" width="84" height="30" rx="7" fill="#22a6c3"/>
+  <text x="844" y="126" text-anchor="middle" font-size="12" font-weight="600" fill="#06181d">Organize now</text>
+
+  <g font-size="12" fill="#9aa1ab">
+    <rect x="250" y="172" width="208" height="70" rx="10" fill="#1f2226"/>
+    <text x="268" y="196">Folders watched</text>
+    <text x="268" y="224" font-size="20" font-weight="600" fill="#e6e8eb">2</text>
+    <rect x="471" y="172" width="208" height="70" rx="10" fill="#1f2226"/>
+    <text x="489" y="196">Organized today</text>
+    <text x="489" y="224" font-size="20" font-weight="600" fill="#e6e8eb">14</text>
+    <rect x="692" y="172" width="208" height="70" rx="10" fill="#1f2226"/>
+    <text x="710" y="196">Last activity</text>
+    <text x="710" y="224" font-size="20" font-weight="600" fill="#e6e8eb">2m ago</text>
+  </g>
+
+  <rect x="250" y="256" width="318" height="228" rx="10" fill="#1f2226"/>
+  <text x="268" y="282" font-size="12" font-weight="700" letter-spacing="1" fill="#9aa1ab">FOLDERS</text>
+  <g fill="#272b30">
+    <rect x="268" y="296" width="282" height="40" rx="8"/>
+    <rect x="268" y="344" width="282" height="40" rx="8"/>
+  </g>
+  <rect x="280" y="310" width="10" height="10" rx="2" fill="#0ea5e9"/>
+  <text x="300" y="320" font-size="12.5" fill="#e6e8eb">Downloads · Instant · 8 rules</text>
+  <rect x="280" y="358" width="10" height="10" rx="2" fill="#8b5cf6"/>
+  <text x="300" y="368" font-size="12.5" fill="#e6e8eb">Desktop · Manual · 2 rules</text>
+
+  <rect x="582" y="256" width="318" height="228" rx="10" fill="#1f2226"/>
+  <text x="600" y="282" font-size="12" font-weight="700" letter-spacing="1" fill="#9aa1ab">RECENT ACTIVITY</text>
+  <g font-size="12.5">
+    <rect x="600" y="296" width="30" height="30" rx="7" fill="#123640"/>
+    <text x="640" y="309" fill="#e6e8eb">invoice.pdf</text>
+    <text x="640" y="323" font-size="11" fill="#9aa1ab">Moved to Finance</text>
+    <rect x="600" y="340" width="30" height="30" rx="7" fill="#2d2440"/>
+    <text x="640" y="353" fill="#e6e8eb">photo.jpg</text>
+    <text x="640" y="367" font-size="11" fill="#9aa1ab">Moved to Images</text>
+    <rect x="600" y="384" width="30" height="30" rx="7" fill="#3a2e12"/>
+    <text x="640" y="397" fill="#e6e8eb">setup.exe</text>
+    <text x="640" y="411" font-size="11" fill="#9aa1ab">Moved to Installers</text>
+  </g>
+
+  <!-- toast -->
+  <rect x="704" y="446" width="180" height="30" rx="8" fill="#e6e8eb"/>
+  <text x="794" y="465" text-anchor="middle" font-size="12" fill="#17191c">toast</text>
+
+  <!-- legend -->
+  <g font-size="13" fill="#9aa1ab">
+    <text x="40" y="534"><tspan font-weight="600" fill="#e6e8eb">Overview</tspan>  status hero · 3 stats · Folders | Recent activity</text>
+    <text x="40" y="558"><tspan font-weight="600" fill="#e6e8eb">Folders &amp; rules</tspan>  folder list | folder detail (schedule, rules, file types, options)</text>
+    <text x="40" y="582"><tspan font-weight="600" fill="#e6e8eb">Settings</tspan>  updates, uninstall, theme, options, troubleshoot  ·  a save bar appears only with unsaved changes</text>
+  </g>
+</svg>

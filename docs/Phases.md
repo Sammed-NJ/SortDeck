@@ -30,6 +30,8 @@ Delivery plan. ✅ done · 🔄 in progress · ⬜ planned.
 - [x] Tutorial with starter rules for Downloads
 - [x] README download link
 - [x] Check for updates + download and install (manual)
+- [x] Themes: System / Light / Dark + accent colors
+- [x] Docs diagrams as images
 - [ ] GitHub Release with the installer attached
 - [ ] License file
 - [ ] Undo for recent moves (from the activity log)

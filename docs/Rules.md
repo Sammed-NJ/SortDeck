@@ -33,6 +33,9 @@ Rules for anyone changing SortDeck - people and AI agents alike. Break one only 
 17. New engine behaviour gets an assert in `tests/engine.test.js` (plain node, real temp folders).
     Backdate mtimes with `utimes` so the settle window doesn't skip test files.
 
+## Docs
+- Diagrams are **SVG images** in `docs/images/` (same dark style as `how-it-works.svg`). No ASCII/box-drawing diagrams.
+
 ## Environment gotchas
 - VS Code's terminal sets `ELECTRON_RUN_AS_NODE=1`. Unset it before `npm start` / `npm run dist`.
 - Use forward slashes in paths passed through test harnesses. Some strip backslashes.

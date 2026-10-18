@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="800" viewBox="0 0 960 800" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif">
+  <title>SortDeck engine flow: triggers, sweep, listing, rules, fallback, actions, finish</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7d8590"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#34d399"/>
+    </marker>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22a6c3"/>
+      <stop offset="1" stop-color="#0e7490"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="800" rx="18" fill="#17191c"/>
+
+  <!-- triggers -->
+  <text x="480" y="38" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="1.6" fill="#22a6c3">WHAT STARTS A RUN</text>
+  <g text-anchor="middle">
+    <rect x="40" y="52" width="205" height="60" rx="12" fill="#1f2226" stroke="#3a4048"/>
+    <text x="142" y="78" font-size="14" font-weight="600" fill="#e6e8eb">New item arrives</text>
+    <text x="142" y="98" font-size="12" fill="#9aa1ab">fs.watch, debounced 1.5 s</text>
+    <rect x="263" y="52" width="205" height="60" rx="12" fill="#1f2226" stroke="#3a4048"/>
+    <text x="365" y="78" font-size="14" font-weight="600" fill="#e6e8eb">Safety re-check</text>
+    <text x="365" y="98" font-size="12" fill="#9aa1ab">"Instantly" folders, every 30 s</text>
+    <rect x="486" y="52" width="205" height="60" rx="12" fill="#1f2226" stroke="#3a4048"/>
+    <text x="588" y="78" font-size="14" font-weight="600" fill="#e6e8eb">Schedule</text>
+    <text x="588" y="98" font-size="12" fill="#9aa1ab">every N minutes or hours</text>
+    <rect x="709" y="52" width="211" height="60" rx="12" fill="#1f2226" stroke="#fbbf24"/>
+    <text x="814" y="78" font-size="14" font-weight="600" fill="#e6e8eb">Organize now</text>
+    <text x="814" y="98" font-size="12" fill="#9aa1ab">manual, can preview first</text>
+  </g>
+  <g stroke="#7d8590" stroke-width="2" fill="none">
+    <path d="M142 112 V132 H480"/>
+    <path d="M365 112 V132"/>
+    <path d="M588 112 V132"/>
+    <path d="M814 112 V132 H480"/>
+    <line x1="480" y1="132" x2="480" y2="150" marker-end="url(#arrow)"/>
+  </g>
+  <text x="900" y="146" text-anchor="end" font-size="11.5" fill="#9aa1ab">paused / quiet hours stop automatic runs only</text>
+
+  <!-- list -->
+  <rect x="230" y="156" width="500" height="72" rx="14" fill="url(#accent)"/>
+  <text x="480" y="184" text-anchor="middle" font-size="16" font-weight="600" fill="#ffffff">List the folder's items</text>
+  <text x="480" y="206" text-anchor="middle" font-size="12.5" fill="#d8f3f8">skip system/hidden files, ignored extensions and destination subfolders</text>
+
+  <rect x="760" y="164" width="170" height="56" rx="12" fill="#3a2e12"/>
+  <text x="845" y="188" text-anchor="middle" font-size="13.5" font-weight="600" fill="#fbbf24">Changed &lt; 3 s ago?</text>
+  <text x="845" y="207" text-anchor="middle" font-size="12" fill="#d6c08a">re-check a bit later</text>
+  <line x1="732" y1="192" x2="756" y2="192" stroke="#7d8590" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="480" y1="230" x2="480" y2="262" stroke="#7d8590" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- rules -->
+  <rect x="40" y="268" width="880" height="190" rx="16" fill="#1b1e22" stroke="#2c3036" stroke-width="1.5"/>
+  <text x="480" y="296" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="1.6" fill="#22a6c3">FOR EACH ITEM  ·  ENABLED RULES, TOP TO BOTTOM</text>
+  <g text-anchor="middle">
+    <rect x="64" y="314" width="190" height="64" rx="12" fill="#1f2226" stroke="#3a4048"/>
+    <text x="159" y="341" font-size="14.5" font-weight="600" fill="#e6e8eb">Conditions match?</text>
+    <text x="159" y="362" font-size="12" fill="#9aa1ab">and no exception</text>
+    <rect x="286" y="314" width="190" height="64" rx="12" fill="#1f2226" stroke="#3a4048"/>
+    <text x="381" y="341" font-size="14.5" font-weight="600" fill="#e6e8eb">Copy / notify</text>
+    <text x="381" y="362" font-size="12" fill="#9aa1ab">extra actions, keep going</text>
+    <rect x="508" y="314" width="190" height="64" rx="12" fill="#1f2226" stroke="#34d399"/>
+    <text x="603" y="341" font-size="14.5" font-weight="600" fill="#e6e8eb">Move / Recycle / Keep</text>
+    <text x="603" y="362" font-size="12" fill="#9aa1ab">the item is finished</text>
+    <rect x="730" y="314" width="166" height="64" rx="12" fill="#10302a"/>
+    <text x="813" y="351" font-size="15" font-weight="700" fill="#34d399">Done</text>
+  </g>
+  <g stroke-width="2">
+    <line x1="256" y1="346" x2="282" y2="346" stroke="#7d8590" marker-end="url(#arrow)"/>
+    <line x1="478" y1="346" x2="504" y2="346" stroke="#7d8590" marker-end="url(#arrow)"/>
+    <line x1="700" y1="346" x2="726" y2="346" stroke="#34d399" marker-end="url(#arrowGreen)"/>
+  </g>
+  <text x="270" y="338" text-anchor="middle" font-size="11" fill="#9aa1ab">yes</text>
+  <path d="M159 380 V412 H140" stroke="#7d8590" stroke-width="2" fill="none"/>
+  <text x="64" y="404" font-size="12" fill="#9aa1ab">no:</text>
+  <text x="64" y="424" font-size="12.5" font-weight="600" fill="#e6e8eb">try the next rule</text>
+  <path d="M381 380 V420 H420" stroke="#7d8590" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <text x="428" y="416" font-size="12.5" font-weight="600" fill="#e6e8eb">no move action + "Stop processing"</text>
+  <text x="428" y="435" font-size="12" fill="#9aa1ab">skip the remaining rules</text>
+  <line x1="480" y1="460" x2="480" y2="488" stroke="#7d8590" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="492" y="480" font-size="11.5" fill="#9aa1ab">no rule finished it</text>
+
+  <!-- fallback -->
+  <rect x="200" y="494" width="560" height="62" rx="14" fill="#1f2226" stroke="#3a4048"/>
+  <text x="480" y="520" text-anchor="middle" font-size="15" font-weight="600" fill="#e6e8eb">Sort by file type (if on for this folder)</text>
+  <text x="480" y="541" text-anchor="middle" font-size="12.5" fill="#9aa1ab">Images · Documents · Installers · Archives · Data · Video · Audio · Other · Folders</text>
+  <line x1="480" y1="558" x2="480" y2="586" stroke="#7d8590" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- act -->
+  <rect x="40" y="592" width="880" height="96" rx="16" fill="#1b1e22" stroke="#2c3036" stroke-width="1.5"/>
+  <text x="480" y="618" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="1.6" fill="#22a6c3">DO IT SAFELY  (PREVIEW STOPS HERE - NOTHING IS TOUCHED)</text>
+  <g text-anchor="middle" font-size="12" fill="#9aa1ab">
+    <text x="230" y="646" font-size="13.5" font-weight="600" fill="#e6e8eb">Move / copy</text>
+    <text x="230" y="666">never overwrites: "name (1).ext"</text>
+    <text x="480" y="646" font-size="13.5" font-weight="600" fill="#e6e8eb">Recycle</text>
+    <text x="480" y="666">always the Recycle Bin</text>
+    <text x="730" y="646" font-size="13.5" font-weight="600" fill="#e6e8eb">File in use</text>
+    <text x="730" y="666">retry next run, warn once</text>
+  </g>
+  <line x1="480" y1="690" x2="480" y2="718" stroke="#7d8590" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="260" y="724" width="440" height="52" rx="14" fill="#272b30"/>
+  <text x="480" y="756" text-anchor="middle" font-size="14.5" font-weight="600" fill="#e6e8eb">Activity log + one grouped notification</text>
+</svg>

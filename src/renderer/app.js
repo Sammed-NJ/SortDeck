@@ -126,6 +126,19 @@ function renderSettings() {
   $('#quietStart').value = s.quietStart;
   $('#quietEnd').value = s.quietEnd;
   $('#quietStart').disabled = $('#quietEnd').disabled = !s.quietOn;
+  for (const r of document.querySelectorAll('input[name=theme]')) r.checked = r.value === s.theme;
+  for (const r of document.querySelectorAll('input[name=accent]')) r.checked = r.value === s.accent;
+  applyLook(s);
+}
+// theme switches live through main (nativeTheme); accent is CSS only
+function applyLook(s) {
+  document.documentElement.dataset.accent = s.accent;
+  window.api.previewTheme(s.theme);
+}
+for (const name of ['theme', 'accent']) {
+  for (const r of document.querySelectorAll(`input[name=${name}]`)) {
+    r.addEventListener('change', () => { form.settings[name] = r.value; applyLook(form.settings); markDirty(); });
+  }
 }
 const bindSetting = (sel, key, read = (el) => el.checked) => $(sel).addEventListener(sel.includes('Start') || sel.includes('End') || sel.includes('Interval') ? 'input' : 'change', (e) => {
   form.settings[key] = read(e.target);

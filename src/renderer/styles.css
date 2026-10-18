@@ -477,3 +477,4 @@ img.logo { width: 20px; height: 20px; }
 .tut-dots { display: flex; gap: 5px; }
 .tut-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
 .tut-dots i.on { background: var(--accent); }
+

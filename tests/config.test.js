@@ -67,5 +67,16 @@ for (const s of ['needs a name', 'not a valid regex', 'needs a number', 'unknown
 }
 assert.ok(validateRule({ name: 'x', actions: [] }).errors.some((e) => e.includes('at least one action')));
 
+// theme + accent: defaults, kept when valid, unknown values fall back
+({ cfg } = loadConfig(path.join(path.dirname(tmp), 'none.json')));
+assert.equal(cfg.settings.theme, 'system');
+assert.equal(cfg.settings.accent, 'teal');
+const themed = buildConfig({ ...toForm(cfg), settings: { ...toForm(cfg).settings, theme: 'dark', accent: 'pink' } });
+assert.equal(themed.cfg.settings.theme, 'dark');
+assert.equal(themed.cfg.settings.accent, 'pink');
+const junk = buildConfig({ ...toForm(cfg), settings: { ...toForm(cfg).settings, theme: 'neon', accent: 'red' } });
+assert.equal(junk.cfg.settings.theme, 'system');
+assert.equal(junk.cfg.settings.accent, 'teal');
+
 fs.rmSync(path.dirname(tmp), { recursive: true, force: true });
 console.log('config.test.js: all checks passed');

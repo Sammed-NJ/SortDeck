@@ -3,7 +3,7 @@ const { app, BrowserWindow, Tray, Menu, Notification, ipcMain, shell, dialog, na
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
-const { loadConfig, saveConfig, toForm, buildConfig, validateRule, validateFolder, newFolder, samePath } = require('./config');
+const { loadConfig, saveConfig, toForm, buildConfig, validateRule, validateFolder, newFolder, samePath, THEMES } = require('./config');
 const { Organizer } = require('./engine');
 const doctor = require('./doctor');
 const update = require('./update');
@@ -54,6 +54,7 @@ const organizer = new Organizer({
 
 function applyConfig(next) {
   cfg = next;
+  nativeTheme.themeSource = cfg.settings.theme;   // drives prefers-color-scheme in the page and the titlebar colors
   organizer.setConfig(cfg);
   if (app.isPackaged) app.setLoginItemSettings({ openAtLogin: cfg.settings.launchAtLogin, args: ['--hidden'] });
   updateTray();
@@ -160,6 +161,9 @@ ipcMain.handle('status', () => {
     today: activity.filter((a) => a.time >= today && a.ok).length,
   };
 });
+
+// live preview while choosing in Settings; Save keeps it, Revert re-applies the saved theme
+ipcMain.handle('theme:preview', (_e, theme) => { if (THEMES.includes(theme)) nativeTheme.themeSource = theme; return nativeTheme.shouldUseDarkColors; });
 
 ipcMain.handle('organizer:pause', (_e, paused) => { setPaused(!!paused); return true; });
 ipcMain.handle('organizer:sweep', async () => (await organizer.sweepAll()).flat().length);
