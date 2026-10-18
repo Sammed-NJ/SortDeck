@@ -2,14 +2,17 @@
 const { app, BrowserWindow, Tray, Menu, Notification, ipcMain, shell, dialog, nativeTheme } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const { spawn } = require('child_process');
 const { loadConfig, saveConfig, toForm, buildConfig, validateRule, validateFolder, newFolder, samePath } = require('./config');
 const { Organizer } = require('./engine');
+const doctor = require('./doctor');
 
 const APP_NAME = 'SortDeck';
+const APP_ID = 'com.sortdeck.app';
 app.setName(APP_NAME);
 // Windows groups taskbar buttons and caches their icon by this id; it must match the installer's
 // shortcut (build.appId). Dev runs (plain electron.exe) get their own id so they can't poison that cache.
-app.setAppUserModelId(app.isPackaged ? 'com.sortdeck.app' : 'com.sortdeck.app.dev');
+app.setAppUserModelId(app.isPackaged ? APP_ID : `${APP_ID}.dev`);
 const DATA = app.getPath('userData');
 const CONFIG = path.join(DATA, 'config.json');
 const ACTIVITY = path.join(DATA, 'activity.json');
@@ -20,7 +23,21 @@ const startHidden = process.argv.includes('--hidden');
 let win = null;
 let tray = null;
 let quitting = false;
-let cfg = loadConfig(CONFIG).cfg;
+const boot = loadConfig(CONFIG);
+let cfg = boot.cfg;
+let bootNote = null;   // told to the page once
+if (boot.error && fs.existsSync(CONFIG)) {   // keep the damaged file for the user, never just overwrite it
+  try { fs.copyFileSync(CONFIG, CONFIG.replace(/\.json$/, '.damaged.json')); } catch { /* best effort */ }
+}
+if (!boot.error && !boot.restored && !fs.existsSync(CONFIG)) {   // first run: write defaults so Troubleshoot sees a file
+  try { saveConfig(CONFIG, cfg); } catch { /* troubleshoot will report it */ }
+}
+if (boot.restored) {
+  try { saveConfig(CONFIG, cfg); } catch { /* troubleshoot will report it */ }
+  bootNote = 'Your settings file was damaged or missing, so it was restored from the last backup.';
+} else if (boot.error) {
+  bootNote = `Your settings file was damaged and there was no backup, so settings were reset. The damaged copy is config.damaged.json. (${boot.error})`;
+}
 let activity = [];
 try { activity = JSON.parse(fs.readFileSync(ACTIVITY, 'utf8')); } catch { activity = []; }
 
@@ -57,7 +74,7 @@ function createWindow() {
     title: APP_NAME, icon: ICON_ICO, show: false,
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#17191c' : '#f5f6f8',
     titleBarStyle: 'hidden', titleBarOverlay: overlay(),
-    webPreferences: { preload: path.join(__dirname, '..', 'preload.js'), contextIsolation: true, sandbox: true },
+    webPreferences: { preload: path.join(__dirname, '..', 'preload.js'), contextIsolation: true, sandbox: true, devTools: !app.isPackaged },
   });
   win.removeMenu();
   win.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));
@@ -113,8 +130,9 @@ const isAllowedPath = (p) => typeof p === 'string' && path.isAbsolute(p) && cfg.
 }) || cfg.folders.some((f) => f.rules.some((r) => r.actions.some((a) => a.dest && path.isAbsolute(a.dest) && samePath(a.dest, p))));
 
 ipcMain.handle('config:get', () => {
-  const { error } = loadConfig(CONFIG);
-  return { form: toForm(cfg), error };
+  const note = bootNote;
+  bootNote = null;
+  return { form: toForm(cfg), note };
 });
 
 ipcMain.handle('config:save', (_e, form) => {
@@ -192,7 +210,62 @@ ipcMain.handle('config:openFile', async () => {
   return !(await shell.openPath(CONFIG));
 });
 
-ipcMain.handle('app:info', () => ({ version: app.getVersion(), configPath: CONFIG }));
+ipcMain.handle('app:info', () => ({ version: app.getVersion(), configPath: CONFIG, packaged: app.isPackaged }));
+
+// ---------- troubleshoot ----------
+const START_MENU_LINK = path.join(app.getPath('appData'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', `${APP_NAME}.lnk`);
+const loginArgs = { args: ['--hidden'] };
+// installed-app checks only: a dev run has no shortcut and no login item
+const extraChecks = () => (!app.isPackaged ? [] : [
+  {
+    id: 'shortcut', label: 'Start menu shortcut (needed for notifications)',
+    test: () => {
+      if (!fs.existsSync(START_MENU_LINK)) return 'The shortcut is missing';
+      return samePath(shell.readShortcutLink(START_MENU_LINK).target, process.execPath) ? null : 'The shortcut points somewhere else';
+    },
+    fix: () => shell.writeShortcutLink(START_MENU_LINK, fs.existsSync(START_MENU_LINK) ? 'replace' : 'create', {
+      target: process.execPath, appUserModelId: APP_ID, icon: process.execPath, iconIndex: 0, description: APP_NAME,
+    }),
+  },
+  {
+    id: 'login', label: 'Start with Windows',
+    test: () => (app.getLoginItemSettings(loginArgs).openAtLogin === cfg.settings.launchAtLogin ? null : 'Not set up the way Settings says'),
+    fix: () => app.setLoginItemSettings({ openAtLogin: cfg.settings.launchAtLogin, ...loginArgs }),
+  },
+]);
+const doctorCtx = () => ({ dataDir: DATA, configFile: CONFIG, activityFile: ACTIVITY, cfg, activity, extra: extraChecks() });
+
+ipcMain.handle('doctor:check', () => doctor.check(doctorCtx()));
+ipcMain.handle('doctor:repair', async () => {
+  const result = await doctor.repair(doctorCtx());
+  applyConfig(cfg);   // restart watchers and timers too
+  return result;
+});
+
+// ---------- uninstall (installed app only; confirmation lives here, not in the page) ----------
+ipcMain.handle('app:uninstall', async (e, withData) => {
+  const uninstaller = path.join(path.dirname(process.execPath), `Uninstall ${APP_NAME}.exe`);
+  if (!app.isPackaged || !fs.existsSync(uninstaller)) {
+    return { ok: false, error: 'Uninstall works from the installed app. Use Windows Settings > Apps instead.' };
+  }
+  const r = await dialog.showMessageBox(BrowserWindow.fromWebContents(e.sender), {
+    type: 'warning', title: APP_NAME, noLink: true, defaultId: 1, cancelId: 1,
+    message: withData ? `You're about to uninstall ${APP_NAME} and delete all its data.` : `You're about to uninstall ${APP_NAME}.`,
+    detail: (withData
+      ? 'Your watched folders, rules, settings and activity history will be deleted for good. This cannot be undone.'
+      : 'Your folders, rules and settings are kept, so reinstalling picks up where you left off.')
+      + '\n\nYour files are not touched - everything stays where SortDeck put it.',
+    buttons: [withData ? 'Uninstall and delete data' : 'Uninstall', 'Cancel'],
+    checkboxLabel: withData ? 'I understand my SortDeck data will be deleted' : undefined,
+  });
+  if (r.response !== 0) return { ok: false, cancelled: true };
+  if (withData && !r.checkboxChecked) return { ok: false, error: 'Nothing was uninstalled - tick the box to confirm deleting your data.' };
+  // the uninstaller closes us if we're still running; --delete-app-data removes %APPDATA%\SortDeck
+  spawn(uninstaller, withData ? ['--delete-app-data'] : [], { detached: true, stdio: 'ignore' }).unref();
+  quitting = true;
+  setTimeout(() => app.quit(), 200);
+  return { ok: true };
+});
 
 // ---------- startup ----------
 if (!app.requestSingleInstanceLock()) {

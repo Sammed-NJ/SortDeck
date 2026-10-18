@@ -3,6 +3,26 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
+## [0.1.0-beta.3] - 2026-10-19
+
+### Added
+- **Tutorial** in the sidebar, and on the welcome screen. It is a 7-step walk-through of folders, rules, rule
+  order, preview and schedules. It ends with **Create starter rules**, which adds your Downloads folder
+  (set to *Only when I click*) with one editable rule per file type plus "Everything else to Other".
+- README download button.
+- **Uninstall** from Settings, with a warning first. Choose to keep your data for a reinstall, or
+  **uninstall and delete all data** (needs an extra confirmation). Your organized files are never touched.
+- **Troubleshoot** in Settings. It checks the settings file, activity log, watched folders, start with Windows
+  and the Start menu shortcut. **Repair** appears only when something is broken. If it finds a problem at
+  startup, a banner appears on Overview.
+- The settings file is backed up on every save. A damaged or deleted settings file is restored automatically
+  from the backup, and the damaged copy is kept as `config.damaged.json`.
+
+### Security
+- The app code is packed and integrity-checked: a modified installation refuses to start, and a loose `app`
+  folder is ignored. Running the app as Node, `NODE_OPTIONS` and `--inspect` are switched off.
+  Developer tools are off in installed builds.
+
 ## [0.1.0-beta.2] - 2026-10-19
 
 ### Added
@@ -36,5 +56,6 @@ First public beta.
 - Overview with status, per-folder counts and recent activity.
 - Light and dark theme following Windows.
 
+[0.1.0-beta.3]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.3
 [0.1.0-beta.2]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.2
 [0.1.0-beta.1]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.1

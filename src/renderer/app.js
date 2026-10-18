@@ -48,7 +48,7 @@ function show(view) {
   document.querySelectorAll('.nav').forEach((b) => b.classList.toggle('active', b.dataset.view === view));
   document.querySelectorAll('.view').forEach((v) => { v.hidden = v.id !== `view-${view}`; });
 }
-document.querySelectorAll('.nav').forEach((b) => b.addEventListener('click', () => show(b.dataset.view)));
+document.querySelectorAll('.nav[data-view]').forEach((b) => b.addEventListener('click', () => show(b.dataset.view)));
 
 // tag-style input: Enter / comma (and space, for extensions) commits, Backspace removes the last tag
 const normExt = (s) => s.trim().replace(/^\.+/, '').toLowerCase();
@@ -91,14 +91,14 @@ function markDirty() {
 }
 
 async function loadForm() {
-  const { form: f, error } = await window.api.getConfig();
+  const { form: f, note } = await window.api.getConfig();
   form = f;
   savedJson = JSON.stringify(form);
   renderSettings();
   renderFolders();
   markDirty();
   renderOverview();
-  if (error) toast(`Config file had an error and was reset: ${error}`, true);
+  if (note) toast(note, true);
 }
 
 async function save() {
@@ -231,8 +231,46 @@ window.addEventListener('focus', () => { if (!dirty) loadForm(); refresh(); });
 window.api.info().then((i) => {
   $('#configPath').textContent = i.configPath;
   $('#version').textContent = `SortDeck ${i.version}`;
+  if (!i.packaged) for (const b of [$('#btnUninstall'), $('#btnUninstallAll')]) { b.disabled = true; b.title = 'Only in the installed app'; }
 });
 
+// ---------- troubleshoot ----------
+function showChecks(results) {
+  const bad = results.filter((r) => !r.ok);
+  $('#checkList').hidden = false;
+  $('#checkList').replaceChildren(...results.map((r) => h('div', { class: 'check' + (r.ok ? '' : ' bad') },
+    h('span', { class: 'check-mark' }, r.ok ? '✓' : '!'),
+    h('div', { style: 'min-width:0' }, h('div', { class: 'fname' }, r.label), h('div', { class: 'fsub' }, r.detail)))));
+  $('#btnRepair').hidden = !bad.some((r) => r.fix);
+  $('#problemBanner').hidden = !bad.length;
+  $('#problemText').textContent = `SortDeck found ${plural(bad.length, 'problem')}.`;
+  return bad;
+}
+async function runCheck(quiet) {
+  const bad = showChecks(await window.api.checkProblems());
+  if (!quiet) toast(bad.length ? `Found ${plural(bad.length, 'problem')}.` : 'No problems found.', bad.length > 0);
+}
+$('#btnCheck').addEventListener('click', () => runCheck(false));
+$('#btnRepair').addEventListener('click', async () => {
+  $('#btnRepair').disabled = true;
+  try {
+    const bad = showChecks(await window.api.repairProblems());
+    toast(bad.length ? `Repaired what could be fixed. ${plural(bad.length, 'problem')} still need you.` : 'Everything is repaired.', bad.length > 0);
+    if (!dirty) loadForm();
+    refresh();
+  } finally { $('#btnRepair').disabled = false; }
+});
+$('#btnProblems').addEventListener('click', () => show('settings'));
+
+// ---------- uninstall (main shows the warning and does the work) ----------
+async function uninstall(withData) {
+  const r = await window.api.uninstall(withData);
+  if (r.ok) toast('Uninstalling SortDeck...');
+  else if (r.error) toast(r.error, true);
+}
+$('#btnUninstall').addEventListener('click', () => uninstall(false));
+$('#btnUninstallAll').addEventListener('click', () => uninstall(true));
+
 // ---------- start (after folders.js and rules.js have loaded) ----------
-document.addEventListener('DOMContentLoaded', () => loadForm().then(refresh));
+document.addEventListener('DOMContentLoaded', () => loadForm().then(refresh).then(() => runCheck(true)));
 setInterval(() => { if (document.visibilityState === 'visible') refresh(); }, 5000);

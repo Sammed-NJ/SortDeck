@@ -27,17 +27,27 @@
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-1.7-1L15 3.5h-4L10.7 6a7.4 7.4 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 1.7 1l.3 2.5h4l.3-2.5a7.4 7.4 0 0 0 1.7-1l2.4 1 2-3.4z"/></svg>
         Settings
       </button>
+      <button class="nav" id="btnTutorial" type="button">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17.2v.1"/></svg>
+        Tutorial
+      </button>
       <div class="sidebar-foot"><span class="dot"></span><span id="navStatus">Starting...</span></div>
     </nav>
 
     <main>
       <!-- Overview -->
       <section id="view-overview" class="view">
+        <div id="problemBanner" class="problem-banner" hidden>
+          <span id="problemText"></span>
+          <button id="btnProblems" class="btn">Troubleshoot</button>
+        </div>
+
         <div id="welcome" class="welcome" hidden>
           <img src="../../build/icon.png" alt="" class="welcome-icon">
           <h1>What should we organize first?</h1>
           <p class="muted">Pick a folder. Anything that lands in it is sorted automatically - by file type, or by rules you create, just like Outlook rules.</p>
           <div id="suggestions" class="suggestions"></div>
+          <p class="muted">New here? <button id="btnTutorialWelcome" class="link" type="button">Take the 1-minute tutorial</button> - it can set up starter rules for Downloads.</p>
         </div>
 
         <div id="dashboard" hidden>
@@ -108,6 +118,33 @@
             <button id="btnEditJson" class="btn">Open</button>
           </div>
         </div>
+
+        <h2 class="section-title">Troubleshoot</h2>
+        <div class="card settings">
+          <div class="setting stack">
+            <div class="setting-row">
+              <div><h3>Check for problems</h3><p class="muted">Checks the settings file, activity log, watched folders, start with Windows and the Start menu shortcut. Repair only appears if something is broken.</p></div>
+              <div class="inline">
+                <button id="btnCheck" class="btn">Run check</button>
+                <button id="btnRepair" class="btn primary" hidden>Repair</button>
+              </div>
+            </div>
+            <div id="checkList" class="checks" hidden></div>
+            <p class="muted small">If SortDeck won't open at all, download and run the installer again. It repairs the app and keeps your folders and rules.</p>
+          </div>
+        </div>
+
+        <h2 class="section-title">Uninstall</h2>
+        <div class="card settings danger-zone">
+          <div class="setting">
+            <div><h3>Uninstall SortDeck</h3><p class="muted">Removes the app. Your folders, rules and settings are kept in case you reinstall. Your files stay where they are.</p></div>
+            <button id="btnUninstall" class="btn danger-text">Uninstall...</button>
+          </div>
+          <div class="setting">
+            <div><h3>Uninstall and delete all data</h3><p class="muted">Removes the app <b>and</b> everything it stored: watched folders, rules, settings and history. Cannot be undone. Your files stay where they are.</p></div>
+            <button id="btnUninstallAll" class="btn danger">Uninstall and delete data...</button>
+          </div>
+        </div>
         <p class="muted small center" id="version"></p>
       </section>
     </main>
@@ -123,10 +160,12 @@
   <dialog id="addDialog" class="dialog"></dialog>
   <dialog id="ruleDialog" class="dialog wide"></dialog>
   <dialog id="runDialog" class="dialog"></dialog>
+  <dialog id="tutorialDialog" class="dialog"></dialog>
   <datalist id="folderOptions"></datalist>
 
   <script src="app.js"></script>
   <script src="folders.js"></script>
   <script src="rules.js"></script>
+  <script src="tutorial.js"></script>
 </body>
 </html>

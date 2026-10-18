@@ -1,13 +1,13 @@
 {
   "name": "sortdeck",
   "productName": "SortDeck",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "description": "SortDeck keeps any folder organized automatically with Outlook-style rules",
   "main": "src/main/main.js",
   "private": true,
   "scripts": {
     "start": "electron .",
-    "test": "node tests/config.test.js && node tests/engine.test.js",
+    "test": "node tests/config.test.js && node tests/engine.test.js && node tests/doctor.test.js",
     "dist": "electron-builder --win"
   },
   "build": {
@@ -19,6 +19,15 @@
       "build/icon.ico",
       "package.json"
     ],
+    "asar": true,
+    "electronFuses": {
+      "runAsNode": false,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true,
+      "enableCookieEncryption": true
+    },
     "directories": {
       "output": "dist"
     },

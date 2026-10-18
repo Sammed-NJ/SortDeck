@@ -21,7 +21,7 @@ or by rules you build from name, size, age and even the website it came from.
 ![Platform](https://img.shields.io/badge/platform-windows%2010%20%7C%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![Electron](https://img.shields.io/badge/built%20with-electron%2044-47848F?style=for-the-badge&logo=electron&logoColor=white)
 ![Status](https://img.shields.io/badge/status-beta-F59E0B?style=for-the-badge)
-![Version](https://img.shields.io/badge/version-0.1.0--beta.2-0E7490?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.1.0--beta.3-0E7490?style=for-the-badge)
 <br>
 ![Install](https://img.shields.io/badge/install-one%20click-22C55E?style=for-the-badge&logo=windowsterminal&logoColor=white)
 ![Admin](https://img.shields.io/badge/admin%20rights-not%20required-22C55E?style=for-the-badge)
@@ -30,6 +30,13 @@ or by rules you build from name, size, age and even the website it came from.
 
 <br>
 
+<a href="https://github.com/Sammed-NJ/SortDeck/releases/download/v0.1.0-beta.3/SortDeck-Setup-0.1.0-beta.3.exe"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.3-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
+
+<sub>Windows 10 / 11 · 64-bit · no admin rights · <a href="https://github.com/Sammed-NJ/SortDeck/releases">all releases</a></sub>
+
+<br><br>
+
+[Download](#install) •
 [Screenshots](#screenshots) •
 [Why SortDeck?](#why-sortdeck) •
 [Install](#install) •
@@ -70,20 +77,28 @@ or by rules you build from name, size, age and even the website it came from.
 | **Set up before anything moves** | New folders start in "set up rules first" mode: nothing is touched until you decide. |
 | **Safe by default** | Unfinished downloads are skipped, files in use are retried, name clashes become `name (1).ext`, nothing is ever overwritten, and "delete" means the Recycle Bin. |
 | **Set and forget** | Lives in the tray and starts with Windows. Close the window and it keeps working. |
+| **Tamper-proof install** | App code is packed and integrity-checked, so an edited install refuses to start. Troubleshoot repairs everything else. |
 | **Private** | Runs entirely on your PC. No account, no cloud, no telemetry. |
 
 ## Install
 
-1. Download **`SortDeck-Setup-0.1.0-beta.2.exe`** from [Releases](https://github.com/Sammed-NJ/SortDeck/releases).
+1. **[Download SortDeck-Setup-0.1.0-beta.3.exe](https://github.com/Sammed-NJ/SortDeck/releases/download/v0.1.0-beta.3/SortDeck-Setup-0.1.0-beta.3.exe)** (or pick a version from [Releases](https://github.com/Sammed-NJ/SortDeck/releases)).
 2. Double-click it. It installs in seconds - no admin prompt - and opens SortDeck.
-3. Pick a folder and choose **Set up rules first** (nothing moves) or **Sort by file type right away**.
+3. New here? Click **Tutorial** in the sidebar: a 1-minute walk-through that can also create starter rules
+   for your Downloads folder (one rule per file type, nothing moves until you run them).
+   Or pick a folder yourself and choose **Set up rules first** (nothing moves) or **Sort by file type right away**.
 4. Add rules, hit **Organize now → Preview** to check them, then set **When to organize**:
    *Instantly*, *On a schedule* (every N minutes/hours) or *Only when I click*.
 
 > Windows may say *"Windows protected your PC"* because beta builds aren't code-signed yet.
 > Click **More info → Run anyway**.
 
-Uninstall any time from **Settings → Apps**. Your files stay exactly where SortDeck put them.
+Uninstall any time from **SortDeck → Settings → Uninstall** (optionally deleting all its data) or from
+Windows **Settings → Apps**. Your files stay exactly where SortDeck put them.
+
+**Something wrong?** **Settings → Troubleshoot → Run check** finds and repairs a damaged settings file, a missing
+Start menu shortcut and similar problems. A damaged settings file is restored from its automatic backup. If
+SortDeck won't open at all, run the installer again: it repairs the app and keeps your rules.
 
 ## Rules
 
@@ -151,10 +166,11 @@ src/
   main/
     main.js      window, tray, start-with-Windows, IPC
     engine.js    watches folders, matches rules, moves / copies / recycles
-    config.js    config shape, validation, load / save
+    config.js    config shape, validation, load / save (+ .bak backup)
+    doctor.js    troubleshoot: check + repair
   preload.js     the page's only bridge to the main process
-  renderer/      the UI - app.js (overview, settings), folders.js, rules.js
-tests/           engine.test.js, config.test.js  (plain node, no framework)
+  renderer/      the UI - app.js (overview, settings), folders.js, rules.js, tutorial.js
+tests/           engine, config, doctor tests  (plain node, no framework)
 build/           app icon
 docs/images/     screenshots
 ```
@@ -173,6 +189,7 @@ SortDeck follows [Semantic Versioning](https://semver.org). While in beta, versi
 - [ ] Code-signed installer (no SmartScreen warning)
 - [ ] Automatic updates
 - [ ] Undo for recent moves
+- [x] In-app tutorial with starter rules for Downloads
 - [ ] Rule templates gallery
 - [ ] Conditions on file contents and dates in names
 - [ ] macOS build

@@ -15,5 +15,8 @@ contextBridge.exposeInMainWorld('api', {
   pickFolder: (base) => ipcRenderer.invoke('pick:folder', base),
   openPath: (p) => ipcRenderer.invoke('open:path', p),
   info: () => ipcRenderer.invoke('app:info'),
+  checkProblems: () => ipcRenderer.invoke('doctor:check'),
+  repairProblems: () => ipcRenderer.invoke('doctor:repair'),
+  uninstall: (withData) => ipcRenderer.invoke('app:uninstall', !!withData),
   onActivity: (fn) => ipcRenderer.on('activity', () => fn()),
 });

@@ -453,3 +453,27 @@ img.logo { width: 20px; height: 20px; }
 .schedule { padding: 16px 20px; }
 .schedule-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
 .schedule-row .inline select { min-width: 250px; }
+
+/* troubleshoot + uninstall */
+.section-title { font-size: 13px; font-weight: 600; color: var(--muted); margin: 22px 2px 8px; }
+.setting-row { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.checks { display: flex; flex-direction: column; gap: 6px; }
+.check { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 8px; background: var(--ok-soft); }
+.check.bad { background: var(--warn-soft); }
+.check-mark { width: 20px; height: 20px; flex: none; display: grid; place-items: center; border-radius: 50%; font-size: 12px; font-weight: 700; color: #fff; background: var(--ok); }
+.check.bad .check-mark { background: var(--warn); }
+.check .fname { font-weight: 500; overflow-wrap: anywhere; }
+.check .fsub { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.danger-zone { border-color: color-mix(in srgb, var(--bad) 35%, var(--border)); }
+.btn.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
+.btn.danger:hover { filter: brightness(1.08); }
+.problem-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; padding: 10px 14px; border-radius: 10px; background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); font-weight: 600; }
+
+/* tutorial */
+.tutorial .dlg-body p { line-height: 1.55; }
+.tutorial .dlg-body p + p { margin-top: 10px; }
+.tut-list { margin: 10px 0 0 18px; display: grid; gap: 6px; line-height: 1.5; }
+.tut-example { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--accent-soft); font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; }
+.tut-dots { display: flex; gap: 5px; }
+.tut-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
+.tut-dots i.on { background: var(--accent); }

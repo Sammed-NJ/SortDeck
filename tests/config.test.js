@@ -30,8 +30,13 @@ saveConfig(tmp, built.cfg);
 assert.deepEqual(cfg, built.cfg);
 assert.equal(cfg.folders[1].sortByType, false);
 
-// broken file -> defaults + error
+// broken file -> restored from the backup saveConfig keeps; no backup either -> defaults + error
 fs.writeFileSync(tmp, '{ nope');
+let restored;
+({ cfg, error, restored } = loadConfig(tmp));
+assert.ok(error && restored);
+assert.deepEqual(cfg, built.cfg);
+fs.writeFileSync(tmp + '.bak', '{ nope');
 ({ cfg, error } = loadConfig(tmp));
 assert.ok(error);
 assert.deepEqual(cfg.folders, []);

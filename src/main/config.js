@@ -94,13 +94,17 @@ function normalizeConfig(c) {
   };
 }
 
+// a damaged or deleted config.json is restored from config.json.bak (the last good save)
 function loadConfig(file) {
-  if (!fs.existsSync(file)) return { cfg: normalizeConfig({}), error: null };
-  try {
-    return { cfg: normalizeConfig(JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, ''))), error: null };
-  } catch (e) {
-    return { cfg: normalizeConfig({}), error: e.message };
+  const read = (f) => normalizeConfig(JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')));
+  let error = null;
+  if (fs.existsSync(file)) {
+    try { return { cfg: read(file), error: null }; } catch (e) { error = e.message; }
   }
+  if (fs.existsSync(file + '.bak')) {
+    try { return { cfg: read(file + '.bak'), error, restored: true }; } catch { /* backup bad too */ }
+  }
+  return { cfg: normalizeConfig({}), error };
 }
 
 function saveConfig(file, cfg) {
@@ -108,6 +112,7 @@ function saveConfig(file, cfg) {
   const tmp = file + '.tmp';
   fs.writeFileSync(tmp, JSON.stringify(cfg, null, 2), 'utf8');
   fs.renameSync(tmp, file);
+  fs.copyFileSync(file, file + '.bak');
 }
 
 // ---------- config <-> the shape the UI edits (categories as an ordered list) ----------
