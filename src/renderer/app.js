@@ -305,6 +305,8 @@ $('#btnInstallUpdate').addEventListener('click', async () => {
   b.disabled = false; b.textContent = label;
 });
 $('#btnReleases').addEventListener('click', () => window.api.openReleases());
+$('#btnFeedback').addEventListener('click', () => window.api.openLink('feedback'));
+document.querySelectorAll('[data-link]').forEach((b) => b.addEventListener('click', () => window.api.openLink(b.dataset.link)));
 $('#btnGoUninstall').addEventListener('click', () => $('#uninstallCard').scrollIntoView({ behavior: 'smooth', block: 'center' }));
 
 // ---------- uninstall (main shows the warning and does the work) ----------

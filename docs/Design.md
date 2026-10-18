@@ -5,7 +5,7 @@ itself, and never surprises the user by moving files.
 
 ## Principles
 1. **Nothing moves by surprise.** New folders start in "Set up rules first". Preview comes before every manual run.
-2. **Outlook vocabulary.** The UI uses *When / Do this / Except if*, "Stop processing more rules", top-to-bottom order.
+2. **One rule language.** The UI uses *When / Do this / Except if*, "Stop processing more rules", top-to-bottom order.
 3. **Plain words.** The UI says "Only when I click", not `trigger: manual`, and "Recycle Bin", not "delete".
 4. **One save model.** All edits are collected in a form. The save bar shows *Unsaved changes* with Revert / Save (Ctrl+S).
 5. **Quiet by default.** Notifications are grouped, there is a single tray hint, and a busy file is warned about once.

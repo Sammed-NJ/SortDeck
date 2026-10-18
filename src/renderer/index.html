@@ -32,6 +32,10 @@
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17.2v.1"/></svg>
         Tutorial
       </button>
+      <button class="nav" id="btnFeedback" type="button" title="Opens the contact form on sammednj.in">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg>
+        Send feedback
+      </button>
       <div class="sidebar-foot"><span class="dot"></span><span id="navStatus">Starting...</span></div>
     </nav>
 
@@ -46,7 +50,7 @@
         <div id="welcome" class="welcome" hidden>
           <img src="../../build/icon.png" alt="" class="welcome-icon">
           <h1>What should we organize first?</h1>
-          <p class="muted">Pick a folder. Anything that lands in it is sorted automatically - by file type, or by rules you create, just like Outlook rules.</p>
+          <p class="muted">Pick a folder. Anything that lands in it is sorted automatically - by file type, or by rules you create.</p>
           <div id="suggestions" class="suggestions"></div>
           <p class="muted">New here? <button id="btnTutorialWelcome" class="link" type="button">Take the 1-minute tutorial</button> - it can set up starter rules for Downloads.</p>
         </div>
@@ -101,6 +105,13 @@
               <button id="btnReleases" class="btn" hidden>What's new</button>
               <button id="btnInstallUpdate" class="btn primary" hidden>Download and install</button>
               <button id="btnCheckUpdate" class="btn">Check for updates</button>
+            </div>
+          </div>
+          <div class="setting">
+            <div><h3>About</h3><p class="muted">SortDeck is made by Sammed NJ. It's in beta - tell me what works and what doesn't.</p></div>
+            <div class="inline">
+              <button class="btn" data-link="portfolio" type="button">Portfolio</button>
+              <button class="btn primary" data-link="feedback" type="button">Send feedback</button>
             </div>
           </div>
           <div class="setting">

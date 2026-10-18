@@ -3,6 +3,16 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
+## [0.1.0-beta.7] - 2026-10-19
+
+### Added
+- **Send feedback** in the sidebar, and **About** in Settings with links to the author's portfolio and contact form.
+
+### Changed
+- One beta download at a time: each beta update replaces the file on the single "SortDeck Beta" release. Official
+  versions get their own release.
+- Clearer wording across the app and docs.
+
 ## [0.1.0-beta.6] - 2026-10-19
 
 ### Added
@@ -76,7 +86,7 @@ First public beta.
 ### Added
 - One-click Windows installer (per-user, no admin rights), Start Menu and Desktop shortcuts.
 - Watch any number of folders; each has its own rules and settings.
-- Outlook-style rules: conditions (name, extension, size, age, downloaded-from website, file/folder),
+- Rules: conditions (name, extension, size, age, downloaded-from website, file/folder),
   actions (move, copy, Recycle Bin, keep, notify), exceptions, match all/any, stop processing,
   automatic or manual-only, reordering.
 - Preview matches and "Run rules now" on a folder or any subfolder.
@@ -86,6 +96,7 @@ First public beta.
 - Overview with status, per-folder counts and recent activity.
 - Light and dark theme following Windows.
 
+[0.1.0-beta.7]: https://github.com/Sammed-NJ/SortDeck/releases/tag/beta
 [0.1.0-beta.6]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.6
 [0.1.0-beta.5]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.5
 [0.1.0-beta.4]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.4

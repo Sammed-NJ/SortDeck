@@ -3,7 +3,7 @@
 Guide for AI coding agents (Claude Code, Codex, Copilot, ...) working on SortDeck.
 
 ## What this is
-SortDeck is a Windows Electron app that organizes any folder with Outlook-style rules. Read these first:
+SortDeck is a Windows Electron app that organizes any folder with rules you build. Read these first:
 
 | Doc | Read it for |
 | --- | --- |

@@ -5,13 +5,13 @@
 ## 1. Problem
 
 Folders like Downloads, Desktop and project inboxes fill up with files nobody files away. Existing tools are
-either scripts (hard to set up and change) or sorters that only group by file type. People already
-understand Outlook mail rules - "when X, do Y, except Z" - but nothing applies that model to folders.
+either scripts (hard to set up and change) or sorters that only group by file type. Nothing lets people
+say simply "when X, do Y, except Z" for their own folders.
 
 ## 2. Goal
 
 A desktop app you **download, double-click and use**. Point it at any folder, describe rules the
-Outlook way, preview them, then let it run automatically or only when you click.
+*when / do this / except if* way, preview them, then let it run automatically or only when you click.
 
 ## 3. Users
 
@@ -36,7 +36,7 @@ Outlook way, preview them, then let it run automatically or only when you click.
 - R7 Per-folder **When to organize**: *Instantly* · *On a schedule* (every N minutes/hours, 1 min - 7 days) ·
   *Only when I click* · *Off*.
 
-### 4.3 Rules (Outlook model)
+### 4.3 Rules
 - R8 Conditions: file name (contains / starts / ends / equals / wildcard / regex), extension (in / not in),
   size (MB), age (minutes/hours/days), downloaded-from website, file vs folder. Match **all** or **any**.
 - R9 Actions: move, copy, Recycle Bin, keep in place, notify. Several can be combined.

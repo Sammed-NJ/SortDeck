@@ -5,7 +5,7 @@ const TUTORIAL = [
   {
     title: 'Welcome to SortDeck',
     body: [
-      'SortDeck keeps folders tidy with rules - the same idea as Outlook mail rules, but for files.',
+      'SortDeck keeps folders tidy for you. Tell it what to look for and what to do, and it files everything as it arrives.',
       'This takes about a minute. At the end you can create starter rules for your Downloads folder.',
     ],
   },
@@ -54,6 +54,7 @@ const TUTORIAL = [
     body: [
       'Create one rule per file type for your Downloads folder - Images, Documents, Installers, Archives, Data, Video, Audio - plus "Everything else to Other".',
       'They are ordinary rules you can edit, reorder or delete. The folder is set to "Only when I click", so nothing moves until you preview and run it.',
+      'SortDeck is in beta. Use "Send feedback" in the sidebar any time to tell me what to improve.',
     ],
     starter: true,
   },

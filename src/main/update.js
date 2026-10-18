@@ -23,6 +23,13 @@ function compareVersions(a, b) {
   return 0;
 }
 
+// version of a release: its tag (v1.0.0), or for the rolling `beta` release the one in its title
+const SEMVER = /\d+\.\d+\.\d+(?:-[0-9A-Za-z.]+)?/;
+function versionOf(r) {
+  const m = (SEMVER.exec(String(r.tag_name || '')) || SEMVER.exec(String(r.name || '')));
+  return m ? m[0] : null;
+}
+
 // -> { status: 'latest' | 'available' | 'none', current, latest?, url?, page?, notes? }
 async function checkForUpdate(current, fetchImpl = fetch) {
   const res = await fetchImpl(`https://api.github.com/repos/${REPO}/releases?per_page=20`, {
@@ -30,12 +37,11 @@ async function checkForUpdate(current, fetchImpl = fetch) {
   });
   if (!res.ok) throw new Error(`GitHub answered ${res.status}`);
   const releases = (await res.json()).filter((r) => !r.draft)
-    .map((r) => ({ r, asset: (r.assets || []).find((a) => /^SortDeck-Setup-.+\.exe$/i.test(a.name)) }))
-    .filter((x) => x.asset)
-    .sort((a, b) => compareVersions(b.r.tag_name, a.r.tag_name));
+    .map((r) => ({ r, v: versionOf(r), asset: (r.assets || []).find((a) => /^SortDeck-Setup-.+\.exe$/i.test(a.name)) }))
+    .filter((x) => x.asset && x.v)
+    .sort((a, b) => compareVersions(b.v, a.v));
   if (!releases.length) return { status: 'none', current, page: RELEASES };
-  const { r, asset } = releases[0];
-  const latest = r.tag_name.replace(/^v/, '');
+  const { r, v: latest, asset } = releases[0];
   if (compareVersions(latest, current) <= 0) return { status: 'latest', current, latest, page: RELEASES };
   return { status: 'available', current, latest, url: asset.browser_download_url, name: asset.name, page: r.html_url, notes: String(r.body || '').slice(0, 600) };
 }
@@ -48,4 +54,4 @@ const isTrustedDownload = (u) => {
   } catch { return false; }
 };
 
-module.exports = { compareVersions, checkForUpdate, isTrustedDownload, RELEASES };
+module.exports = { compareVersions, versionOf, checkForUpdate, isTrustedDownload, RELEASES };

@@ -156,7 +156,7 @@ function renderFolderDetail() {
     scheduleCard(f),
 
     h('div', { class: 'section-head' },
-      h('div', {}, h('h2', {}, 'Rules'), h('p', { class: 'muted small' }, 'Checked top to bottom for every item, like Outlook rules.')),
+      h('div', {}, h('h2', {}, 'Rules'), h('p', { class: 'muted small' }, 'Checked top to bottom for every new item.')),
       h('button', { class: 'btn primary', onclick: () => openRuleEditor(-1) }, '+ New rule')),
     h('div', { id: 'ruleList', class: 'rule-list' }),
 

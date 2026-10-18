@@ -11,7 +11,7 @@
 
 # SortDeck
 
-### Outlook-style rules for your folders
+### Your folders, sorted by your rules
 
 Pick any folder. Everything that lands in it is filed the moment it arrives - by file type,
 or by rules you build from name, size, age and even the website it came from.
@@ -21,7 +21,7 @@ or by rules you build from name, size, age and even the website it came from.
 ![Platform](https://img.shields.io/badge/platform-windows%2010%20%7C%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![Electron](https://img.shields.io/badge/built%20with-electron%2044-47848F?style=for-the-badge&logo=electron&logoColor=white)
 ![Status](https://img.shields.io/badge/status-beta-F59E0B?style=for-the-badge)
-![Version](https://img.shields.io/badge/version-0.1.0--beta.6-0E7490?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.1.0--beta.7-0E7490?style=for-the-badge)
 <br>
 ![Install](https://img.shields.io/badge/install-one%20click-22C55E?style=for-the-badge&logo=windowsterminal&logoColor=white)
 ![Admin](https://img.shields.io/badge/admin%20rights-not%20required-22C55E?style=for-the-badge)
@@ -30,9 +30,9 @@ or by rules you build from name, size, age and even the website it came from.
 
 <br>
 
-<a href="https://www.sammednj.in/sortdeck/download"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.6-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
+<a href="https://www.sammednj.in/sortdeck/download"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.7-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
 
-<sub>Windows 10 / 11 · 64-bit · no admin rights · <a href="https://www.sammednj.in/sortdeck">website</a> · <a href="https://github.com/Sammed-NJ/SortDeck/releases">all releases</a></sub>
+<sub>Windows 10 / 11 · 64-bit · no admin rights · <a href="https://www.sammednj.in/sortdeck">website</a> · <a href="https://www.sammednj.in/#contact">send feedback</a></sub>
 
 <br><br>
 
@@ -52,7 +52,8 @@ or by rules you build from name, size, age and even the website it came from.
 ---
 
 > [!WARNING]
-> **SortDeck is in beta.** It's usable every day, but things may change between versions.
+> **SortDeck is in beta.** [Send feedback](https://www.sammednj.in/#contact) - it shapes the first official release.
+> It's usable every day, but things may change between versions.
 > Try it on one folder first, and use **Preview matches** before turning a new rule loose.
 > Deleted items always go to the Recycle Bin, so nothing is lost for good.
 
@@ -63,7 +64,7 @@ or by rules you build from name, size, age and even the website it came from.
 <img src="docs/images/welcome.png" alt="First run: pick a folder to organize" width="49%">
 <img src="docs/images/overview.png" alt="Overview: status, folders and recent activity" width="49%">
 
-<img src="docs/images/rules.png" alt="Outlook-style rules for a folder" width="80%">
+<img src="docs/images/rules.png" alt="A folder's rules in SortDeck" width="80%">
 
 </div>
 
@@ -72,7 +73,7 @@ or by rules you build from name, size, age and even the website it came from.
 | | |
 | --- | --- |
 | **Any folder, not just Downloads** | Desktop, Documents, a project folder, a USB drive - add as many as you like, each with its own rules. |
-| **Rules you already understand** | Conditions, actions and exceptions, checked top to bottom - exactly like Outlook mail rules. |
+| **Rules in plain words** | *When* this, *do* that, *except if* something else - checked top to bottom. |
 | **Your schedule, per folder** | Organize *instantly* as items arrive, *every N minutes or hours*, or *only when you click* **Organize now** - with a preview first. |
 | **Set up before anything moves** | New folders start in "set up rules first" mode: nothing is touched until you decide. |
 | **Safe by default** | Unfinished downloads are skipped, files in use are retried, name clashes become `name (1).ext`, nothing is ever overwritten, and "delete" means the Recycle Bin. |
@@ -83,8 +84,8 @@ or by rules you build from name, size, age and even the website it came from.
 
 ## Install
 
-1. **[Download SortDeck for Windows](https://www.sammednj.in/sortdeck/download)**. It always gets the newest version. You can also visit the
-   [SortDeck website](https://www.sammednj.in/sortdeck) or pick a version from [Releases](https://github.com/Sammed-NJ/SortDeck/releases).
+1. **[Download SortDeck for Windows](https://www.sammednj.in/sortdeck/download)**. It always gets the newest beta. More on the
+   [SortDeck website](https://www.sammednj.in/sortdeck).
 2. Double-click it. It installs in seconds - no admin prompt - and opens SortDeck.
 3. New here? Click **Tutorial** in the sidebar: a 1-minute walk-through that can also create starter rules
    for your Downloads folder (one rule per file type, nothing moves until you run them).

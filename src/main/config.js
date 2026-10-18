@@ -1,4 +1,4 @@
-// Config: watched folders, each with Outlook-style rules + optional sort-by-file-type.
+// Config: watched folders, each with its own rules + optional sort-by-file-type.
 // Stored as JSON in the app's user-data folder. No Electron imports - testable with plain node.
 const fs = require('fs');
 const path = require('path');

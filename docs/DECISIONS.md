@@ -19,8 +19,8 @@ consequences*. Never rewrite an accepted entry; supersede it with a new one.
 - **Decision:** `engine.js` and `config.js` import only Node built-ins. Trash and notify are injected.
 - **Consequences:** `npm test` runs under plain `node` against real temp folders. Never `require('electron')` there.
 
-### D3 - Outlook rule model · 2026-10-18 · Accepted
-- **Context:** Users already know mail rules.
+### D3 - When / Do this / Except if rule model · 2026-10-18 · Accepted
+- **Context:** Rules must be quick to read and build for non-technical users.
 - **Decision:** Rules have conditions (all/any), actions and exceptions, are checked top to bottom, and
   support stop processing.
   - copy/notify are non-terminal.
@@ -126,3 +126,15 @@ consequences*. Never rewrite an accepted entry; supersede it with a new one.
   - Needs a published GitHub release with the installer attached.
   - Unsigned builds still show SmartScreen.
   - Background checks are deferred.
+
+### D17 - One rolling beta release; automatic builds · 2026-10-19 · Accepted
+- **Context:** While SortDeck is in beta, the owner doesn't want a release per update. Users should always get the
+  current beta, and official versions come after feedback. Uploading the 107 MB installer by hand failed (a release
+  was published with no file attached).
+- **Decision:**
+  - `.github/workflows/release.yml` builds on every `v*` tag.
+  - Beta tags move the `beta` tag and replace the file on one "SortDeck Beta (x.y.z-beta.n)" pre-release.
+  - Official tags get their own release.
+  - The update check and website read the version from the tag, or from the beta release's title.
+- **Consequences:** The download link always resolves to a real file. There is no per-beta history on GitHub; the
+  CHANGELOG is the history.

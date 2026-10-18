@@ -1,5 +1,8 @@
-# Push a tag like v0.1.0-beta.6 or v1.0.0 -> builds the Windows installer and publishes the
-# GitHub release with SortDeck-Setup-*.exe attached. Notes come from that version's CHANGELOG section.
+# Builds the Windows installer when a version tag is pushed and puts it where the Download links find it.
+#   v0.1.0-beta.7 -> replaces the file on the single "SortDeck Beta" release (tag `beta`), so there is
+#                    one beta download at a time, never a pile of releases.
+#   v1.0.0        -> publishes an official "SortDeck 1.0.0" release.
+# Notes come from that version's CHANGELOG section.
 name: Release
 
 on:
@@ -8,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Existing tag to (re)build, e.g. v0.1.0-beta.6
+        description: Existing version tag to (re)build, e.g. v0.1.0-beta.7
         required: true
 
 permissions:
@@ -23,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ env.TAG }}
+          ref: ${{ inputs.tag || github.ref_name }}
 
       - uses: actions/setup-node@v4
         with:
@@ -38,26 +41,37 @@ jobs:
         shell: bash
         run: |
           version="${TAG#v}"
-          awk -v v="$version" '
-            /^## \[/ { if (on) exit; if (index($0, "[" v "]")) { on = 1; next } }
-            on { print }
-          ' CHANGELOG.md > notes.md
           {
+            echo "**Version:** $version"
+            echo
+            awk -v v="$version" '
+              /^## \[/ { if (on) exit; if (index($0, "[" v "]")) { on = 1; next } }
+              on { print }
+            ' CHANGELOG.md
             echo
             echo "**Install:** download the .exe below and double-click it - no admin rights needed."
             echo "Windows may say \"Windows protected your PC\" because the app isn't code-signed yet: click **More info -> Run anyway**."
             echo
-            echo "Website: https://www.sammednj.in/sortdeck"
-          } >> notes.md
+            echo "Feedback: https://www.sammednj.in/#contact · Website: https://www.sammednj.in/sortdeck"
+          } > notes.md
 
-      - name: Publish release with installer
+      - name: Publish
         shell: bash
         run: |
           exe=$(ls dist/SortDeck-Setup-*.exe)
-          pre=""; [[ "$TAG" == *-* ]] && pre="--prerelease"
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "$exe" --clobber
-            gh release edit "$TAG" --notes-file notes.md --draft=false $pre
+          version="${TAG#v}"
+          if [[ "$version" == *-* ]]; then
+            # beta: move the `beta` tag here and swap the file on the one beta release
+            git tag -f beta HEAD
+            git push -f origin refs/tags/beta
+            title="SortDeck Beta ($version)"
+            if gh release view beta >/dev/null 2>&1; then
+              for a in $(gh release view beta --json assets -q '.assets[].name'); do gh release delete-asset beta "$a" -y; done
+              gh release upload beta "$exe"
+              gh release edit beta --title "$title" --notes-file notes.md --prerelease --draft=false
+            else
+              gh release create beta "$exe" --title "$title" --notes-file notes.md --prerelease
+            fi
           else
-            gh release create "$TAG" "$exe" --title "SortDeck ${TAG#v}" --notes-file notes.md $pre
+            gh release create "$TAG" "$exe" --title "SortDeck $version" --notes-file notes.md --latest
           fi

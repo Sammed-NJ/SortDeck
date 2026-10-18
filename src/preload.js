@@ -16,6 +16,7 @@ contextBridge.exposeInMainWorld('api', {
   pickFolder: (base) => ipcRenderer.invoke('pick:folder', base),
   openPath: (p) => ipcRenderer.invoke('open:path', p),
   info: () => ipcRenderer.invoke('app:info'),
+  openLink: (key) => ipcRenderer.invoke('open:link', key),
   checkProblems: () => ipcRenderer.invoke('doctor:check'),
   repairProblems: () => ipcRenderer.invoke('doctor:repair'),
   checkUpdate: () => ipcRenderer.invoke('update:check'),

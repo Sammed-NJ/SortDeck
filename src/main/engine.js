@@ -61,7 +61,7 @@ async function testCondition(c, item, now) {
 }
 
 async function matchRule(rule, item, now = Date.now()) {
-  if (rule.conditions.length) {   // no conditions = applies to every item, like Outlook
+  if (rule.conditions.length) {   // no conditions = applies to every item
     const hits = [];
     for (const c of rule.conditions) hits.push(await testCondition(c, item, now));
     if (rule.match === 'any' ? !hits.some(Boolean) : !hits.every(Boolean)) return false;

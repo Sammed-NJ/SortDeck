@@ -10,7 +10,7 @@ Delivery plan. ✅ done · 🔄 in progress · ⬜ planned.
 - [x] Electron shell: custom titlebar, tray, single instance, start with Windows
 - [x] Engine: watcher + debounce + settle + safety interval, busy-file retry
 - [x] Any number of folders, each with its own config
-- [x] Outlook rules: conditions, actions, exceptions, all/any, stop, reorder, auto/manual
+- [x] Rules: conditions, actions, exceptions, all/any, stop, reorder, auto/manual
 - [x] Optional sort by file type with editable groups
 - [x] Overview dashboard, activity log, grouped notifications, quiet hours, pause
 - [x] One-click per-user installer. Correct icon and AppUserModelId

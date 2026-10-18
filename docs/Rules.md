@@ -50,7 +50,9 @@ Rules for anyone changing SortDeck - people and AI agents alike. Break one only 
     2. Update CHANGELOG.md and the README version badge.
     3. Run `npm test`, then `npm run dist`.
        This makes `dist/SortDeck-Setup-beta.N.exe` (betas) or `dist/SortDeck-Setup-vX.Y.Z.exe` (official).
-    3b. Pushing the tag runs `.github/workflows/release.yml`. It builds the installer on GitHub and publishes the
-        release with the .exe attached and notes from CHANGELOG. Never publish a release without the .exe.
+    3b. Pushing the tag runs `.github/workflows/release.yml`:
+        - a beta tag replaces the file on the single **SortDeck Beta** release (tag `beta`)
+        - an official tag (`v1.0.0`) creates its own release
+        Never create releases by hand.
     4. Commit, tag `v<version>`, then push the branch and the tag.
 22. Never commit `node_modules/`, `dist/`, secrets or 0-byte junk files.

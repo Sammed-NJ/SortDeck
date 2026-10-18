@@ -1,4 +1,4 @@
-// Rules page: Outlook-style rule list, rule editor dialog, "Run rules now" dialog.
+// Rules page: rule list, rule editor dialog, "Run rules now" dialog.
 // Rules belong to the selected folder (curFolder() in folders.js). Uses globals from app.js.
 
 const FIELDS = [['name', 'File name'], ['ext', 'Extension'], ['size', 'Size'], ['age', 'Age (last modified)'], ['source', 'Downloaded from (website)'], ['type', 'Item type']];

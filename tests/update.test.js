@@ -26,6 +26,15 @@ const { compareVersions: cmp, checkForUpdate, isTrustedDownload } = require('../
   assert.ok(!isTrustedDownload('https://evil.com/Sammed-NJ/SortDeck/releases/download/x.exe'));
   assert.ok(!isTrustedDownload('http://github.com/Sammed-NJ/SortDeck/releases/download/x.exe'));
   assert.ok(!isTrustedDownload('https://github.com/someone/else/releases/download/x.exe'));
+  // rolling beta release: tag `beta`, version in the title
+  const beta = [{ tag_name: 'beta', name: 'SortDeck Beta (0.1.0-beta.7)', prerelease: true, assets: [{ name: 'SortDeck-Setup-beta.7.exe', browser_download_url: 'https://github.com/Sammed-NJ/SortDeck/releases/download/beta/SortDeck-Setup-beta.7.exe' }], html_url: 'https://github.com/Sammed-NJ/SortDeck/releases/tag/beta' }];
+  const b = await checkForUpdate('0.1.0-beta.6', fake(beta));
+  assert.equal(b.status, 'available');
+  assert.equal(b.latest, '0.1.0-beta.7');
+  assert.ok(isTrustedDownload(b.url));
+  assert.equal((await checkForUpdate('0.1.0-beta.7', fake(beta))).status, 'latest');
+  assert.equal((await checkForUpdate('0.1.0-beta.6', fake([{ ...beta[0], name: 'SortDeck Beta' }]))).status, 'none', 'no version anywhere -> ignored');
+
   // installer names: short for betas, v-prefixed for official releases
   const { artifactName } = require('../scripts/dist');
   assert.equal(artifactName('0.1.0-beta.5'), 'SortDeck-Setup-beta.5.exe');

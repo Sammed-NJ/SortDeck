@@ -215,6 +215,14 @@ ipcMain.handle('config:openFile', async () => {
   return !(await shell.openPath(CONFIG));
 });
 
+// fixed links only - the page can't open arbitrary URLs
+const LINKS = {
+  portfolio: 'https://www.sammednj.in/',
+  feedback: 'https://www.sammednj.in/#contact',
+  website: 'https://www.sammednj.in/sortdeck',
+};
+ipcMain.handle('open:link', (_e, key) => (Object.hasOwn(LINKS, key) ? shell.openExternal(LINKS[key]).then(() => true) : false));
+
 ipcMain.handle('app:info', () => ({ version: app.getVersion(), configPath: CONFIG, packaged: app.isPackaged }));
 
 // ---------- troubleshoot ----------

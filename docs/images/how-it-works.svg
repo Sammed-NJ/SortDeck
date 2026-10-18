@@ -33,7 +33,7 @@
 
   <!-- 3. rules panel -->
   <rect x="96" y="220" width="768" height="312" rx="16" fill="#1b1e22" stroke="#2c3036" stroke-width="1.5"/>
-  <text x="480" y="250" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="1.6" fill="#22a6c3">RULES  ·  CHECKED TOP TO BOTTOM, LIKE OUTLOOK</text>
+  <text x="480" y="250" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="1.6" fill="#22a6c3">RULES  ·  CHECKED TOP TO BOTTOM</text>
 
   <rect x="140" y="268" width="320" height="60" rx="12" fill="#1f2226" stroke="#3a4048"/>
   <text x="300" y="294" text-anchor="middle" font-size="15" font-weight="600" fill="#e6e8eb">Conditions match?</text>
