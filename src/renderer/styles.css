@@ -469,12 +469,4 @@ img.logo { width: 20px; height: 20px; }
 .btn.danger:hover { filter: brightness(1.08); }
 .problem-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; padding: 10px 14px; border-radius: 10px; background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); font-weight: 600; }
 
-/* tutorial */
-.tutorial .dlg-body p { line-height: 1.55; }
-.tutorial .dlg-body p + p { margin-top: 10px; }
-.tut-list { margin: 10px 0 0 18px; display: grid; gap: 6px; line-height: 1.5; }
-.tut-example { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--accent-soft); font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; }
-.tut-dots { display: flex; gap: 5px; }
-.tut-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
-.tut-dots i.on { background: var(--accent); }
 

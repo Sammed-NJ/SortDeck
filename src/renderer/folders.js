@@ -101,7 +101,7 @@ function scheduleCard(f) {
   const setEvery = (n, unit) => { f.intervalMinutes = Math.round(Number(n) * (unit === 'hours' ? 60 : 1)); markDirty(); renderFolderNav(); };
   let unit = hours ? 'hours' : 'minutes';
   const num = h('input', { type: 'number', min: '1', class: 'num', value: hours ? f.intervalMinutes / 60 : f.intervalMinutes, oninput: (e) => setEvery(e.target.value, unit) });
-  return h('div', { class: 'card schedule' },
+  return h('div', { class: 'card schedule', 'data-tour': 'schedule' },
     h('div', { class: 'schedule-row' },
       h('div', {}, h('h3', {}, 'When to organize'), h('p', { class: 'muted small' }, hint)),
       h('div', { class: 'inline' },
@@ -152,17 +152,17 @@ function renderFolderDetail() {
       h('div', { class: 'actions' },
         h('button', { class: 'btn', onclick: async () => { if (!(await window.api.openPath(f.path))) toast('Folder not found.', true); } }, 'Open'),
         h('button', { class: 'btn danger-text', onclick: remove }, 'Remove'),
-        h('button', { class: 'btn primary', title: 'Preview, then run this folder\'s rules once', onclick: () => openRunDialog() }, 'Organize now...'))),
+        h('button', { class: 'btn primary', title: 'Preview, then run this folder\'s rules once', onclick: () => openRunDialog(), 'data-tour': 'organize' }, 'Organize now...'))),
     scheduleCard(f),
 
     h('div', { class: 'section-head' },
       h('div', {}, h('h2', {}, 'Rules'), h('p', { class: 'muted small' }, 'Checked top to bottom for every new item.')),
-      h('button', { class: 'btn primary', onclick: () => openRuleEditor(-1) }, '+ New rule')),
+      h('button', { class: 'btn primary', 'data-tour': 'newrule', onclick: () => openRuleEditor(-1) }, '+ New rule')),
     h('div', { id: 'ruleList', class: 'rule-list' }),
 
     h('div', { class: 'section-head' },
       h('div', {}, h('h2', {}, 'Sort by file type'), h('p', { class: 'muted small' }, 'For items no rule moved, recycled or kept. Unknown types go to Other, loose folders to Folders.')),
-      h('label', { class: 'switch' }, h('input', { type: 'checkbox', checked: f.sortByType, onchange: (e) => { f.sortByType = e.target.checked; renderFolderDetail(); markDirty(); } }), h('span'))),
+      h('label', { class: 'switch', 'data-tour': 'sortbytype' }, h('input', { type: 'checkbox', checked: f.sortByType, onchange: (e) => { f.sortByType = e.target.checked; renderFolderDetail(); markDirty(); } }), h('span'))),
     f.sortByType ? h('div', { class: 'cat-editor' }, ...catRows(f),
       h('button', { class: 'link', onclick: () => { f.categories.push({ name: '', exts: [] }); renderFolderDetail(); markDirty(); const n = document.querySelectorAll('.cat-name'); n[n.length - 1]?.focus(); } }, '+ Add file type group')) : null,
 

@@ -33,7 +33,7 @@
 
     <rect x="705" y="74" width="195" height="94" rx="12" fill="#1f2226" stroke="#3a4048"/>
     <text x="802" y="104" font-size="15" font-weight="600" fill="#e6e8eb">tutorial.js</text>
-    <text x="802" y="126">walk-through dialog</text>
+    <text x="802" y="126">guided tour</text>
     <text x="802" y="144">starter rules for Downloads</text>
   </g>
 

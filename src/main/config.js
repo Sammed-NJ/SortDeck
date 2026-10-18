@@ -16,9 +16,10 @@ const DEFAULT_CATEGORIES = {
 };
 // unfinished downloads from Chrome/Edge, Firefox, Safari, Opera
 const DEFAULT_IGNORE = ['crdownload', 'part', 'partial', 'download', 'tmp', 'opdownload'];
-const DEFAULT_SETTINGS = { notifications: true, launchAtLogin: true, paused: false, intervalSeconds: 30, quietHours: null, theme: 'system', accent: 'teal' };
+const DEFAULT_SETTINGS = { notifications: true, launchAtLogin: true, paused: false, intervalSeconds: 30, quietHours: null, theme: 'system', accent: 'teal', tour: 'new' };
 const THEMES = ['system', 'light', 'dark'];
 const ACCENTS = ['teal', 'blue', 'purple', 'green', 'orange', 'pink'];
+const TOURS = ['new', 'later', 'done'];   // guided tour: not seen yet, asked to see it later, finished/skipped
 const pick = (v, list) => (list.includes(v) ? v : list[0]);
 
 const OPS = {
@@ -94,6 +95,7 @@ function normalizeConfig(c) {
       quietHours: s.quietHours?.start && s.quietHours?.end ? { start: String(s.quietHours.start), end: String(s.quietHours.end) } : null,
       theme: pick(s.theme, THEMES),
       accent: pick(s.accent, ACCENTS),
+      tour: pick(s.tour, TOURS),
     },
     folders: arr(c?.folders).filter(Boolean).map(normalizeFolder),
   };
@@ -247,13 +249,13 @@ function buildConfig(form) {
     errors,
     cfg: {
       version: 2,
-      settings: { notifications: !!s.notifications, launchAtLogin: !!s.launchAtLogin, paused: !!s.paused, trayHintShown: !!s.trayHintShown, intervalSeconds: interval, quietHours, theme: pick(s.theme, THEMES), accent: pick(s.accent, ACCENTS) },
+      settings: { notifications: !!s.notifications, launchAtLogin: !!s.launchAtLogin, paused: !!s.paused, trayHintShown: !!s.trayHintShown, intervalSeconds: interval, quietHours, theme: pick(s.theme, THEMES), accent: pick(s.accent, ACCENTS), tour: pick(s.tour, TOURS) },
       folders,
     },
   };
 }
 
 module.exports = {
-  RESERVED, DEFAULT_CATEGORIES, DEFAULT_IGNORE, OPS, TERMINAL, TRIGGERS, THEMES, ACCENTS, samePath,
+  RESERVED, DEFAULT_CATEGORIES, DEFAULT_IGNORE, OPS, TERMINAL, TRIGGERS, THEMES, ACCENTS, TOURS, samePath,
   newFolder, normalizeConfig, loadConfig, saveConfig, toForm, buildConfig, validateRule, validateFolder,
 };

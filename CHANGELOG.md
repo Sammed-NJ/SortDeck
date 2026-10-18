@@ -3,6 +3,16 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
+## [0.1.0-beta.8] - 2026-10-19
+
+### Added
+- **Guided tour.** On first launch SortDeck walks you through the app. Each step switches to the right page,
+  highlights one part and explains it while the rest is locked. Choose **Skip**, or **Maybe later** to see it next time.
+- A **?** button in the title bar replays the tour any time. The last step can add starter rules for Downloads.
+
+### Removed
+- The old Tutorial dialog, its sidebar item and the welcome-screen link (replaced by the tour).
+
 ## [0.1.0-beta.7] - 2026-10-19
 
 ### Added
@@ -96,7 +106,8 @@ First public beta.
 - Overview with status, per-folder counts and recent activity.
 - Light and dark theme following Windows.
 
-[0.1.0-beta.7]: https://github.com/Sammed-NJ/SortDeck/releases/tag/beta
+[0.1.0-beta.8]: https://github.com/Sammed-NJ/SortDeck/releases/tag/beta
+[0.1.0-beta.7]: https://github.com/Sammed-NJ/SortDeck/blob/master/CHANGELOG.md
 [0.1.0-beta.6]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.6
 [0.1.0-beta.5]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.5
 [0.1.0-beta.4]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.4

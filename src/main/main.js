@@ -3,7 +3,7 @@ const { app, BrowserWindow, Tray, Menu, Notification, ipcMain, shell, dialog, na
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
-const { loadConfig, saveConfig, toForm, buildConfig, validateRule, validateFolder, newFolder, samePath, THEMES } = require('./config');
+const { loadConfig, saveConfig, toForm, buildConfig, validateRule, validateFolder, newFolder, samePath, THEMES, TOURS } = require('./config');
 const { Organizer } = require('./engine');
 const doctor = require('./doctor');
 const update = require('./update');
@@ -141,6 +141,7 @@ ipcMain.handle('config:save', (_e, form) => {
   const { errors, cfg: next } = buildConfig(form);
   if (errors.length) return { ok: false, errors };
   next.settings.trayHintShown = cfg.settings.trayHintShown; // set by main, not the form
+  next.settings.tour = cfg.settings.tour;
   try { saveConfig(CONFIG, next); } catch (e) { return { ok: false, errors: [`Could not save: ${e.message}`] }; }
   applyConfig(next);
   return { ok: true, errors: [] };
@@ -160,6 +161,14 @@ ipcMain.handle('status', () => {
     activity: activity.slice(0, 100),
     today: activity.filter((a) => a.time >= today && a.ok).length,
   };
+});
+
+// guided tour progress, saved straight away (not part of the Settings form)
+ipcMain.handle('tour:set', (_e, state) => {
+  if (!TOURS.includes(state)) return false;
+  cfg.settings.tour = state;
+  try { saveConfig(CONFIG, cfg); } catch { return false; }
+  return true;
 });
 
 // live preview while choosing in Settings; Save keeps it, Revert re-applies the saved theme

@@ -1,7 +1,7 @@
 {
   "name": "sortdeck",
   "productName": "SortDeck",
-  "version": "0.1.0-beta.7",
+  "version": "0.1.0-beta.8",
   "description": "SortDeck keeps any folder organized automatically with rules you build",
   "main": "src/main/main.js",
   "private": true,

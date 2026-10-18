@@ -21,7 +21,7 @@ or by rules you build from name, size, age and even the website it came from.
 ![Platform](https://img.shields.io/badge/platform-windows%2010%20%7C%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![Electron](https://img.shields.io/badge/built%20with-electron%2044-47848F?style=for-the-badge&logo=electron&logoColor=white)
 ![Status](https://img.shields.io/badge/status-beta-F59E0B?style=for-the-badge)
-![Version](https://img.shields.io/badge/version-0.1.0--beta.7-0E7490?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.1.0--beta.8-0E7490?style=for-the-badge)
 <br>
 ![Install](https://img.shields.io/badge/install-one%20click-22C55E?style=for-the-badge&logo=windowsterminal&logoColor=white)
 ![Admin](https://img.shields.io/badge/admin%20rights-not%20required-22C55E?style=for-the-badge)
@@ -30,7 +30,7 @@ or by rules you build from name, size, age and even the website it came from.
 
 <br>
 
-<a href="https://www.sammednj.in/sortdeck/download"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.7-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
+<a href="https://www.sammednj.in/sortdeck/download"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.8-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
 
 <sub>Windows 10 / 11 · 64-bit · no admin rights · <a href="https://www.sammednj.in/sortdeck">website</a> · <a href="https://www.sammednj.in/#contact">send feedback</a></sub>
 
@@ -87,8 +87,9 @@ or by rules you build from name, size, age and even the website it came from.
 1. **[Download SortDeck for Windows](https://www.sammednj.in/sortdeck/download)**. It always gets the newest beta. More on the
    [SortDeck website](https://www.sammednj.in/sortdeck).
 2. Double-click it. It installs in seconds - no admin prompt - and opens SortDeck.
-3. New here? Click **Tutorial** in the sidebar: a 1-minute walk-through that can also create starter rules
-   for your Downloads folder (one rule per file type, nothing moves until you run them).
+3. On first launch a short **guided tour** highlights each part of the app (skip it, or replay it any time with the
+   **?** button). At the end it can add starter rules for your Downloads folder (one rule per file type, nothing
+   moves until you run them).
    Or pick a folder yourself and choose **Set up rules first** (nothing moves) or **Sort by file type right away**.
 4. Add rules, hit **Organize now → Preview** to check them, then set **When to organize**:
    *Instantly*, *On a schedule* (every N minutes/hours) or *Only when I click*.
@@ -176,7 +177,7 @@ src/
     doctor.js    troubleshoot: check + repair
     update.js    check GitHub Releases for a newer version
   preload.js     the page's only bridge to the main process
-  renderer/      the UI - app.js (overview, settings), folders.js, rules.js, tutorial.js
+  renderer/      the UI - app.js (overview, settings), folders.js, rules.js, tutorial.js (guided tour)
 tests/           engine, config, doctor, update tests  (plain node, no framework)
 build/           app icon
 docs/            PRD, ARCHITECTURE, Design, DECISIONS, Rules, Phases
@@ -198,7 +199,7 @@ SortDeck follows [Semantic Versioning](https://semver.org). While in beta, versi
 - [ ] Code-signed installer (no SmartScreen warning)
 - [ ] Automatic updates
 - [ ] Undo for recent moves
-- [x] In-app tutorial with starter rules for Downloads
+- [x] Guided tour with starter rules for Downloads
 - [ ] Rule templates gallery
 - [ ] Conditions on file contents and dates in names
 - [ ] macOS build

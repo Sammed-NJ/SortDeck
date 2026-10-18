@@ -27,7 +27,7 @@ Delivery plan. ✅ done · 🔄 in progress · ⬜ planned.
 - [x] Uninstall from Settings (keep data, or delete all data)
 - [x] Troubleshoot + Repair, config backup and auto-restore
 - [x] Tamper protection: asar integrity + Electron fuses
-- [x] Tutorial with starter rules for Downloads
+- [x] Guided tour (first launch, replay from ? button) with starter rules for Downloads
 - [x] README download link
 - [x] Check for updates + download and install (manual)
 - [x] Themes: System / Light / Dark + accent colors

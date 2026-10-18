@@ -12,7 +12,7 @@ itself, and never surprises the user by moving files.
 
 ## Layout
 
-<p align="center"><img src="images/design-layout.svg" alt="Window layout: custom titlebar with logo and BETA badge, sidebar with Overview, Folders and rules, Settings, Tutorial and a status dot, and the main view showing the status hero, three stats, Folders and Recent activity cards, with a toast at the bottom." width="100%"></p>
+<p align="center"><img src="images/design-layout.svg" alt="Window layout: custom titlebar with logo and BETA badge, sidebar with Overview, Folders and rules, Settings, Send feedback and a status dot, a ? tour button in the titlebar, and the main view showing the status hero, three stats, Folders and Recent activity cards, with a toast at the bottom." width="100%"></p>
 
 **Folder detail, top to bottom:**
 - header: name, path, Open, Remove, **Organize now...**
@@ -33,9 +33,12 @@ itself, and never surprises the user by moving files.
 2. Use *Preview matches* to list affected items.
 3. Save.
 
-**Tutorial** (sidebar, or the welcome-screen link)
-1. A 7-step dialog with Back/Next and step dots.
-2. The last step offers **Create starter rules**: Downloads is added in click-only mode with one rule per file type
+**Guided tour** (starts by itself on first launch; replay with the **?** button in the title bar)
+1. A welcome card offers **Start tour**, **Maybe later** (asks again next launch) or **Skip** (never auto-starts again).
+2. Each step switches to the right page, dims the app and spotlights one element with a callout (Back / Next /
+   Skip tour, "3 of 12"). The app can't be clicked while touring. Esc means "later"; the arrow keys move between steps.
+3. Steps only appear when their element exists (folder steps need a folder).
+4. The last step offers **Add starter rules**: Downloads is added in click-only mode with one rule per file type
    plus "Everything else to Other". Re-running it never duplicates rules.
 
 **Organize now**

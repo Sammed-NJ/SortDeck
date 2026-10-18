@@ -77,6 +77,10 @@ assert.equal(themed.cfg.settings.accent, 'pink');
 const junk = buildConfig({ ...toForm(cfg), settings: { ...toForm(cfg).settings, theme: 'neon', accent: 'red' } });
 assert.equal(junk.cfg.settings.theme, 'system');
 assert.equal(junk.cfg.settings.accent, 'teal');
+// guided tour state: new by default, kept when valid
+assert.equal(cfg.settings.tour, 'new');
+assert.equal(buildConfig({ ...toForm(cfg), settings: { ...toForm(cfg).settings, tour: 'later' } }).cfg.settings.tour, 'later');
+assert.equal(buildConfig({ ...toForm(cfg), settings: { ...toForm(cfg).settings, tour: 'x' } }).cfg.settings.tour, 'new');
 
 fs.rmSync(path.dirname(tmp), { recursive: true, force: true });
 console.log('config.test.js: all checks passed');

@@ -3,7 +3,7 @@
 SortDeck is an Electron app with three layers: a sandboxed **renderer** (UI), a tiny **preload** bridge, and
 the **main** process, which owns the window, the tray and the file-system engine.
 
-<p align="center"><img src="images/architecture.svg" alt="Architecture: the sandboxed renderer (app.js, folders.js, rules.js, tutorial.js) talks only through preload.js to the main process (main.js, config.js, engine.js, doctor.js, update.js), which works with your folders, the Recycle Bin, notifications and GitHub Releases." width="100%"></p>
+<p align="center"><img src="images/architecture.svg" alt="Architecture: the sandboxed renderer (app.js, folders.js, rules.js, tutorial.js) (tutorial.js = guided tour) talks only through preload.js to the main process (main.js, config.js, engine.js, doctor.js, update.js), which works with your folders, the Recycle Bin, notifications and GitHub Releases." width="100%"></p>
 
 ## Files
 
@@ -32,7 +32,8 @@ the **main** process, which owns the window, the tray and the file-system engine
 {
   settings: { notifications, launchAtLogin, paused, trayHintShown,
               intervalSeconds /*5..3600*/, quietHours: {start,end} | null,
-              theme: 'system'|'light'|'dark', accent: 'teal'|'blue'|'purple'|'green'|'orange'|'pink' },
+              theme: 'system'|'light'|'dark', accent: 'teal'|'blue'|'purple'|'green'|'orange'|'pink',
+              tour: 'new'|'later'|'done' },
   folders: [{
     id, path, enabled,
     trigger: 'instant' | 'interval' | 'manual',   // "Off" = enabled:false
@@ -66,6 +67,7 @@ the **main** process, which owns the window, the tray and the file-system engine
 | --- | --- |
 | `getConfig` / `saveConfig(form)` | Load the form; validate and save it, then re-apply to the engine |
 | `status` | Per-folder exists/error/today/nextRun, activity, totals |
+| `setTour(state)` | Guided tour progress (`new` / `later` / `done`), saved straight away |
 | `previewTheme(theme)` | Sets `nativeTheme.themeSource` live while choosing; saved with the config |
 | `pause(bool)` / `sweep()` | Tray-equivalent controls |
 | `validateRule` / `runRules(folder, rules, target, preview, sortByType)` | Rule editor and Organize now |

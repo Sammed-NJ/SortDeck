@@ -1,65 +1,143 @@
-// Tutorial: a short walk-through of folders, rules and schedules, ending with starter rules for Downloads.
-// Uses globals from app.js and folders.js.
+// Guided tour: highlights each part of the app and explains it. Starts by itself on first launch
+// (Skip / Maybe later), and any time from the ? button in the title bar. Uses globals from app.js and folders.js.
 
-const TUTORIAL = [
-  {
-    title: 'Welcome to SortDeck',
-    body: [
-      'SortDeck keeps folders tidy for you. Tell it what to look for and what to do, and it files everything as it arrives.',
-      'This takes about a minute. At the end you can create starter rules for your Downloads folder.',
-    ],
-  },
-  {
-    title: '1. Add a folder',
-    body: [
-      'Click "+ Add folder" and pick any folder: Downloads, Desktop, a project folder or a USB drive.',
-      'Choose "Set up rules first" and nothing moves until you say so. Each folder has its own rules and settings.',
-    ],
-  },
-  {
-    title: '2. Build a rule',
-    body: ['Open the folder and click "New rule". A rule has three parts:'],
-    list: [
-      ['When', 'what to look for - name contains "invoice", extension is pdf, older than 30 days, downloaded from github.com...'],
-      ['Do this', 'move or copy to a folder, send to the Recycle Bin, leave it, or notify you.'],
-      ['Except if', 'skip items that also match this, for example "size over 500 MB".'],
-    ],
-    example: 'When extension is pdf  ->  Move to Documents  ->  Except if name contains "draft"',
-  },
-  {
-    title: '3. Order matters',
-    body: [
-      'Rules are checked top to bottom. The first rule that moves, recycles or keeps an item finishes it - later rules never see it.',
-      'Put specific rules (Invoices) above general ones (all PDFs). Use the arrows to reorder.',
-    ],
-  },
-  {
-    title: '4. Try it safely',
-    body: [
-      'Click "Organize now..." then "Preview". You see every file and where it would go - nothing moves.',
-      'Happy? Click "Organize now". Anything sent to the Recycle Bin can be restored, and files are never overwritten.',
-    ],
-  },
-  {
-    title: '5. Choose when it runs',
-    body: ['In "When to organize" pick one:'],
-    list: [
-      ['Instantly', 'new items are filed a few seconds after they arrive.'],
-      ['On a schedule', 'every N minutes or hours.'],
-      ['Only when I click', 'nothing happens until you press Organize now.'],
-    ],
-  },
-  {
-    title: 'Start with Downloads',
-    body: [
-      'Create one rule per file type for your Downloads folder - Images, Documents, Installers, Archives, Data, Video, Audio - plus "Everything else to Other".',
-      'They are ordinary rules you can edit, reorder or delete. The folder is set to "Only when I click", so nothing moves until you preview and run it.',
-      'SortDeck is in beta. Use "Send feedback" in the sidebar any time to tell me what to improve.',
-    ],
-    starter: true,
-  },
+const hasFolders = () => form.folders.length > 0;
+
+const TOUR = [
+  { intro: true, view: 'overview', title: 'Welcome to SortDeck', text: 'SortDeck keeps your folders tidy. Tell it what to look for and what to do, and it files everything as it arrives. Take a one-minute tour?' },
+  { view: 'overview', target: '.nav[data-view=overview]', title: 'Overview', text: 'Your home screen: whether SortDeck is running, how much it organized today, and the latest activity.' },
+  { view: 'overview', target: '#suggestions', title: 'Pick a folder', text: 'Start here. Choose Downloads, Desktop or any other folder you want kept tidy.' },
+  { view: 'overview', target: '#btnSweep', title: 'Organize now', text: 'Runs every automatic folder right away instead of waiting.' },
+  { view: 'overview', target: '#btnPause', title: 'Pause', text: 'Stops automatic organizing for a while. Manual runs still work.' },
+  { view: 'folders', target: '.nav[data-view=folders]', title: 'Folders & rules', text: 'Every folder you add lives here, each with its own rules and schedule.' },
+  { view: 'folders', target: '#btnAddFolder', title: 'Add a folder', text: 'Pick any folder or drive. Choose "Set up rules first" and nothing moves until you say so.' },
+  { view: 'folders', target: '[data-tour=schedule]', title: 'When to organize', text: 'Instantly as files arrive, on a schedule, only when you click, or off.' },
+  { view: 'folders', target: '[data-tour=newrule]', title: 'Build a rule', text: 'When something matches - name, type, size, age, or the website it came from - move it, copy it, recycle it, keep it or get notified. Add "except if" for the exceptions.' },
+  { view: 'folders', target: '[data-tour=sortbytype]', title: 'Sort by file type', text: 'Anything no rule handled can go into Images, Documents, Installers and more.' },
+  { view: 'folders', target: '[data-tour=organize]', title: 'Preview, then run', text: 'See exactly what will move before anything happens, then run it once.' },
+  { view: 'settings', target: '.nav[data-view=settings]', title: 'Settings', text: 'Theme and accent color, start with Windows, notifications, quiet hours, updates, troubleshooting and uninstall.' },
+  { target: '#btnFeedback', title: 'Send feedback', text: 'SortDeck is in beta. Tell me what to improve - this opens my contact form.' },
+  { target: '#btnTour', title: 'Replay the tour', text: 'Click this any time to see the tour again.' },
+  { outro: true, view: 'overview', title: "You're all set", text: 'Want a head start? SortDeck can add your Downloads folder with one rule per file type. Nothing moves until you preview and run it.' },
 ];
 
+let tourAt = -1;
+let tourList = [];   // steps worked out when the tour starts or moves
+const visible = (el) => !!el && el.getClientRects().length > 0;
+const tourEl = (id) => document.getElementById(id);
+
+function tourSteps() {
+  // only steps whose target exists right now (e.g. folder steps need a folder); each page is shown to check
+  return TOUR.filter((s) => {
+    if (!s.target) return true;
+    if (s.view) show(s.view);
+    return visible(document.querySelector(s.target));
+  });
+}
+// the page a step belongs to; steps without one (sidebar, title bar) keep the previous step's page
+function tourView(i) {
+  for (let k = i; k >= 0; k--) if (tourList[k].view) return tourList[k].view;
+  return 'overview';
+}
+
+function startTour() {
+  for (const d of document.querySelectorAll('dialog[open]')) d.close();
+  if (hasFolders() && !selectedId) selectFolder(form.folders[0].id);
+  if (!tourEl('tourBlock')) {
+    document.body.append(
+      h('div', { id: 'tourBlock', class: 'tour-block' }),   // eats clicks: the app is locked while touring
+      h('div', { id: 'tourSpot', class: 'tour-spot' }),
+      h('div', { id: 'tourCard', class: 'tour-card', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'tourTitle' }));
+    window.addEventListener('resize', placeTour);
+    document.addEventListener('keydown', tourKeys, true);
+  }
+  tourAt = 0;
+  tourList = tourSteps();
+  drawTour();
+}
+
+function endTour(state) {
+  for (const id of ['tourBlock', 'tourSpot', 'tourCard']) tourEl(id)?.remove();
+  window.removeEventListener('resize', placeTour);
+  document.removeEventListener('keydown', tourKeys, true);
+  tourAt = -1;
+  show('overview');
+  // saved by main straight away; keep the Settings form clean
+  const saved = JSON.parse(savedJson);
+  saved.settings.tour = form.settings.tour = state;
+  savedJson = JSON.stringify(saved);
+  markDirty();
+  window.api.setTour(state);
+}
+
+function tourKeys(e) {
+  if (tourAt < 0) return;
+  e.stopPropagation();
+  if (e.key === 'Escape') { e.preventDefault(); endTour('later'); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); goTour(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); goTour(-1); }
+}
+
+function goTour(d) {
+  tourList = tourSteps();
+  tourAt = Math.min(tourList.length - 1, Math.max(0, tourAt + d));
+  drawTour();
+}
+
+function drawTour() {
+  const steps = tourList;
+  const s = steps[tourAt];
+  show(tourView(tourAt));
+  const first = s.intro;
+  const last = s.outro;
+  const btn = (label, cls, onclick) => h('button', { type: 'button', class: `btn ${cls}`, onclick }, label);
+  const count = steps.length - 2;   // intro and outro aren't counted
+
+  tourEl('tourCard').replaceChildren(
+    h('h2', { id: 'tourTitle' }, s.title),
+    h('p', {}, s.text),
+    h('div', { class: 'tour-foot' },
+      first || last ? null : h('span', { class: 'tour-count' }, `${tourAt} of ${count}`),
+      h('span', { class: 'grow' }),
+      first ? [btn('Skip', '', () => endTour('done')), btn('Maybe later', '', () => endTour('later')), btn('Start tour', 'primary', () => goTour(1))]
+        : last ? [btn('Finish', '', () => endTour('done')),
+          btn('Add starter rules', 'primary', async () => { endTour('done'); await createStarterRules(); })]
+          : [h('button', { type: 'button', class: 'link tour-skip', onclick: () => endTour('done') }, 'Skip tour'),
+            btn('Back', '', () => goTour(-1)), btn(tourAt === count ? 'Done' : 'Next', 'primary', () => goTour(1))]));
+  tourEl('tourCard').querySelector('.btn.primary')?.focus();
+  placeTour();
+}
+
+function placeTour() {
+  if (tourAt < 0) return;
+  const s = tourList[tourAt];
+  const spot = tourEl('tourSpot');
+  const card = tourEl('tourCard');
+  const el = s.target && document.querySelector(s.target);
+  tourEl('tourBlock').classList.toggle('dim', !el);   // intro/outro: plain dim, no spotlight
+  if (!el) {
+    spot.hidden = true;
+    Object.assign(card.style, { left: '50%', top: '50%', transform: 'translate(-50%, -50%)' });
+    return;
+  }
+  el.scrollIntoView({ block: 'center' });
+  const r = el.getBoundingClientRect();
+  const pad = 6;
+  spot.hidden = false;
+  Object.assign(spot.style, { left: `${r.left - pad}px`, top: `${r.top - pad}px`, width: `${r.width + pad * 2}px`, height: `${r.height + pad * 2}px` });
+
+  // beside the target if there's room (sidebar, buttons), otherwise below or above
+  card.style.transform = 'none';
+  const cw = card.offsetWidth, ch = card.offsetHeight, gap = 16, vw = innerWidth, vh = innerHeight;
+  let left, top;
+  if (r.right + gap + cw < vw && r.height < 120) { left = r.right + gap; top = r.top + r.height / 2 - ch / 2; }
+  else if (r.bottom + gap + ch < vh) { left = r.left; top = r.bottom + gap; }
+  else { left = r.left; top = r.top - gap - ch; }
+  card.style.left = `${Math.max(12, Math.min(left, vw - cw - 12))}px`;
+  card.style.top = `${Math.max(52, Math.min(top, vh - ch - 12))}px`;
+}
+
+// ---------- starter rules for Downloads ----------
 async function createStarterRules() {
   const dl = (await window.api.suggestFolders()).find((s) => s.key === 'downloads');
   if (!dl) { toast("Couldn't find your Downloads folder.", true); return false; }
@@ -85,26 +163,10 @@ async function createStarterRules() {
   return true;
 }
 
-function openTutorial(step = 0) {
-  const d = $('#tutorialDialog');
-  const s = TUTORIAL[step];
-  const last = step === TUTORIAL.length - 1;
-  d.replaceChildren(h('div', { class: 'dlg tutorial' },
-    h('header', {}, h('h1', {}, s.title), h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Close', onclick: () => d.close() }, '×')),
-    h('div', { class: 'dlg-body' },
-      ...s.body.map((p) => h('p', {}, p)),
-      s.list && h('ul', { class: 'tut-list' }, ...s.list.map(([b, t]) => h('li', {}, h('b', {}, b), ` - ${t}`))),
-      s.example && h('p', { class: 'tut-example' }, s.example)),
-    h('footer', {},
-      h('span', { class: 'tut-dots', 'aria-label': `Step ${step + 1} of ${TUTORIAL.length}` }, ...TUTORIAL.map((_, i) => h('i', { class: i === step ? 'on' : '' }))),
-      h('span', { class: 'grow' }),
-      step > 0 && h('button', { type: 'button', class: 'btn', onclick: () => openTutorial(step - 1) }, 'Back'),
-      last
-        ? [h('button', { type: 'button', class: 'btn', onclick: () => d.close() }, 'Finish'),
-          h('button', { type: 'button', class: 'btn primary', onclick: async (e) => { e.target.disabled = true; if (await createStarterRules()) d.close(); else e.target.disabled = false; } }, 'Create starter rules')]
-        : h('button', { type: 'button', class: 'btn primary', onclick: () => openTutorial(step + 1) }, step === 0 ? 'Start' : 'Next'))));
-  if (!d.open) d.showModal();
-}
+$('#btnTour').addEventListener('click', startTour);
 
-$('#btnTutorial').addEventListener('click', () => openTutorial());
-$('#btnTutorialWelcome').addEventListener('click', () => openTutorial());
+// first launch (or "Maybe later" last time): start once the config has loaded
+document.addEventListener('DOMContentLoaded', () => {
+  const wait = () => (form ? (form.settings.tour !== 'done' && setTimeout(startTour, 400)) : setTimeout(wait, 100));
+  wait();
+});

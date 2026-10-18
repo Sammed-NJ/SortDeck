@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('api', {
   saveConfig: (form) => ipcRenderer.invoke('config:save', form),
   openConfigFile: () => ipcRenderer.invoke('config:openFile'),
   status: () => ipcRenderer.invoke('status'),
+  setTour: (state) => ipcRenderer.invoke('tour:set', state),
   previewTheme: (theme) => ipcRenderer.invoke('theme:preview', theme),
   pause: (paused) => ipcRenderer.invoke('organizer:pause', paused),
   sweep: () => ipcRenderer.invoke('organizer:sweep'),
