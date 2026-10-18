@@ -3,6 +3,12 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+
+### Changed
+- README download links go through [samnj.fyi/sortdeck/download](https://samnj.fyi/sortdeck/download), which always
+  points to the newest installer. The product page is at [samnj.fyi/sortdeck](https://samnj.fyi/sortdeck).
+
 ## [0.1.0-beta.4] - 2026-10-19
 
 ### Added

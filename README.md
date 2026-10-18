@@ -30,9 +30,9 @@ or by rules you build from name, size, age and even the website it came from.
 
 <br>
 
-<a href="https://github.com/Sammed-NJ/SortDeck/releases/download/v0.1.0-beta.4/SortDeck-Setup-0.1.0-beta.4.exe"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.4-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
+<a href="https://samnj.fyi/sortdeck/download"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.4-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
 
-<sub>Windows 10 / 11 · 64-bit · no admin rights · <a href="https://github.com/Sammed-NJ/SortDeck/releases">all releases</a></sub>
+<sub>Windows 10 / 11 · 64-bit · no admin rights · <a href="https://samnj.fyi/sortdeck">website</a> · <a href="https://github.com/Sammed-NJ/SortDeck/releases">all releases</a></sub>
 
 <br><br>
 
@@ -82,7 +82,8 @@ or by rules you build from name, size, age and even the website it came from.
 
 ## Install
 
-1. **[Download SortDeck-Setup-0.1.0-beta.4.exe](https://github.com/Sammed-NJ/SortDeck/releases/download/v0.1.0-beta.4/SortDeck-Setup-0.1.0-beta.4.exe)** (or pick a version from [Releases](https://github.com/Sammed-NJ/SortDeck/releases)).
+1. **[Download SortDeck for Windows](https://samnj.fyi/sortdeck/download)**. It always gets the newest version. You can also visit the
+   [SortDeck website](https://samnj.fyi/sortdeck) or pick a version from [Releases](https://github.com/Sammed-NJ/SortDeck/releases).
 2. Double-click it. It installs in seconds - no admin prompt - and opens SortDeck.
 3. New here? Click **Tutorial** in the sidebar: a 1-minute walk-through that can also create starter rules
    for your Downloads folder (one rule per file type, nothing moves until you run them).
