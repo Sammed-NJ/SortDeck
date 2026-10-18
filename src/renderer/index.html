@@ -95,6 +95,21 @@
         <div class="view-head"><div><h1>Settings</h1><p class="muted">Apply to every folder.</p></div></div>
         <div class="card settings">
           <div class="setting">
+            <div><h3>Updates</h3><p class="muted" id="updateText">You have SortDeck <span id="curVersion"></span>.</p></div>
+            <div class="inline">
+              <button id="btnReleases" class="btn" hidden>What's new</button>
+              <button id="btnInstallUpdate" class="btn primary" hidden>Download and install</button>
+              <button id="btnCheckUpdate" class="btn">Check for updates</button>
+            </div>
+          </div>
+          <div class="setting">
+            <div><h3>Uninstall</h3><p class="muted">Remove SortDeck from this PC, keeping or deleting your data.</p></div>
+            <button id="btnGoUninstall" class="btn danger-text">Uninstall...</button>
+          </div>
+        </div>
+
+        <div class="card settings">
+          <div class="setting">
             <div><h3>Start with Windows</h3><p class="muted">Runs quietly in the tray after you sign in, so folders stay organized.</p></div>
             <label class="switch"><input id="setLogin" type="checkbox"><span></span></label>
           </div>
@@ -135,7 +150,7 @@
         </div>
 
         <h2 class="section-title">Uninstall</h2>
-        <div class="card settings danger-zone">
+        <div id="uninstallCard" class="card settings danger-zone">
           <div class="setting">
             <div><h3>Uninstall SortDeck</h3><p class="muted">Removes the app. Your folders, rules and settings are kept in case you reinstall. Your files stay where they are.</p></div>
             <button id="btnUninstall" class="btn danger-text">Uninstall...</button>

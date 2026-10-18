@@ -231,6 +231,7 @@ window.addEventListener('focus', () => { if (!dirty) loadForm(); refresh(); });
 window.api.info().then((i) => {
   $('#configPath').textContent = i.configPath;
   $('#version').textContent = `SortDeck ${i.version}`;
+  $('#curVersion').textContent = i.version;
   if (!i.packaged) for (const b of [$('#btnUninstall'), $('#btnUninstallAll')]) { b.disabled = true; b.title = 'Only in the installed app'; }
 });
 
@@ -261,6 +262,37 @@ $('#btnRepair').addEventListener('click', async () => {
   } finally { $('#btnRepair').disabled = false; }
 });
 $('#btnProblems').addEventListener('click', () => show('settings'));
+
+// ---------- updates ----------
+$('#btnCheckUpdate').addEventListener('click', async () => {
+  const b = $('#btnCheckUpdate');
+  b.disabled = true; b.textContent = 'Checking...';
+  try {
+    const u = await window.api.checkUpdate();
+    const text = {
+      available: `SortDeck ${u.latest} is available - you have ${u.current}.`,
+      latest: `You're up to date (${u.current}).`,
+      none: `You have ${u.current}. No downloadable release is published yet.`,
+      error: `Couldn't check for updates (${u.error}). Check your internet connection.`,
+    }[u.status];
+    $('#updateText').textContent = text;
+    $('#btnInstallUpdate').hidden = u.status !== 'available';
+    $('#btnInstallUpdate').textContent = u.canInstall ? 'Download and install' : 'Open download page';
+    $('#btnReleases').hidden = u.status === 'error';
+    toast(text, u.status === 'error');
+  } finally { b.disabled = false; b.textContent = 'Check for updates'; }
+});
+$('#btnInstallUpdate').addEventListener('click', async () => {
+  const b = $('#btnInstallUpdate');
+  const label = b.textContent;
+  b.disabled = true; b.textContent = 'Downloading...';
+  const r = await window.api.installUpdate();
+  if (r.ok) { toast('Installing the update - SortDeck will reopen.'); return; }
+  toast(r.error, true);
+  b.disabled = false; b.textContent = label;
+});
+$('#btnReleases').addEventListener('click', () => window.api.openReleases());
+$('#btnGoUninstall').addEventListener('click', () => $('#uninstallCard').scrollIntoView({ behavior: 'smooth', block: 'center' }));
 
 // ---------- uninstall (main shows the warning and does the work) ----------
 async function uninstall(withData) {

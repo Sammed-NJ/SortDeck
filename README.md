@@ -21,7 +21,7 @@ or by rules you build from name, size, age and even the website it came from.
 ![Platform](https://img.shields.io/badge/platform-windows%2010%20%7C%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![Electron](https://img.shields.io/badge/built%20with-electron%2044-47848F?style=for-the-badge&logo=electron&logoColor=white)
 ![Status](https://img.shields.io/badge/status-beta-F59E0B?style=for-the-badge)
-![Version](https://img.shields.io/badge/version-0.1.0--beta.3-0E7490?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.1.0--beta.4-0E7490?style=for-the-badge)
 <br>
 ![Install](https://img.shields.io/badge/install-one%20click-22C55E?style=for-the-badge&logo=windowsterminal&logoColor=white)
 ![Admin](https://img.shields.io/badge/admin%20rights-not%20required-22C55E?style=for-the-badge)
@@ -30,7 +30,7 @@ or by rules you build from name, size, age and even the website it came from.
 
 <br>
 
-<a href="https://github.com/Sammed-NJ/SortDeck/releases/download/v0.1.0-beta.3/SortDeck-Setup-0.1.0-beta.3.exe"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.3-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
+<a href="https://github.com/Sammed-NJ/SortDeck/releases/download/v0.1.0-beta.4/SortDeck-Setup-0.1.0-beta.4.exe"><img src="https://img.shields.io/badge/⬇%20Download%20for%20Windows-SortDeck%200.1.0--beta.4-0E7490?style=for-the-badge&logo=windows&logoColor=white" alt="Download SortDeck for Windows" height="44"></a>
 
 <sub>Windows 10 / 11 · 64-bit · no admin rights · <a href="https://github.com/Sammed-NJ/SortDeck/releases">all releases</a></sub>
 
@@ -78,11 +78,11 @@ or by rules you build from name, size, age and even the website it came from.
 | **Safe by default** | Unfinished downloads are skipped, files in use are retried, name clashes become `name (1).ext`, nothing is ever overwritten, and "delete" means the Recycle Bin. |
 | **Set and forget** | Lives in the tray and starts with Windows. Close the window and it keeps working. |
 | **Tamper-proof install** | App code is packed and integrity-checked, so an edited install refuses to start. Troubleshoot repairs everything else. |
-| **Private** | Runs entirely on your PC. No account, no cloud, no telemetry. |
+| **Private** | Runs entirely on your PC. No account, no cloud, no telemetry. It only goes online when you click **Check for updates**. |
 
 ## Install
 
-1. **[Download SortDeck-Setup-0.1.0-beta.3.exe](https://github.com/Sammed-NJ/SortDeck/releases/download/v0.1.0-beta.3/SortDeck-Setup-0.1.0-beta.3.exe)** (or pick a version from [Releases](https://github.com/Sammed-NJ/SortDeck/releases)).
+1. **[Download SortDeck-Setup-0.1.0-beta.4.exe](https://github.com/Sammed-NJ/SortDeck/releases/download/v0.1.0-beta.4/SortDeck-Setup-0.1.0-beta.4.exe)** (or pick a version from [Releases](https://github.com/Sammed-NJ/SortDeck/releases)).
 2. Double-click it. It installs in seconds - no admin prompt - and opens SortDeck.
 3. New here? Click **Tutorial** in the sidebar: a 1-minute walk-through that can also create starter rules
    for your Downloads folder (one rule per file type, nothing moves until you run them).
@@ -92,6 +92,9 @@ or by rules you build from name, size, age and even the website it came from.
 
 > Windows may say *"Windows protected your PC"* because beta builds aren't code-signed yet.
 > Click **More info → Run anyway**.
+
+**Updates:** **Settings → Check for updates** looks for a newer release on GitHub. **Download and install**
+updates SortDeck in place and keeps your folders and rules.
 
 Uninstall any time from **SortDeck → Settings → Uninstall** (optionally deleting all its data) or from
 Windows **Settings → Apps**. Your files stay exactly where SortDeck put them.

@@ -114,3 +114,15 @@ consequences*. Never rewrite an accepted entry; supersede it with a new one.
   - Repair is offered only when a check fails.
   - The config is backed up on every save and auto-restored when damaged or deleted.
 - **Consequences:** Folder problems are reported but never auto-"fixed", because they need the user.
+
+### D16 - Manual update check via GitHub Releases · 2026-10-19 · Accepted
+- **Context:** Users need a way to get new versions. The app promises to be offline and private.
+- **Decision:**
+  - The check runs only when the user clicks **Check for updates**, against the GitHub Releases API.
+  - Install downloads the `SortDeck-Setup-*.exe` asset (only https github.com URLs for this repo, taken from
+    main's own check, never from the page) and runs it. The one-click installer updates in place.
+  - No electron-updater dependency.
+- **Consequences:**
+  - Needs a published GitHub release with the installer attached.
+  - Unsigned builds still show SmartScreen.
+  - Background checks are deferred.

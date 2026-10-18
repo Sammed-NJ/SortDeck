@@ -17,6 +17,9 @@ contextBridge.exposeInMainWorld('api', {
   info: () => ipcRenderer.invoke('app:info'),
   checkProblems: () => ipcRenderer.invoke('doctor:check'),
   repairProblems: () => ipcRenderer.invoke('doctor:repair'),
+  checkUpdate: () => ipcRenderer.invoke('update:check'),
+  installUpdate: () => ipcRenderer.invoke('update:install'),
+  openReleases: () => ipcRenderer.invoke('update:page'),
   uninstall: (withData) => ipcRenderer.invoke('app:uninstall', !!withData),
   onActivity: (fn) => ipcRenderer.on('activity', () => fn()),
 });

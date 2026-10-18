@@ -3,6 +3,14 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
+## [0.1.0-beta.4] - 2026-10-19
+
+### Added
+- **Check for updates** at the top of Settings. It asks GitHub Releases for a newer version (only when you click).
+  **Download and install** fetches the installer from GitHub over HTTPS, runs it, and SortDeck reopens
+  updated with your settings kept. **What's new** opens the release notes.
+- **Uninstall...** shortcut at the top of Settings that jumps to the uninstall options.
+
 ## [0.1.0-beta.3] - 2026-10-19
 
 ### Added
@@ -56,6 +64,7 @@ First public beta.
 - Overview with status, per-folder counts and recent activity.
 - Light and dark theme following Windows.
 
+[0.1.0-beta.4]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.4
 [0.1.0-beta.3]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.3
 [0.1.0-beta.2]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.2
 [0.1.0-beta.1]: https://github.com/Sammed-NJ/SortDeck/releases/tag/v0.1.0-beta.1

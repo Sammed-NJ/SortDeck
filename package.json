@@ -1,13 +1,13 @@
 {
   "name": "sortdeck",
   "productName": "SortDeck",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.4",
   "description": "SortDeck keeps any folder organized automatically with Outlook-style rules",
   "main": "src/main/main.js",
   "private": true,
   "scripts": {
     "start": "electron .",
-    "test": "node tests/config.test.js && node tests/engine.test.js && node tests/doctor.test.js",
+    "test": "node tests/config.test.js && node tests/engine.test.js && node tests/doctor.test.js && node tests/update.test.js",
     "dist": "electron-builder --win"
   },
   "build": {

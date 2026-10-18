@@ -29,6 +29,7 @@ Delivery plan. ✅ done · 🔄 in progress · ⬜ planned.
 - [x] Tamper protection: asar integrity + Electron fuses
 - [x] Tutorial with starter rules for Downloads
 - [x] README download link
+- [x] Check for updates + download and install (manual)
 - [ ] GitHub Release with the installer attached
 - [ ] License file
 - [ ] Undo for recent moves (from the activity log)
@@ -37,7 +38,7 @@ Delivery plan. ✅ done · 🔄 in progress · ⬜ planned.
 
 ## Phase 4 - Release candidate ⬜ `0.9.x`
 - [ ] Code-signed installer (no SmartScreen warning)
-- [ ] Automatic updates (electron-updater, beta channel)
+- [ ] Automatic background update checks (manual check done in beta.4)
 - [ ] Crash and error log file the user can attach to an issue
 - [ ] UI test pass on Windows 10 and 11, light and dark, at small window sizes
 

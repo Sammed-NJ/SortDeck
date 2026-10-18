@@ -27,6 +27,7 @@ the **main** process, which owns the window, the tray and the file-system engine
 | `src/main/main.js` | App lifecycle, `BrowserWindow`, `Tray`, IPC, AppUserModelId | yes |
 | `src/main/config.js` | Config schema, defaults, validation, atomic save | **no** |
 | `src/main/engine.js` | `Organizer` class plus pure helpers (`matchRule`, `transfer`, ...) | **no** |
+| `src/main/update.js` | Update check against GitHub Releases, version compare, trusted-URL check | **no** |
 | `src/main/doctor.js` | Troubleshoot `check` / `repair` (app-specific checks injected) | **no** |
 | `src/preload.js` | Exposes `window.api` - the renderer's only door | yes |
 | `src/renderer/*` | Plain HTML/CSS/JS, no framework, no bundler | - |
@@ -100,6 +101,7 @@ per-folder setInterval (interval folders) ──┘
 | `validateRule` / `runRules(folder, rules, target, preview, sortByType)` | Rule editor and Organize now |
 | `suggestFolders` / `newFolder(path, opts)` / `pickFolder(base)` | Adding folders, picking destinations |
 | `checkProblems` / `repairProblems` | Troubleshoot (`doctor.js`), also run once at startup |
+| `checkUpdate` / `installUpdate` / `openReleases` | Update check. Install only uses the URL main found itself (github.com, https, this repo) |
 | `uninstall(withData)` | Main shows the warning, then runs `Uninstall SortDeck.exe [--delete-app-data]` and quits |
 | `openPath` (allow-listed) / `openConfigFile` / `info` / `onActivity` | Misc |
 

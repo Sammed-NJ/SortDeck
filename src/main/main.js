@@ -6,6 +6,7 @@ const { spawn } = require('child_process');
 const { loadConfig, saveConfig, toForm, buildConfig, validateRule, validateFolder, newFolder, samePath } = require('./config');
 const { Organizer } = require('./engine');
 const doctor = require('./doctor');
+const update = require('./update');
 
 const APP_NAME = 'SortDeck';
 const APP_ID = 'com.sortdeck.app';
@@ -241,6 +242,32 @@ ipcMain.handle('doctor:repair', async () => {
   applyConfig(cfg);   // restart watchers and timers too
   return result;
 });
+
+// ---------- updates (only when the user clicks) ----------
+let lastUpdate = null;
+ipcMain.handle('update:check', async () => {
+  try { lastUpdate = await update.checkForUpdate(app.getVersion()); } catch (e) { lastUpdate = null; return { status: 'error', error: e.message }; }
+  return { ...lastUpdate, canInstall: app.isPackaged };
+});
+ipcMain.handle('update:install', async () => {
+  const u = lastUpdate;   // never a URL from the page: only what the last check found on GitHub
+  if (u?.status !== 'available' || !update.isTrustedDownload(u.url) || !/^SortDeck-Setup-[\w.-]+\.exe$/i.test(u.name)) return { ok: false, error: 'Check for updates first.' };
+  if (!app.isPackaged) { shell.openExternal(u.page); return { ok: false, error: 'Running from source - opened the release page instead.' }; }
+  try {
+    const res = await fetch(u.url);
+    if (!res.ok) throw new Error(`download failed (${res.status})`);
+    const file = path.join(app.getPath('temp'), u.name);
+    fs.writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+    // the installer updates in place, keeps settings and reopens SortDeck
+    spawn(file, [], { detached: true, stdio: 'ignore' }).unref();
+    quitting = true;
+    setTimeout(() => app.quit(), 300);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: `Couldn't download the update: ${e.message}` };
+  }
+});
+ipcMain.handle('update:page', () => shell.openExternal(lastUpdate?.page?.startsWith(update.RELEASES) ? lastUpdate.page : update.RELEASES));
 
 // ---------- uninstall (installed app only; confirmation lives here, not in the page) ----------
 ipcMain.handle('app:uninstall', async (e, withData) => {
