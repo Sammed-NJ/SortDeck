@@ -3,6 +3,11 @@
 All notable changes to SortDeck are listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+
+### Changed
+- New README screenshots. Docs (architecture file list, PRD, agent guide, rules) brought up to date with the app.
+
 ## [0.1.0-beta.9] - 2026-10-19
 
 ### Changed

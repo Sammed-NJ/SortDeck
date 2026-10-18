@@ -79,6 +79,8 @@ or by rules you build from name, size, age and even the website it came from.
 | **Safe by default** | Unfinished downloads are skipped, files in use are retried, name clashes become `name (1).ext`, nothing is ever overwritten, and "delete" means the Recycle Bin. |
 | **Set and forget** | Lives in the tray and starts with Windows. Close the window and it keeps working. |
 | **Tamper-proof install** | App code is packed and integrity-checked, so an edited install refuses to start. Troubleshoot repairs everything else. |
+| **Learn it in a minute** | A guided tour on first launch highlights every part of the app. Replay it with the **?** button. |
+| **Built-in updates & feedback** | **Check for updates** in Settings, and **Send feedback** goes straight to the author. |
 | **Your look** | Light, dark or follow Windows, plus six accent colors. |
 | **Private** | Runs entirely on your PC. No account, no cloud, no telemetry. It only goes online when you click **Check for updates**. |
 
@@ -177,11 +179,14 @@ src/
     doctor.js    troubleshoot: check + repair
     update.js    check GitHub Releases for a newer version
   preload.js     the page's only bridge to the main process
-  renderer/      the UI - app.js (overview, settings), folders.js, rules.js, tutorial.js (guided tour)
+  renderer/      the UI - app.js (overview, settings), folders.js, rules.js, tutorial.js (guided tour),
+                 icons.js (Heroicons), styles.css / theme.css / tour.css
+scripts/dist.js  builds the installer with its short name
+.github/         release workflow: tag push -> installer on GitHub
 tests/           engine, config, doctor, update tests  (plain node, no framework)
 build/           app icon
 docs/            PRD, ARCHITECTURE, Design, DECISIONS, Rules, Phases
-docs/images/     screenshots, how-it-works diagram
+docs/images/     screenshots and diagrams (SVG)
 AGENTS.md        guide for AI coding agents
 ```
 

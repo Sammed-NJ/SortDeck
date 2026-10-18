@@ -35,6 +35,10 @@ Rules for anyone changing SortDeck - people and AI agents alike. Break one only 
     Backdate mtimes with `utimes` so the settle window doesn't skip test files.
 
 ## Docs
+- **Always update together.** Every code change also updates, in the same pass: README, CHANGELOG, `docs/`
+  (and diagrams/screenshots if the UI changed), the portfolio SortDeck page and project card, and the resume
+  (`.docx` → Word PDF → portfolio `public/sammednj.pdf` + `resume_text.txt`). Remove dead code before committing.
+  Check the live site after deploy.
 - Diagrams are **SVG images** in `docs/images/` (same dark style as `how-it-works.svg`). No ASCII/box-drawing diagrams.
 
 ## Environment gotchas

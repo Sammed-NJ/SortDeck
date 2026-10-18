@@ -15,8 +15,15 @@ the **main** process, which owns the window, the tray and the file-system engine
 | `src/main/update.js` | Update check against GitHub Releases, version compare, trusted-URL check | **no** |
 | `src/main/doctor.js` | Troubleshoot `check` / `repair` (app-specific checks injected) | **no** |
 | `src/preload.js` | Exposes `window.api` - the renderer's only door | yes |
-| `src/renderer/*` | Plain HTML/CSS/JS, no framework, no bundler | - |
-| `tests/*.test.js` | Plain-node asserts against real temp folders | - |
+| `src/renderer/app.js` | Helpers (`h`, toast), navigation, overview, settings, save, troubleshoot, updates, uninstall | - |
+| `src/renderer/folders.js` | Folder list, add dialog, schedule card, file-type groups | - |
+| `src/renderer/rules.js` | Rule list, rule editor, Organize now / preview dialog | - |
+| `src/renderer/tutorial.js` | Guided tour (spotlight + callouts) and starter rules for Downloads | - |
+| `src/renderer/icons.js` | Heroicons SVGs, stored locally | - |
+| `src/renderer/styles.css` · `theme.css` · `tour.css` | Base styles and tokens · accent colors and pickers · tour + title-bar button | - |
+| `scripts/dist.js` | `npm run dist`: names the installer `SortDeck-Setup-beta.N.exe` / `-vX.Y.Z.exe` | - |
+| `.github/workflows/release.yml` | Tag push → build on Windows → rolling "SortDeck Beta" release or official release | - |
+| `tests/*.test.js` | Plain-node asserts: config, engine (real temp folders), doctor, update | - |
 
 `config.js` and `engine.js` have no Electron imports. Electron services (trash, notify) are injected into
 `Organizer`, so the tests run with plain `node`.

@@ -32,7 +32,10 @@ Unset `ELECTRON_RUN_AS_NODE` first. VS Code's terminal sets it, and Electron the
 | New per-folder option | `config.js` (`newFolder`, `normalizeConfig`, `toForm`, `buildConfig`) → `renderer/folders.js` |
 | New global setting | `config.js` settings → `index.html` Settings card → `app.js` `bindSetting` |
 | New main-process capability | `main.js` `ipcMain.handle` → `preload.js` → renderer |
-| Look and feel | `renderer/styles.css` tokens on `:root` |
+| Look and feel | `renderer/styles.css` tokens on `:root`; accents in `theme.css` |
+| New icon | Copy its SVG from the `heroicons` package into `renderer/icons.js` (never a CDN) |
+| New tour step | `TOUR` in `renderer/tutorial.js`; give the target a `data-tour` attribute |
+| Release | Bump `package.json`, CHANGELOG, README badge → tag `vX.Y.Z[-beta.N]` → push (CI builds and publishes) |
 
 ## Must-follow rules (full list in [docs/Rules.md](docs/Rules.md))
 - Never delete permanently, never overwrite, never move files without user consent.
@@ -43,6 +46,11 @@ Unset `ELECTRON_RUN_AS_NODE` first. VS Code's terminal sets it, and Electron the
 - Run `npm test` after changes. Add an engine assert for new behaviour.
 - When testing the UI, use a scratch `--user-data-dir`. Never touch the real `%APPDATA%\SortDeck`.
 - Commits: conventional style, **no AI attribution / Co-Authored-By lines**.
+
+## Always update together
+Every change also updates, in the same pass: README, CHANGELOG, `docs/`, the owner's portfolio page
+(`samnj.fyi` repo: `app/sortdeck/page.tsx`, `app/data/content.json`) and resume (`.docx` → PDF → portfolio
+`public/sammednj.pdf` + `resume_text.txt`), whenever they mention the changed thing. Check the live site after deploy.
 
 ## Done means
 1. `npm test` passes.

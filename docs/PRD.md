@@ -54,11 +54,18 @@ A desktop app you **download, double-click and use**. Point it at any folder, de
 - R17 Files in use are retried, and the user is warned once.
 - R18 Never overwrite: name clashes become `name (1).ext`.
 - R19 "Delete" always means the Recycle Bin.
-- R20 Config is saved atomically; a corrupt config is reset with a visible warning.
+- R20 Config is saved atomically and backed up; a damaged config is restored from the backup with a visible note.
+- R20a Troubleshoot finds and repairs broken settings, log, shortcut and start-with-Windows; installs are tamper-checked.
 
 ### 4.6 Feedback
 - R21 Overview: on/paused state, folder status, count organized today, recent activity (click to show in Explorer).
 - R22 Notifications are grouped and never sent one per file.
+
+### 4.7 Onboarding, look and lifecycle
+- R23 A guided tour on first launch highlights each part of the app, with Skip and Maybe later. A **?** button replays it.
+- R24 Theme (System / Light / Dark) and accent color.
+- R25 Check for updates and install in place; uninstall from Settings, keeping or deleting data.
+- R26 **Send feedback** opens the author's contact form. Betas ship as one rolling download until the official release.
 
 ## 5. Non-goals (for now)
 - macOS / Linux builds
