@@ -91,7 +91,7 @@ function renderRules() {
     h('div', { class: 'rule-main', title: 'Edit rule', onclick: () => openRuleEditor(i) },
       h('div', { class: 'rule-title' },
         h('span', { class: 'rule-name' }, r.name || 'Untitled rule'),
-        h('span', { class: 'tag' + (r.auto ? ' auto' : '') }, r.auto ? 'Automatic' : 'Manual only'),
+        folder.trigger === 'manual' ? null : h('span', { class: 'tag' + (r.auto ? ' auto' : '') }, r.auto ? 'Automatic' : 'Manual only'),
         r.stop ? h('span', { class: 'tag' }, 'Stops other rules') : null,
         r.enabled ? null : h('span', { class: 'tag' }, 'Off')),
       summary(r)),
@@ -207,7 +207,7 @@ function renderEditor(extra) {
         ...condRows(draft.exceptions),
         h('button', { type: 'button', class: 'link', onclick: () => { draft.exceptions.push(defaultCond('size')); renderEditor(); } }, '+ Add exception')),
       h('section', { class: 'opts' },
-        optSwitch('Run automatically on new items', 'auto'),
+        curFolder().trigger === 'manual' ? null : optSwitch('Include in automatic runs', 'auto'),
         optSwitch('Stop processing more rules', 'stop'),
         optSwitch('Rule is on', 'enabled')),
       preview),
@@ -227,42 +227,48 @@ function openRuleEditor(i) {
   if (i < 0) $('#ruleDialog .rule-name-input').focus();
 }
 
-// ---------- run rules now ----------
+// ---------- organize now (all of a folder's rules) / run one rule ----------
 function openRunDialog(only) {
   const folder = curFolder();
-  if (!folder?.rules.length) { toast('Create a rule first.'); return; }
+  if (!folder) return;
+  if (!folder.rules.length && !folder.sortByType) { toast('Add a rule or turn on sort by file type first.'); return; }
   const picks = folder.rules.map((r, i) => (only ? only.includes(i) : r.enabled));
   fillFolderOptions();
-  const state = { own: true, scope: '', result: null };
+  // a single rule's Run button runs just that rule; "Organize now" also sorts the rest by type
+  const state = { own: true, scope: '', sortRest: !only && folder.sortByType, result: null };
   const d = $('#runDialog');
 
   const go = async (preview, btn) => {
     const rules = folder.rules.filter((_, i) => picks[i]);
-    btn.disabled = true; btn.textContent = preview ? 'Checking...' : 'Running...';
-    state.result = resultList(await window.api.runRules(folder, rules, state.own ? null : state.scope, preview), preview);
+    btn.disabled = true; btn.textContent = preview ? 'Checking...' : 'Organizing...';
+    state.result = resultList(await window.api.runRules(folder, rules, state.own ? null : state.scope, preview, state.own && state.sortRest), preview);
     draw();
     if (!preview) { lastSig = ''; refresh(); }
   };
 
   function draw() {
     d.replaceChildren(h('div', { class: 'dlg' },
-      h('header', {}, h('h1', {}, 'Run rules now'), iconBtn('x', 'Close', () => d.close())),
+      h('header', {}, h('h1', {}, only ? 'Run rule' : `Organize ${baseName(folder.path)} now`), iconBtn('x', 'Close', () => d.close())),
       h('div', { class: 'dlg-body' },
-        h('p', { class: 'muted' }, 'Runs the selected rules once - including manual-only and turned-off ones. Default sorting is not applied. Unsaved edits are used as they are.'),
-        h('section', {}, h('h3', {}, 'Rules'),
+        h('p', { class: 'muted' }, 'Runs once, right now - including manual-only and turned-off rules you tick. Use Preview first to see exactly what will happen. Unsaved edits are used as they are.'),
+        folder.rules.length ? h('section', {}, h('h3', {}, 'Rules'),
           ...folder.rules.map((r, i) => h('label', { class: 'check' },
             h('input', { type: 'checkbox', checked: picks[i], onchange: (e) => { picks[i] = e.target.checked; } }),
             h('span', {}, r.name || 'Untitled rule'),
-            h('span', { class: 'muted small' }, r.auto ? '' : 'manual only')))),
+            h('span', { class: 'muted small' }, r.enabled ? '' : 'off')))) : null,
         h('section', {}, h('h3', {}, 'Run on'),
           sel([['own', `${baseName(folder.path)} (this folder)`], ['pick', 'A subfolder or another folder...']], state.own ? 'own' : 'pick', (v) => { state.own = v === 'own'; draw(); }),
           state.own ? null : folderInput(state.scope, (v) => { state.scope = v; }, 'e.g. Installers, or a full path')),
+        folder.sortByType && state.own ? h('label', { class: 'check' },
+          h('input', { type: 'checkbox', checked: state.sortRest, onchange: (e) => { state.sortRest = e.target.checked; } }),
+          h('span', {}, 'Then sort the rest by file type'),
+          h('span', { class: 'muted small' }, 'items no rule moved, recycled or kept')) : null,
         state.result ? h('div', { class: 'dlg-preview' }, state.result) : null),
       h('footer', {},
         h('span', { class: 'grow' }),
         h('button', { type: 'button', class: 'btn', onclick: (e) => go(true, e.currentTarget) }, 'Preview'),
         h('button', { type: 'button', class: 'btn', onclick: () => d.close() }, 'Close'),
-        h('button', { type: 'button', class: 'btn primary', onclick: (e) => go(false, e.currentTarget) }, 'Run now'))));
+        h('button', { type: 'button', class: 'btn primary', onclick: (e) => go(false, e.currentTarget) }, only ? 'Run now' : 'Organize now'))));
   }
   draw();
   d.showModal();

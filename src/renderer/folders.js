@@ -38,27 +38,36 @@ function openAddDialog(p, sortByType) {
     return;
   }
   const d = $('#addDialog');
-  const opt = { sortByType };
+  const CHOICES = {
+    setup: { title: 'Set up rules first', desc: 'Nothing moves yet. Add your rules, preview them, then choose when this folder is organized - instantly, on a schedule, or only when you click.', button: 'Add folder', opts: { trigger: 'manual', sortByType: false } },
+    quick: { title: 'Sort by file type right away', desc: 'Items already here are moved into Images, Documents, Installers... now, and new ones as they arrive. You can still add rules.', button: 'Start organizing', opts: { trigger: 'instant', sortByType: true } },
+  };
+  let choice = 'setup';
+  const submit = h('button', { type: 'submit', class: 'btn primary' }, CHOICES.setup.button);
+  const card = (key) => h('label', { class: 'choice' },
+    h('input', { type: 'radio', name: 'addMode', checked: key === choice, onchange: () => { choice = key; submit.textContent = CHOICES[key].button; } }),
+    h('span', {}, h('b', {}, CHOICES[key].title), h('span', { class: 'muted small' }, CHOICES[key].desc)));
+
   d.replaceChildren(h('form', { class: 'dlg', onsubmit: async (e) => {
     e.preventDefault();
-    const folder = await window.api.newFolder(p, opt.sortByType);
+    const folder = await window.api.newFolder(p, CHOICES[choice].opts);
     form.folders.push(folder);
     selectedId = folder.id;
     d.close();
     renderFolders();
     markDirty();
-    if (await save()) { show('folders'); toast(`Now organizing ${baseName(p)}.`); }
+    if (await save()) {
+      show('folders');
+      toast(choice === 'setup' ? `${baseName(p)} added - nothing moves until you choose when to organize.` : `Now organizing ${baseName(p)}.`);
+    }
   } },
-    h('header', {}, h('h1', {}, `Organize ${baseName(p)}`), h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Close', onclick: () => d.close() }, '×')),
+    h('header', {}, h('h1', {}, `Add ${baseName(p)}`), h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Close', onclick: () => d.close() }, '×')),
     h('div', { class: 'dlg-body' },
       h('p', { class: 'path' }, p),
-      h('label', { class: 'opt big' },
-        h('span', { class: 'switch' }, h('input', { type: 'checkbox', checked: opt.sortByType, onchange: (e) => { opt.sortByType = e.target.checked; } }), h('span')),
-        h('span', {}, h('b', {}, 'Sort files into folders by type'), h('br'), h('span', { class: 'muted small' }, 'Images, Documents, Installers, Archives, Video, Audio... You can change these.'))),
-      h('p', { class: 'muted small' }, 'Items already in the folder are organized right away. You can add your own rules next - by name, size, age or the website a file came from.')),
+      h('div', { class: 'choices' }, card('setup'), card('quick'))),
     h('footer', {}, h('span', { class: 'grow' }),
       h('button', { type: 'button', class: 'btn', onclick: () => d.close() }, 'Cancel'),
-      h('button', { type: 'submit', class: 'btn primary' }, 'Start organizing'))));
+      submit)));
   d.showModal();
 }
 $('#btnAddFolder').addEventListener('click', pickAndAdd);
@@ -72,6 +81,39 @@ function renderFolders() {
   renderFolderDetail();
 }
 
+const everyText = (m) => (m % 60 === 0 ? plural(m / 60, 'hour') : plural(m, 'minute'));
+function whenLabel(f) {
+  if (!f.enabled) return 'Off';
+  return { instant: 'Instant', interval: `Every ${everyText(f.intervalMinutes)}`, manual: 'Manual' }[f.trigger];
+}
+
+// "When to organize": instant / every N / only when I click / off  (off = enabled false, trigger kept)
+function scheduleCard(f) {
+  const mode = f.enabled ? f.trigger : 'off';
+  const st = status?.folders.find((s) => s.id === f.id);
+  const hint = {
+    instant: 'New items are organized a few seconds after they arrive.',
+    interval: st?.nextRun && !status?.paused ? `Next check ${new Date(st.nextRun).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.` : 'Checked on a schedule - good for busy folders.',
+    manual: 'Nothing moves until you click Organize now. Perfect while you set up and test rules.',
+    off: 'This folder is ignored.',
+  }[mode];
+  const hours = f.intervalMinutes % 60 === 0;
+  const setEvery = (n, unit) => { f.intervalMinutes = Math.round(Number(n) * (unit === 'hours' ? 60 : 1)); markDirty(); renderFolderNav(); };
+  let unit = hours ? 'hours' : 'minutes';
+  const num = h('input', { type: 'number', min: '1', class: 'num', value: hours ? f.intervalMinutes / 60 : f.intervalMinutes, oninput: (e) => setEvery(e.target.value, unit) });
+  return h('div', { class: 'card schedule' },
+    h('div', { class: 'schedule-row' },
+      h('div', {}, h('h3', {}, 'When to organize'), h('p', { class: 'muted small' }, hint)),
+      h('div', { class: 'inline' },
+        sel([['instant', 'Instantly, as items arrive'], ['interval', 'On a schedule'], ['manual', 'Only when I click "Organize now"'], ['off', 'Off']], mode, (v) => {
+          f.enabled = v !== 'off';
+          if (v !== 'off') f.trigger = v;
+          markDirty(); renderFolderDetail(); renderFolderNav();
+        }),
+        mode === 'interval' ? [h('span', { class: 'muted' }, 'every'), num,
+          sel([['minutes', 'minutes'], ['hours', 'hours']], unit, (v) => { unit = v; setEvery(num.value, unit); })] : null)));
+}
+
 function renderFolderNav() {
   if (!form) return;
   const cur = curFolder();
@@ -81,7 +123,7 @@ function renderFolderNav() {
     return h('button', { class: 'fnav' + (f.id === cur?.id ? ' active' : '') + (f.enabled ? '' : ' off'), title: f.path, onclick: () => selectFolder(f.id) },
       h('span', { class: 'swatch', style: `background:${bad ? 'var(--bad)' : colorFor(baseName(f.path))}` }),
       h('span', { class: 'fnav-name' }, baseName(f.path)),
-      h('span', { class: 'muted small' }, f.enabled ? (st?.today ? String(st.today) : '') : 'off'));
+      h('span', { class: 'muted small' }, whenLabel(f)));
   }));
 }
 
@@ -108,13 +150,13 @@ function renderFolderDetail() {
     h('div', { class: 'fhead card' },
       h('div', { style: 'min-width:0' }, h('h1', {}, baseName(f.path)), h('p', { class: 'path' }, f.path)),
       h('div', { class: 'actions' },
-        h('label', { class: 'opt' }, h('span', { class: 'switch' }, h('input', { type: 'checkbox', checked: f.enabled, onchange: (e) => { f.enabled = e.target.checked; markDirty(); renderFolderNav(); } }), h('span')), 'On'),
         h('button', { class: 'btn', onclick: async () => { if (!(await window.api.openPath(f.path))) toast('Folder not found.', true); } }, 'Open'),
-        h('button', { class: 'btn', onclick: () => openRunDialog() }, 'Run rules now...'),
-        h('button', { class: 'btn danger-text', onclick: remove }, 'Remove'))),
+        h('button', { class: 'btn danger-text', onclick: remove }, 'Remove'),
+        h('button', { class: 'btn primary', title: 'Preview, then run this folder\'s rules once', onclick: () => openRunDialog() }, 'Organize now...'))),
+    scheduleCard(f),
 
     h('div', { class: 'section-head' },
-      h('div', {}, h('h2', {}, 'Rules'), h('p', { class: 'muted small' }, 'Checked top to bottom for every new item, like Outlook rules.')),
+      h('div', {}, h('h2', {}, 'Rules'), h('p', { class: 'muted small' }, 'Checked top to bottom for every item, like Outlook rules.')),
       h('button', { class: 'btn primary', onclick: () => openRuleEditor(-1) }, '+ New rule')),
     h('div', { id: 'ruleList', class: 'rule-list' }),
 

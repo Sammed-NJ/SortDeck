@@ -194,7 +194,7 @@ function renderOverview() {
       h('span', { class: 'name' }, baseName(f.path)),
       h('span', { class: 'count' }, st?.today ? `${st.today} today` : ''),
       h('div', { class: 'meta' }, problem ? h('span', { class: 'bad-text' }, problem)
-        : h('span', {}, `${plural(f.rules.length, 'rule')}${f.sortByType ? ' + sort by type' : ''}${f.enabled ? '' : ' · off'}`)));
+        : h('span', {}, `${whenLabel(f)} · ${plural(f.rules.length, 'rule')}${f.sortByType ? ' + sort by type' : ''}`)));
   }));
 
   $('#activityList').replaceChildren(...(status.activity.length ? status.activity.slice(0, 40).map((a) => {

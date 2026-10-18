@@ -145,16 +145,27 @@ class Organizer {
     this.timers = new Map();
     this.busy = new Map();
     this.status = new Map();     // folderId -> { error, lastRun }
+    this.schedules = new Map();  // folderId -> interval timer ("every N minutes" folders)
+    this.nextRun = new Map();    // folderId -> when its next scheduled run is due
     this.failed = new Set();     // paths we've already warned about
+  }
+
+  // folders organized without a click: "instant" (watcher + safety re-check) and "interval" (own timer)
+  autoFolders(trigger) {
+    return this.cfg.folders.filter((f) => f.enabled && (trigger ? f.trigger === trigger : f.trigger !== 'manual'));
   }
 
   setConfig(cfg) {
     this.cfg = cfg;
     this.stop();
     if (cfg.settings.paused) return;
-    for (const f of cfg.folders.filter((x) => x.enabled)) this.watch(f);
-    this.interval = setInterval(() => this.sweepAll(), cfg.settings.intervalSeconds * 1000).unref();
-    this.sweepAll();
+    for (const f of this.autoFolders('instant')) this.watch(f);
+    this.interval = setInterval(() => this.sweepAll('instant'), cfg.settings.intervalSeconds * 1000).unref();
+    for (const f of this.autoFolders('interval')) {
+      this.schedules.set(f.id, setInterval(() => this.sweep(f.id), f.intervalMinutes * 60000).unref());
+      this.nextRun.set(f.id, this.now() + f.intervalMinutes * 60000);
+    }
+    this.sweepAll('instant'); // interval folders wait for their first tick
   }
 
   stop() {
@@ -162,6 +173,9 @@ class Organizer {
     this.watchers.clear();
     for (const t of this.timers.values()) clearTimeout(t);
     this.timers.clear();
+    for (const t of this.schedules.values()) clearInterval(t);
+    this.schedules.clear();
+    this.nextRun.clear();
     clearInterval(this.interval);
   }
 
@@ -178,16 +192,18 @@ class Organizer {
     this.timers.set(id, setTimeout(() => { this.timers.delete(id); this.sweep(id); }, ms).unref());
   }
 
-  sweepAll() { for (const f of this.cfg.folders.filter((x) => x.enabled)) this.sweep(f.id); }
+  sweepAll(trigger) { return Promise.all(this.autoFolders(trigger).map((f) => this.sweep(f.id))); }
 
   // automatic pass: enabled+automatic rules, then sort-by-type for whatever no rule handled
   async sweep(id) {
     const folder = this.cfg.folders.find((f) => f.id === id);
-    if (!folder || this.cfg.settings.paused || inQuietHours(this.cfg.settings.quietHours)) return [];
+    if (!folder || !folder.enabled || folder.trigger === 'manual') return [];
+    if (this.cfg.settings.paused || inQuietHours(this.cfg.settings.quietHours)) return [];
     if (this.busy.get(id)) { this.busy.set(id, 'again'); return []; }
     this.busy.set(id, true);
+    if (folder.trigger === 'interval') this.nextRun.set(id, this.now() + folder.intervalMinutes * 60000);
     try {
-      if (!this.watchers.has(id) && folder.enabled) this.watch(folder);
+      if (folder.trigger === 'instant' && !this.watchers.has(id)) this.watch(folder);
       const rules = folder.rules.filter((r) => r.enabled && r.auto);
       const { items, unsettled, error } = await listItems(folder, this.cfg.folders, this.now());
       this.status.set(id, { error: error ? (error.code === 'ENOENT' ? 'Folder not found' : error.message) : null, lastRun: this.now() });
@@ -203,15 +219,15 @@ class Organizer {
     }
   }
 
-  // manual "Run rules now": given rules, once, on the folder (or another one); default sorting not applied
-  async run(folder, rules, { preview = false, target } = {}) {
+  // manual "Organize now": given rules, once, on the folder (or a subfolder); optionally sort the rest by type
+  async run(folder, rules, { preview = false, target, fallback = false } = {}) {
     const dir = target ? resolveIn(folder.path, target) : folder.path;
     const scope = { ...folder, path: dir };
     const { items, error } = await listItems(scope, this.cfg.folders, this.now(), { settle: false });
     if (error) throw new Error(error.code === 'ENOENT' ? `Folder not found: ${dir}` : error.message);
     const report = [];
     // relative destinations stay relative to the watched folder, not the target
-    for (const item of items) report.push(...(await this.processItem(folder, item, rules, { preview })));
+    for (const item of items) report.push(...(await this.processItem(folder, item, rules, { preview, fallback: fallback && !target })));
     this.finish(report, preview);
     return report;
   }

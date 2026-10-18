@@ -135,6 +135,7 @@ ipcMain.handle('status', () => {
       exists: fs.existsSync(f.path),
       error: organizer.status.get(f.id)?.error ?? null,
       today: activity.filter((a) => a.time >= today && a.ok && samePath(a.folder, f.path)).length,
+      nextRun: organizer.nextRun.get(f.id) ?? null,
     })),
     activity: activity.slice(0, 100),
     today: activity.filter((a) => a.time >= today && a.ok).length,
@@ -142,19 +143,16 @@ ipcMain.handle('status', () => {
 });
 
 ipcMain.handle('organizer:pause', (_e, paused) => { setPaused(!!paused); return true; });
-ipcMain.handle('organizer:sweep', async () => {
-  const reports = await Promise.all(cfg.folders.filter((f) => f.enabled).map((f) => organizer.sweep(f.id)));
-  return reports.flat().length;
-});
+ipcMain.handle('organizer:sweep', async () => (await organizer.sweepAll()).flat().length);
 
 ipcMain.handle('rules:validate', (_e, rule) => validateRule(rule));
 
-ipcMain.handle('rules:run', async (_e, folderForm, rules, target, preview) => {
+ipcMain.handle('rules:run', async (_e, folderForm, rules, target, preview, sortByType) => {
   const f = validateFolder({ ...folderForm, rules }, 'Folder');
   if (f.errors.length) return { ok: false, errors: f.errors };
-  if (!f.folder.rules.length) return { ok: false, errors: ['Pick at least one rule.'] };
+  if (!f.folder.rules.length && !sortByType) return { ok: false, errors: ['Pick at least one rule, or sort by file type.'] };
   try {
-    return { ok: true, report: await organizer.run(f.folder, f.folder.rules, { preview: !!preview, target: target ? String(target) : undefined }) };
+    return { ok: true, report: await organizer.run(f.folder, f.folder.rules, { preview: !!preview, target: target ? String(target) : undefined, fallback: !!sortByType }) };
   } catch (e) {
     return { ok: false, errors: [e.message] };
   }
@@ -164,8 +162,10 @@ ipcMain.handle('folders:suggest', () => ['downloads', 'desktop', 'documents', 'p
   .map((k) => ({ key: k, path: app.getPath(k) }))
   .filter((s) => fs.existsSync(s.path)));
 
-ipcMain.handle('folders:new', (_e, p, sortByType) =>
-  toForm({ settings: cfg.settings, folders: [newFolder(String(p), { sortByType: !!sortByType })] }).folders[0]);
+ipcMain.handle('folders:new', (_e, p, opts) => {
+  const trigger = ['instant', 'interval', 'manual'].includes(opts?.trigger) ? opts.trigger : 'manual';
+  return toForm({ settings: cfg.settings, folders: [newFolder(String(p), { sortByType: !!opts?.sortByType, trigger })] }).folders[0];
+});
 
 ipcMain.handle('pick:folder', async (e, base) => {
   const r = await dialog.showOpenDialog(BrowserWindow.fromWebContents(e.sender), {

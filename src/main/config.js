@@ -26,6 +26,8 @@ const OPS = {
   source: ['contains', 'notcontains'],
   type: ['is'],
 };
+// when a folder is organized: as items arrive, on a timer, or only when the user clicks
+const TRIGGERS = ['instant', 'interval', 'manual'];
 const ACTIONS = ['move', 'copy', 'recycle', 'keep', 'notify'];
 const TERMINAL = ['move', 'recycle', 'keep'];
 const UNITS = ['minutes', 'hours', 'days'];
@@ -41,9 +43,10 @@ function normExts(list) {
   return [...new Set(arr(list).flatMap((s) => String(s).split(/[,;\s]+/)).map((s) => s.trim().replace(/^\.+/, '').toLowerCase()).filter(Boolean))];
 }
 
-function newFolder(p, { sortByType = true } = {}) {
-  return { id: uid(), path: p, enabled: true, sortByType, categories: structuredClone(DEFAULT_CATEGORIES), ignore: [...DEFAULT_IGNORE], protected: [], rules: [] };
+function newFolder(p, { sortByType = true, trigger = 'instant', intervalMinutes = 60 } = {}) {
+  return { id: uid(), path: p, enabled: true, trigger, intervalMinutes, sortByType, categories: structuredClone(DEFAULT_CATEGORIES), ignore: [...DEFAULT_IGNORE], protected: [], rules: [] };
 }
+const validInterval = (n) => Number.isInteger(n) && n >= 1 && n <= 10080; // 1 minute .. 1 week
 
 function normalizeRule(r) {
   return {
@@ -65,6 +68,8 @@ function normalizeFolder(f) {
     id: String(f?.id || uid()),
     path: String(f?.path ?? ''),
     enabled: f?.enabled !== false,
+    trigger: TRIGGERS.includes(f?.trigger) ? f.trigger : 'instant',
+    intervalMinutes: validInterval(f?.intervalMinutes) ? f.intervalMinutes : 60,
     sortByType: !!f?.sortByType,
     categories: Object.fromEntries(Object.entries(cats).map(([k, v]) => [k, normExts(v)])),
     ignore: f?.ignore ? normExts(f.ignore) : [...DEFAULT_IGNORE],
@@ -168,6 +173,9 @@ function validateFolder(f, label) {
   const p = String(f?.path ?? '').trim();
   const where = p ? path.basename(p) || p : label;
   if (!p || !path.isAbsolute(p) || badPath(p)) errors.push(`${label}: choose a valid folder.`);
+  const trigger = TRIGGERS.includes(f?.trigger) ? f.trigger : 'instant';
+  const intervalMinutes = Number(f?.intervalMinutes ?? 60);
+  if (trigger === 'interval' && !validInterval(intervalMinutes)) errors.push(`${where}: check every 1 to 10080 minutes.`);
 
   const categories = {};
   const owner = {};
@@ -199,7 +207,7 @@ function validateFolder(f, label) {
 
   return {
     errors,
-    folder: { id: String(f?.id || uid()), path: p, enabled: f?.enabled !== false, sortByType: !!f?.sortByType, categories, ignore: normExts(f?.ignore), protected: prot, rules },
+    folder: { id: String(f?.id || uid()), path: p, enabled: f?.enabled !== false, trigger, intervalMinutes: validInterval(intervalMinutes) ? intervalMinutes : 60, sortByType: !!f?.sortByType, categories, ignore: normExts(f?.ignore), protected: prot, rules },
   };
 }
 
@@ -236,6 +244,6 @@ function buildConfig(form) {
 }
 
 module.exports = {
-  RESERVED, DEFAULT_CATEGORIES, DEFAULT_IGNORE, OPS, TERMINAL, samePath,
+  RESERVED, DEFAULT_CATEGORIES, DEFAULT_IGNORE, OPS, TERMINAL, TRIGGERS, samePath,
   newFolder, normalizeConfig, loadConfig, saveConfig, toForm, buildConfig, validateRule, validateFolder,
 };

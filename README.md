@@ -21,7 +21,7 @@ or by rules you build from name, size, age and even the website it came from.
 ![Platform](https://img.shields.io/badge/platform-windows%2010%20%7C%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![Electron](https://img.shields.io/badge/built%20with-electron%2044-47848F?style=for-the-badge&logo=electron&logoColor=white)
 ![Status](https://img.shields.io/badge/status-beta-F59E0B?style=for-the-badge)
-![Version](https://img.shields.io/badge/version-0.1.0--beta.1-0E7490?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.1.0--beta.2-0E7490?style=for-the-badge)
 <br>
 ![Install](https://img.shields.io/badge/install-one%20click-22C55E?style=for-the-badge&logo=windowsterminal&logoColor=white)
 ![Admin](https://img.shields.io/badge/admin%20rights-not%20required-22C55E?style=for-the-badge)
@@ -66,16 +66,19 @@ or by rules you build from name, size, age and even the website it came from.
 | --- | --- |
 | **Any folder, not just Downloads** | Desktop, Documents, a project folder, a USB drive - add as many as you like, each with its own rules. |
 | **Rules you already understand** | Conditions, actions and exceptions, checked top to bottom - exactly like Outlook mail rules. |
-| **Instant** | New files are picked up within seconds of arriving, not on a timer. |
+| **Your schedule, per folder** | Organize *instantly* as items arrive, *every N minutes or hours*, or *only when you click* **Organize now** - with a preview first. |
+| **Set up before anything moves** | New folders start in "set up rules first" mode: nothing is touched until you decide. |
 | **Safe by default** | Unfinished downloads are skipped, files in use are retried, name clashes become `name (1).ext`, nothing is ever overwritten, and "delete" means the Recycle Bin. |
 | **Set and forget** | Lives in the tray and starts with Windows. Close the window and it keeps working. |
 | **Private** | Runs entirely on your PC. No account, no cloud, no telemetry. |
 
 ## Install
 
-1. Download **`SortDeck-Setup-0.1.0-beta.1.exe`** from [Releases](https://github.com/Sammed-NJ/SortDeck/releases).
+1. Download **`SortDeck-Setup-0.1.0-beta.2.exe`** from [Releases](https://github.com/Sammed-NJ/SortDeck/releases).
 2. Double-click it. It installs in seconds - no admin prompt - and opens SortDeck.
-3. Pick a folder. That's it.
+3. Pick a folder and choose **Set up rules first** (nothing moves) or **Sort by file type right away**.
+4. Add rules, hit **Organize now → Preview** to check them, then set **When to organize**:
+   *Instantly*, *On a schedule* (every N minutes/hours) or *Only when I click*.
 
 > Windows may say *"Windows protected your PC"* because beta builds aren't code-signed yet.
 > Click **More info → Run anyway**.
@@ -95,7 +98,9 @@ Each watched folder has its own list of rules, checked **top to bottom** for eve
 
 - Destinations can be relative to the watched folder (`Finance\Invoices`) or any full path (`D:\Backup`).
 - **Preview matches** shows exactly what a rule would do - without touching a file.
-- **Run rules now** runs chosen rules on demand, on the folder or any subfolder.
+- **Organize now** runs the folder's rules (and sort by file type) once, on the folder or any subfolder,
+  with a preview first. Each rule also has its own **Run** button.
+- **When to organize** is set per folder: *Instantly* · *On a schedule* · *Only when I click* · *Off*.
 - **Sort by file type** (optional, per folder) files whatever no rule handled into
   *Images, Documents, Installers, Archives, Data, Video, Audio* - all editable. Unknown types go to
   *Other*, loose folders to *Folders*.
@@ -119,8 +124,9 @@ Each watched folder has its own list of rules, checked **top to bottom** for eve
 <img src="docs/images/how-it-works.svg" alt="Flowchart: a new item waits until it is fully written, then rules are checked top to bottom - a matching rule runs its copy/notify actions and, if it moves, recycles or keeps the item, it is done; otherwise the next rule is tried. Items no rule handled are sorted by file type into Images, Documents, Installers, Archives, Video, Audio, Other or Folders." width="85%">
 </div>
 
-A safety re-check runs every 30 seconds (configurable) to catch anything that was locked.
-Quiet hours and **Pause** stop automatic organizing; manual runs still work.
+*Instant* folders also get a safety re-check every 30 seconds (configurable) to catch anything that was
+locked; *scheduled* folders run on their own timer; *manual* folders are never touched until you click
+**Organize now**. Quiet hours and **Pause** stop automatic organizing; manual runs still work.
 
 Settings live in `%APPDATA%\SortDeck\config.json` and the activity log next to it.
 

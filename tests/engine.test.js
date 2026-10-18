@@ -91,6 +91,30 @@ const has = (rel) => fs.existsSync(path.join(dir, rel));
   const done = await org.run(cfg.folders[0], manual, { target: 'Documents' });
   assert.ok(done[0].ok && has('Manual/notes.txt'), 'manual run moves');
 
+  // "only when I click" folder: automatic sweeps never touch it; Organize now (with preview) does
+  const manualFolder = { ...cfg.folders[0], trigger: 'manual' };
+  org.cfg = { ...cfg, folders: [manualFolder] };
+  file('clickme.jpg');
+  assert.deepEqual(await org.sweep(manualFolder.id), [], 'manual folder skipped by sweep');
+  await org.sweepAll();
+  assert.ok(has('clickme.jpg'), 'manual folder untouched by sweepAll');
+  const rulesNow = manualFolder.rules.filter((r) => r.enabled);
+  const look = await org.run(manualFolder, rulesNow, { preview: true, fallback: true });
+  assert.ok(look.some((r) => r.item === 'clickme.jpg' && r.rule === 'Sort by type'), 'preview includes sort by type');
+  assert.ok(has('clickme.jpg'), 'preview read-only');
+  await org.run(manualFolder, rulesNow, { fallback: true });
+  assert.ok(has('Images/clickme.jpg'), 'Organize now sorts by type');
+
+  // "every N minutes" folder gets its own schedule; instant folders get a watcher
+  org.setConfig({ ...cfg, folders: [{ ...cfg.folders[0], trigger: 'interval', intervalMinutes: 15 }] });
+  assert.equal(org.schedules.size, 1);
+  assert.equal(org.watchers.size, 0, 'interval folder is not watched');
+  assert.ok(org.nextRun.get(cfg.folders[0].id) > Date.now() + 14 * 60000);
+  org.setConfig(cfg);
+  assert.equal(org.schedules.size, 0);
+  assert.equal(org.watchers.size, 1, 'instant folder is watched');
+  org.stop();
+
   // paused / quiet hours: automatic sweep does nothing
   file('later.jpg');
   org.cfg = { ...cfg, settings: { ...cfg.settings, paused: true } };
