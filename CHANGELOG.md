@@ -5,7 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [
 
 ## [Unreleased]
 
+## [0.1.0-beta.10] - 2026-10-19
+
 ### Changed
+- **Lighter on your PC.** Closing the window now frees its memory while SortDeck keeps organizing from the tray:
+  about 48 MB instead of 107 MB. With the window open it uses about 68 MB instead of 108 MB.
+- The installer is smaller (93 MB instead of 112 MB) and takes 285 MB on disk instead of 369 MB. Unused language
+  files and graphics components are left out.
 - New README screenshots. Docs (architecture file list, PRD, agent guide, rules) brought up to date with the app.
 
 ## [0.1.0-beta.9] - 2026-10-19

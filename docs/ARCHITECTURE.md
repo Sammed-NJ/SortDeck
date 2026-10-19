@@ -21,7 +21,7 @@ the **main** process, which owns the window, the tray and the file-system engine
 | `src/renderer/tutorial.js` | Guided tour (spotlight + callouts) and starter rules for Downloads | - |
 | `src/renderer/icons.js` | Heroicons SVGs, stored locally | - |
 | `src/renderer/styles.css` · `theme.css` · `tour.css` | Base styles and tokens · accent colors and pickers · tour + title-bar button | - |
-| `scripts/dist.js` | `npm run dist`: names the installer `SortDeck-Setup-beta.N.exe` / `-vX.Y.Z.exe` | - |
+| `scripts/dist.js` | `npm run dist`: names the installer `SortDeck-Setup-beta.N.exe` / `-vX.Y.Z.exe`; afterPack drops unused runtime DLLs | - |
 | `.github/workflows/release.yml` | Tag push → build on Windows → rolling "SortDeck Beta" release or official release | - |
 | `tests/*.test.js` | Plain-node asserts: config, engine (real temp folders), doctor, update | - |
 
@@ -103,3 +103,11 @@ the **main** process, which owns the window, the tray and the file-system engine
 `dist/SortDeck-Setup-beta.N.exe` for betas or `dist/SortDeck-Setup-vX.Y.Z.exe` for official releases (named by
 `scripts/dist.js`; run it with `npm run dist`). The `appId` (`com.sortdeck.app`) must equal the AppUserModelId set in
 `main.js`, or the taskbar shows the wrong icon. Dev runs use `com.sortdeck.app.dev`.
+
+## Footprint
+- **Window:** closing it destroys the `BrowserWindow` and its renderer process. The engine, tray and timers live in
+  main, so organizing goes on; the tray or a second launch builds a new window.
+- **Drawing:** `app.disableHardwareAcceleration()` keeps the GPU process small. The UI uses no WebGL or WebGPU.
+- **Package:** English locale only, maximum NSIS compression, and `scripts/dist.js` (electron-builder `afterPack`)
+  deletes `dxcompiler.dll`, `dxil.dll`, `d3dcompiler_47.dll` and the Vulkan/SwiftShader files.
+- **Measured (beta.10, private working set):** window open ~68 MB, tray only ~48 MB. Installer ~93 MB.

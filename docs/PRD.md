@@ -25,7 +25,7 @@ A desktop app you **download, double-click and use**. Point it at any folder, de
 
 ### 4.1 Install and run
 - R1 One-click installer, per-user, **no admin rights**, Start Menu and Desktop shortcuts, opens after install.
-- R2 Runs in the system tray; closing the window keeps it working. Optional start with Windows.
+- R2 Runs in the system tray; closing the window keeps it working and frees the window's memory. Optional start with Windows.
 - R3 Correct app name and icon in taskbar, tray and Start Menu.
 - R4 Fully offline: no account, cloud or telemetry.
 
@@ -77,6 +77,7 @@ A desktop app you **download, double-click and use**. Point it at any folder, de
 - New user goes from install to first organized folder in **under 1 minute**.
 - Zero data-loss reports. Every removal is recoverable from the Recycle Bin.
 - Engine and config tests pass on every release.
+- Light: under 50 MB of memory while working from the tray; installer under 95 MB.
 
 ## 7. Open questions
 - Code signing: cost versus the SmartScreen warning.

@@ -33,7 +33,7 @@ Delivery plan. ✅ done · 🔄 in progress · ⬜ planned.
 - [x] Themes: System / Light / Dark + accent colors
 - [x] Docs diagrams as images
 - [x] Automatic release builds (tag push -> installer attached to the GitHub release)
-- [ ] GitHub Release with the installer attached
+- [x] Lighter app: memory freed when the window closes, software drawing, smaller installer (`0.1.0-beta.10`)
 - [ ] License file
 - [ ] Undo for recent moves (from the activity log)
 - [ ] Rule templates gallery (Invoices, Screenshots, Old installers, ...)

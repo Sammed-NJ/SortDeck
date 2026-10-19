@@ -36,6 +36,7 @@ Unset `ELECTRON_RUN_AS_NODE` first. VS Code's terminal sets it, and Electron the
 | New icon | Copy its SVG from the `heroicons` package into `renderer/icons.js` (never a CDN) |
 | New tour step | `TOUR` in `renderer/tutorial.js`; give the target a `data-tour` attribute |
 | Release | Bump `package.json`, CHANGELOG, README badge → tag `vX.Y.Z[-beta.N]` → push (CI builds and publishes) |
+| Installer size | `build` in `package.json` (`electronLanguages`, `compression`) and `UNUSED` in `scripts/dist.js` (afterPack) |
 
 ## Must-follow rules (full list in [docs/Rules.md](docs/Rules.md))
 - Never delete permanently, never overwrite, never move files without user consent.
@@ -45,6 +46,8 @@ Unset `ELECTRON_RUN_AS_NODE` first. VS Code's terminal sets it, and Electron the
 - Files stay under 500 lines. No new dependencies or frameworks without a docs/DECISIONS.md entry.
 - Run `npm test` after changes. Add an engine assert for new behaviour.
 - When testing the UI, use a scratch `--user-data-dir`. Never touch the real `%APPDATA%\SortDeck`.
+- A test run of `dist/win-unpacked/SortDeck.exe` registers a real start-with-Windows entry (and notifications can
+  create a Start-menu shortcut). Remove them afterwards if SortDeck isn't installed.
 - Commits: conventional style, **no AI attribution / Co-Authored-By lines**.
 
 ## Always update together

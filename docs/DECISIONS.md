@@ -146,3 +146,19 @@ consequences*. Never rewrite an accepted entry; supersede it with a new one.
 - **Consequences:**
   - Consistent icons that work offline, and the CSP stays `'self'`.
   - New icons are added by copying their SVG into `ICONS`.
+
+### D19 - Light footprint · 2026-10-19 · Accepted
+- **Context:** The beta used about 107 MB of memory all day, because closing the window only hid it, and the
+  installer was 112 MB. The owner asked for the smallest RAM and disk use possible. The app's own code is only
+  ~170 KB; the rest is the Electron runtime.
+- **Decision:**
+  - Closing the window destroys it (freeing the page); the tray builds a fresh one. The engine keeps running in main.
+  - `app.disableHardwareAcceleration()`: a few cards and lists draw fine in software, and the GPU process drops
+    from ~54 MB to ~14 MB.
+  - Ship English only (`electronLanguages`), `compression: maximum`, and an afterPack step in `scripts/dist.js`
+    that removes the DirectX shader compilers and Vulkan/SwiftShader DLLs, which software drawing never loads.
+  - Not taken: `--in-process-gpu` (saves only ~3 MB and makes a GPU fault take down the engine).
+- **Consequences:**
+  - Memory: window open 108 → 68 MB; closed to the tray 107 → 48 MB. Installer 112 → 93 MB; installed 369 → 285 MB.
+  - Reopening from the tray takes a moment longer while the page reloads.
+  - No WebGL/WebGPU in the UI (Rules.md 15a). Going much smaller would mean leaving Electron (e.g. Tauri on WebView2).

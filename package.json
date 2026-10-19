@@ -1,7 +1,7 @@
 {
   "name": "sortdeck",
   "productName": "SortDeck",
-  "version": "0.1.0-beta.9",
+  "version": "0.1.0-beta.10",
   "description": "SortDeck keeps any folder organized automatically with rules you build",
   "main": "src/main/main.js",
   "private": true,
@@ -20,6 +20,11 @@
       "package.json"
     ],
     "asar": true,
+    "compression": "maximum",
+    "electronLanguages": [
+      "en-US"
+    ],
+    "afterPack": "scripts/dist.js",
     "electronFuses": {
       "runAsNode": false,
       "enableNodeOptionsEnvironmentVariable": false,

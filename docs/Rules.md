@@ -28,6 +28,8 @@ Rules for anyone changing SortDeck - people and AI agents alike. Break one only 
     - Short comments that say *why*.
     - Mark deliberate shortcuts with `// ponytail:`.
 15. Every `setTimeout` / `setInterval` in the engine is `.unref()`'d and cleared in `stop()`.
+15a. Stay light: the app draws in software and ships without GPU/WebGPU/Vulkan DLLs (D19). No WebGL, WebGPU or
+    heavy canvas work, and nothing that keeps a window alive in the background.
 
 ## Tests
 16. Run `npm test` after every code change. It must pass before a commit.
@@ -45,6 +47,9 @@ Rules for anyone changing SortDeck - people and AI agents alike. Break one only 
 - VS Code's terminal sets `ELECTRON_RUN_AS_NODE=1`. Unset it before `npm start` / `npm run dist`.
 - Use forward slashes in paths passed through test harnesses. Some strip backslashes.
 - `appId` in `package.json` must equal the packaged AppUserModelId in `main.js`.
+- Running `dist/win-unpacked/SortDeck.exe` writes a real start-with-Windows entry (`HKCU\...\Run\com.sortdeck.app`),
+  and a notification from a dev or unpacked run can create a Start-menu shortcut (`SortDeck.lnk` / `Electron.lnk`).
+  Remove them after testing if SortDeck isn't installed.
 
 ## Git and releases
 18. Branch `master`, remote `https://github.com/Sammed-NJ/SortDeck.git`.
