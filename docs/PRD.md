@@ -58,7 +58,9 @@ A desktop app you **download, double-click and use**. Point it at any folder, de
 - R20a Troubleshoot finds and repairs broken settings, log, shortcut and start-with-Windows; installs are tamper-checked.
 
 ### 4.6 Feedback
-- R21 Overview: on/paused state, folder status, count organized today, recent activity (click to show in Explorer).
+- R21 Overview: what SortDeck is really doing (organizing / only when you click / paused / all off / no folders), folder
+  status, count organized today, recent activity (click to show in Explorer).
+- R21a Every run shows progress, and results appear item by item. Troubleshoot results fold away when all checks pass.
 - R22 Notifications are grouped and never sent one per file.
 
 ### 4.7 Onboarding, look and lifecycle

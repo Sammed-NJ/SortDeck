@@ -32,7 +32,8 @@ Unset `ELECTRON_RUN_AS_NODE` first. VS Code's terminal sets it, and Electron the
 | New per-folder option | `config.js` (`newFolder`, `normalizeConfig`, `toForm`, `buildConfig`) → `renderer/folders.js` |
 | New global setting | `config.js` settings → `index.html` Settings card → `app.js` `bindSetting` |
 | New main-process capability | `main.js` `ipcMain.handle` → `preload.js` → renderer |
-| Look and feel | `renderer/styles.css` tokens on `:root`; accents in `theme.css` |
+| Look and feel | `renderer/styles.css` tokens on `:root`; accents in `theme.css`; spinners, progress and row reveal in `status.css` |
+| Status wording | `STATES` in `renderer/app.js` (sidebar icon, text, Overview title) |
 | New icon | Copy its SVG from the `heroicons` package into `renderer/icons.js` (never a CDN) |
 | New tour step | `TOUR` in `renderer/tutorial.js`; give the target a `data-tour` attribute |
 | Release | Bump `package.json`, CHANGELOG, README badge → tag `vX.Y.Z[-beta.N]` → push (CI builds and publishes) |

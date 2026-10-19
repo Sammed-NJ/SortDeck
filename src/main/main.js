@@ -109,7 +109,8 @@ function createWindow() {
 function updateTray() {
   if (!tray) return;
   const paused = cfg.settings.paused;
-  tray.setToolTip(`${APP_NAME} - ${paused ? 'paused' : `watching ${cfg.folders.filter((f) => f.enabled).length} folder(s)`}`);
+  const auto = cfg.folders.filter((f) => f.enabled && f.trigger !== 'manual').length;
+  tray.setToolTip(`${APP_NAME} - ${paused ? 'paused' : auto ? `organizing ${auto} folder(s)` : cfg.folders.some((f) => f.enabled) ? 'organizes when you click Organize now' : 'nothing to organize yet'}`);
   tray.setContextMenu(Menu.buildFromTemplate([
     { label: `Open ${APP_NAME}`, click: showWindow },
     { type: 'separator' },

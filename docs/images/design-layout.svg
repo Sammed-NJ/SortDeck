@@ -35,7 +35,8 @@
     <text x="70" y="147" fill="#9aa1ab">Folders &amp; rules</text>
     <text x="70" y="183" fill="#9aa1ab">Settings</text>
     <text x="70" y="219" fill="#9aa1ab">Send feedback</text>
-    <circle cx="62" cy="478" r="4" fill="#34d399"/>
+    <circle cx="62" cy="478" r="6" fill="none" stroke="#34d399" stroke-width="1.5"/>
+    <path d="M60.2 475.2 v5.6 l4.6 -2.8 z" fill="#34d399"/>
     <text x="74" y="482" font-size="12" fill="#9aa1ab">Organizing</text>
   </g>
 

@@ -163,7 +163,7 @@ function renderFolderDetail() {
       h('div', {}, h('h2', {}, 'Sort by file type'), h('p', { class: 'muted small' }, 'For items no rule moved, recycled or kept. Unknown types go to Other, loose folders to Folders.')),
       h('label', { class: 'switch', 'data-tour': 'sortbytype' }, h('input', { type: 'checkbox', checked: f.sortByType, onchange: (e) => { f.sortByType = e.target.checked; renderFolderDetail(); markDirty(); } }), h('span'))),
     f.sortByType ? h('div', { class: 'cat-editor' }, ...catRows(f),
-      h('button', { class: 'link', onclick: () => { f.categories.push({ name: '', exts: [] }); renderFolderDetail(); markDirty(); const n = document.querySelectorAll('.cat-name'); n[n.length - 1]?.focus(); } }, '+ Add file type group')) : null,
+      h('button', { class: 'link', onclick: () => { f.categories.push({ name: '', exts: [] }); renderFolderDetail(); markDirty(); const n = document.querySelectorAll('.cat-name'); n[n.length - 1]?.focus(); } }, '+ Add file type group')) : '', // '' not null: replaceChildren would print "null"
 
     h('div', { class: 'section-head' }, h('div', {}, h('h2', {}, 'Folder options'))),
     h('div', { class: 'card settings' },

@@ -1,0 +1,49 @@
+/* Live feedback: sidebar status, troubleshoot results, busy spinners and the organize-now progress. */
+
+/* sidebar status icon - color follows body[data-state] */
+.sidebar-foot .ico, .sidebar-foot .ico svg { width: 16px; height: 16px; }
+body[data-state="running"] .sidebar-foot .ico { color: var(--ok); }
+body[data-state="stopped"] .sidebar-foot .ico { color: var(--bad); }
+body[data-state="manual"] .sidebar-foot .ico { color: var(--accent); }
+
+/* icons inside buttons; .spin turns while something runs */
+.btn .ico, .btn .ico svg { width: 15px; height: 15px; }
+.spin svg { animation: spin .9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* troubleshoot: results slide open for a check and fold away again when everything is fine */
+.collapse { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .35s ease, opacity .25s ease; }
+.collapse.open { grid-template-rows: 1fr; opacity: 1; }
+.collapse > * { overflow: hidden; min-height: 0; }
+.setting.stack > .collapse:not(.open) { margin-top: -10px; } /* folded: give back the stack's 10px gap */
+.checks { display: flex; flex-direction: column; gap: 6px; }
+.check-row { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 8px; background: var(--ok-soft); }
+.check-row.bad { background: var(--warn-soft); }
+.check-mark, .check-mark svg { width: 20px; height: 20px; flex: none; color: var(--ok); }
+.check-row.bad .check-mark { color: var(--warn); }
+.check-row .fname { font-weight: 500; overflow-wrap: anywhere; }
+.check-row .fsub { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.check-summary { display: flex; align-items: center; gap: 6px; font-weight: 500; color: var(--ok); }
+.check-summary.bad { color: var(--warn); }
+.check-summary .ico, .check-summary .ico svg { width: 16px; height: 16px; }
+
+/* rows appear one by one: each row sets --i (its position) */
+.reveal { animation: row-in .3s ease both; animation-delay: calc(var(--i) * var(--step, 120ms)); }
+.reveal .ico svg, .reveal .check-mark svg { animation: pop .35s ease both; animation-delay: calc(var(--i) * var(--step, 120ms) + .12s); }
+@keyframes row-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes pop { from { opacity: 0; transform: scale(.3); } }
+
+/* organize now: a moving bar while it works, then results tick in */
+.working { display: flex; flex-direction: column; gap: 10px; padding: 6px 0; }
+.bar { height: 4px; border-radius: 4px; background: var(--accent-soft); overflow: hidden; }
+.bar span { display: block; width: 35%; height: 100%; border-radius: 4px; background: var(--accent); animation: slide 1.1s ease-in-out infinite; }
+@keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(290%); } }
+.result.reveal { --step: 45ms; }
+.result .fname .ico { margin-right: 6px; vertical-align: -2px; color: var(--ok); }
+.result .fname .ico, .result .fname .ico svg { width: 14px; height: 14px; }
+.result.bad .fname .ico { color: var(--bad); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal svg, .spin svg, .bar span { animation: none !important; }
+  .collapse { transition: none; }
+}

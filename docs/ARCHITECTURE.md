@@ -20,7 +20,7 @@ the **main** process, which owns the window, the tray and the file-system engine
 | `src/renderer/rules.js` | Rule list, rule editor, Organize now / preview dialog | - |
 | `src/renderer/tutorial.js` | Guided tour (spotlight + callouts) and starter rules for Downloads | - |
 | `src/renderer/icons.js` | Heroicons SVGs, stored locally | - |
-| `src/renderer/styles.css` · `theme.css` · `tour.css` | Base styles and tokens · accent colors and pickers · tour + title-bar button | - |
+| `src/renderer/styles.css` · `theme.css` · `tour.css` · `status.css` | Base styles and tokens · accent colors and pickers · tour + title-bar button · status icon, troubleshoot fold, spinners and progress | - |
 | `scripts/dist.js` | `npm run dist`: names the installer `SortDeck-Setup-beta.N.exe` / `-vX.Y.Z.exe`; afterPack drops unused runtime DLLs | - |
 | `.github/workflows/release.yml` | Tag push → build on Windows → rolling "SortDeck Beta" release or official release | - |
 | `tests/*.test.js` | Plain-node asserts: config, engine (real temp folders), doctor, update | - |

@@ -5,6 +5,22 @@ Format follows [Keep a Changelog](https://keepachangelog.com); versions follow [
 
 ## [Unreleased]
 
+## [0.1.0-beta.11] - 2026-10-19
+
+### Changed
+- **The status says what's really happening.** The sidebar shows an icon and *Organizing*, *Only when you click*,
+  *Paused*, *All folders off* or *No folders yet*, and the Overview title matches. Folders set to "Only when I click"
+  no longer count as organizing, Pause is hidden when nothing runs by itself, and **Organize now** on the Overview
+  opens the folder's Organize now dialog in that case.
+- **Organize now shows its work.** A moving bar runs while it works, then each item ticks in with a check (or a
+  warning icon if it failed). Overview's Organize now, Run check and Repair show a spinner.
+- **Troubleshoot stays folded.** Only a one-line summary shows. **Run check** opens the list, ticks off each check
+  and folds it closed again when everything passed; problems keep it open with Repair.
+- The Overview's first stat is now *Folders on*, split into automatic, when-you-click and off.
+
+### Fixed
+- The word "null" appeared under *Sort by file type* when it was turned off.
+
 ## [0.1.0-beta.10] - 2026-10-19
 
 ### Changed

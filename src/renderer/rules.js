@@ -105,7 +105,8 @@ function shortPath(p) {
   p = p && p.replace(/\//g, '\\');
   return p && base && p.toLowerCase().startsWith(base + '\\') ? p.slice(base.length + 1) : p;
 }
-function resultList(res, preview) {
+// after a real run the rows tick in one by one (status.css .reveal), each with a done/failed icon
+function resultList(res, preview, animate = false) {
   if (!res.ok) return h('div', { class: 'dlg-errors' }, res.errors.join('  ·  '));
   const rows = res.report;
   if (!rows.length) return h('p', { class: 'muted result-head' }, preview ? 'Nothing matches right now.' : 'Nothing matched - no changes made.');
@@ -115,8 +116,8 @@ function resultList(res, preview) {
     h('p', { class: 'result-head' }, preview
       ? `${plural(rows.length, 'action')} would run:`
       : `${plural(rows.length - failed, 'action')} done${failed ? `, ${failed} failed (file in use?)` : ''}.`),
-    h('div', { class: 'result-rows' }, ...rows.slice(0, 300).map((r) => h('div', { class: 'result' + (r.ok ? '' : ' bad') },
-      h('span', { class: 'fname', title: r.item }, r.item),
+    h('div', { class: 'result-rows' }, ...rows.slice(0, 300).map((r, i) => h('div', { class: 'result' + (r.ok ? '' : ' bad') + (animate ? ' reveal' : ''), style: `--i:${Math.min(i, 40)}` },
+      h('span', { class: 'fname', title: r.item }, preview ? null : icon(r.ok ? 'check-circle' : 'exclamation-triangle'), r.item),
       h('span', { class: 'muted rname' }, r.rule),
       h('span', { class: 'ract' }, label(r))))));
 }
@@ -231,16 +232,24 @@ function openRunDialog(only) {
   const picks = folder.rules.map((r, i) => (only ? only.includes(i) : r.enabled));
   fillFolderOptions();
   // a single rule's Run button runs just that rule; "Organize now" also sorts the rest by type
-  const state = { own: true, scope: '', sortRest: !only && folder.sortByType, result: null };
+  const state = { own: true, scope: '', sortRest: !only && folder.sortByType, result: null, busy: null };
   const d = $('#runDialog');
 
-  const go = async (preview, btn) => {
+  // a moving bar for at least a moment, then the results tick in
+  const go = async (preview) => {
     const rules = folder.rules.filter((_, i) => picks[i]);
-    btn.disabled = true; btn.textContent = preview ? 'Checking...' : 'Organizing...';
-    state.result = resultList(await window.api.runRules(folder, rules, state.own ? null : state.scope, preview, state.own && state.sortRest), preview);
+    state.busy = preview ? 'preview' : 'run';
+    state.result = h('div', { class: 'working' }, h('div', { class: 'bar' }, h('span')),
+      h('p', { class: 'muted small' }, preview ? 'Looking for matches...' : `Organizing ${baseName(folder.path)}...`));
     draw();
+    try {
+      const [res] = await Promise.all([window.api.runRules(folder, rules, state.own ? null : state.scope, preview, state.own && state.sortRest), wait(preview ? 400 : 900)]);
+      state.result = resultList(res, preview, !preview);
+    } finally { state.busy = null; draw(); }
     if (!preview) { lastSig = ''; refresh(); }
   };
+  const goBtn = (kind, label, busyText, cls) => h('button', { type: 'button', class: cls, disabled: state.busy != null, onclick: () => go(kind === 'preview') },
+    state.busy === kind ? [icon('arrow-path', 'ico spin'), busyText] : label);
 
   function draw() {
     d.replaceChildren(h('div', { class: 'dlg' },
@@ -262,9 +271,9 @@ function openRunDialog(only) {
         state.result ? h('div', { class: 'dlg-preview' }, state.result) : null),
       h('footer', {},
         h('span', { class: 'grow' }),
-        h('button', { type: 'button', class: 'btn', onclick: (e) => go(true, e.currentTarget) }, 'Preview'),
+        goBtn('preview', 'Preview', 'Checking...', 'btn'),
         h('button', { type: 'button', class: 'btn', onclick: () => d.close() }, 'Close'),
-        h('button', { type: 'button', class: 'btn primary', onclick: (e) => go(false, e.currentTarget) }, only ? 'Run now' : 'Organize now'))));
+        goBtn('run', only ? 'Run now' : 'Organize now', 'Organizing...', 'btn primary'))));
   }
   draw();
   d.showModal();

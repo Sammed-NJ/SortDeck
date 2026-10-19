@@ -23,6 +23,9 @@ function colorFor(name) {
   return PALETTE[n % PALETTE.length];
 }
 const baseName = (p) => String(p).replace(/[\\/]+$/, '').split(/[\\/]/).pop() || p;
+// a short minimum wait so quick jobs still show they ran instead of flashing past
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const busyLabel = (btn, text) => { btn.disabled = true; btn.replaceChildren(icon('arrow-path', 'ico spin'), text); };
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 function ago(ms) {
   if (!ms) return 'never';
@@ -167,6 +170,14 @@ async function refresh() {
 }
 
 const ACTION_WORD = { move: 'Moved to', copy: 'Copied to', recycle: 'Recycle Bin', keep: 'Kept', notify: 'Notified' };
+// what SortDeck is really doing: [sidebar icon, sidebar text, overview title]
+const STATES = {
+  running: ['play-circle', 'Organizing', 'Organizing is on'],
+  manual: ['cursor-arrow-rays', 'Only when you click', 'Ready when you are'],
+  off: ['power', 'All folders off', 'All folders are off'],
+  stopped: ['pause-circle', 'Paused', 'Organizing is paused'],
+  missing: ['folder-plus', 'No folders yet', ''],
+};
 
 function renderOverview() {
   if (!form) return;
@@ -176,20 +187,30 @@ function renderOverview() {
   if (!hasFolders) { renderSuggestions(); }
   if (!status) return;
 
-  const watching = form.folders.filter((f) => f.enabled).length;
-  const state = status.paused ? 'stopped' : watching ? 'running' : 'missing';
+  // only Instant / On a schedule folders organize by themselves; "Only when I click" waits for the user
+  const on = form.folders.filter((f) => f.enabled).length;
+  const auto = form.folders.filter((f) => f.enabled && f.trigger !== 'manual').length;
+  const state = status.paused ? 'stopped' : auto ? 'running' : on ? 'manual' : hasFolders ? 'off' : 'missing';
   document.body.dataset.state = state;
-  $('#navStatus').textContent = { running: 'Organizing', stopped: 'Paused', missing: 'No folders on' }[state];
+  const [ic, label, title] = STATES[state];
+  $('#navIcon').innerHTML = ICONS[ic]; // constant markup
+  $('#navStatus').textContent = label;
   if (!hasFolders) return;
 
-  $('#statusTitle').textContent = status.paused ? 'Organizing is paused' : 'Organizing is on';
-  $('#statusSub').textContent = status.paused ? 'New files stay where they land until you resume.'
-    : `Watching ${plural(watching, 'folder')} - new files are sorted as soon as they arrive.`;
+  $('#statusTitle').textContent = title;
+  $('#statusSub').textContent = {
+    running: `${plural(auto, 'folder')} organized automatically${on > auto ? `, ${on - auto} only when you click` : ''}.`,
+    manual: 'Nothing moves until you click Organize now.',
+    off: 'Turn a folder on in Folders & rules to start organizing.',
+    stopped: 'New files stay where they land until you resume.',
+  }[state];
   $('#btnPause').textContent = status.paused ? 'Resume' : 'Pause';
-  $('#btnSweep').disabled = status.paused;
+  $('#btnPause').hidden = state === 'manual' || state === 'off'; // nothing automatic to pause
+  $('#btnSweep').disabled = status.paused || state === 'off';
 
-  $('#statFolders').textContent = watching;
-  $('#statFoldersSub').textContent = form.folders.length > watching ? `${form.folders.length - watching} turned off` : 'all on';
+  $('#statFolders').textContent = on;
+  const off = form.folders.length - on;
+  $('#statFoldersSub').textContent = [auto && `${auto} automatic`, on - auto && `${on - auto} when you click`, off && `${off} off`].filter(Boolean).join(' · ');
   $('#statToday').textContent = status.today.toLocaleString();
   const last = status.activity[0];
   $('#statLast').textContent = last ? ago(last.time) : 'never';
@@ -232,9 +253,19 @@ $('#btnPause').addEventListener('click', async () => {
   markDirty();
   refresh();
 });
-$('#btnSweep').addEventListener('click', async () => {
-  const n = await window.api.sweep();
-  toast(n ? `Organized ${plural(n, 'item')}.` : 'Everything is already organized.');
+$('#btnSweep').addEventListener('click', async (e) => {
+  if (document.body.dataset.state === 'manual') { // nothing runs by itself: open a folder's Organize now dialog
+    selectFolder(form.folders.find((f) => f.enabled).id);
+    show('folders');
+    openRunDialog();
+    return;
+  }
+  const b = e.currentTarget;
+  busyLabel(b, 'Organizing...');
+  try {
+    const [n] = await Promise.all([window.api.sweep(), wait(800)]);
+    toast(n ? `Organized ${plural(n, 'item')}.` : 'Everything is already organized.');
+  } finally { b.textContent = 'Organize now'; b.disabled = false; }
   refresh();
 });
 
@@ -249,30 +280,47 @@ window.api.info().then((i) => {
 });
 
 // ---------- troubleshoot ----------
-function showChecks(results) {
+// results stay folded away unless the user runs a check or something is wrong;
+// a clean run opens, ticks each item off, then folds closed leaving a one-line summary
+let foldTimer;
+function showChecks(results, animate) {
   const bad = results.filter((r) => !r.ok);
-  $('#checkList').hidden = false;
-  $('#checkList').replaceChildren(...results.map((r) => h('div', { class: 'check' + (r.ok ? '' : ' bad') },
-    h('span', { class: 'check-mark' }, r.ok ? '✓' : '!'),
+  clearTimeout(foldTimer);
+  $('#checkList').replaceChildren(...results.map((r, i) => h('div', { class: 'check-row' + (r.ok ? '' : ' bad') + (animate ? ' reveal' : ''), style: `--i:${i}` },
+    icon(r.ok ? 'check-circle' : 'exclamation-triangle', 'check-mark'),
     h('div', { style: 'min-width:0' }, h('div', { class: 'fname' }, r.label), h('div', { class: 'fsub' }, r.detail)))));
+  const sum = $('#checkSummary');
+  sum.className = 'check-summary' + (bad.length ? ' bad' : '');
+  sum.replaceChildren(icon(bad.length ? 'exclamation-triangle' : 'check-circle'), bad.length ? `${plural(bad.length, 'problem')} found` : 'No problems found');
+  const clean = animate && !bad.length;
+  sum.hidden = clean; // a clean run shows the summary once the list has folded away
+  $('#checkWrap').classList.toggle('open', animate || bad.length > 0);
+  if (clean) foldTimer = setTimeout(() => { $('#checkWrap').classList.remove('open'); sum.hidden = false; }, 1200 + results.length * 120);
   $('#btnRepair').hidden = !bad.some((r) => r.fix);
   $('#problemBanner').hidden = !bad.length;
   $('#problemText').textContent = `SortDeck found ${plural(bad.length, 'problem')}.`;
   return bad;
 }
 async function runCheck(quiet) {
-  const bad = showChecks(await window.api.checkProblems());
-  if (!quiet) toast(bad.length ? `Found ${plural(bad.length, 'problem')}.` : 'No problems found.', bad.length > 0);
+  const b = $('#btnCheck');
+  if (quiet) { showChecks(await window.api.checkProblems(), false); return; }
+  busyLabel(b, 'Checking...');
+  try {
+    const [results] = await Promise.all([window.api.checkProblems(), wait(700)]);
+    showChecks(results, true);
+  } finally { b.textContent = 'Run check'; b.disabled = false; }
 }
 $('#btnCheck').addEventListener('click', () => runCheck(false));
 $('#btnRepair').addEventListener('click', async () => {
-  $('#btnRepair').disabled = true;
+  const b = $('#btnRepair');
+  busyLabel(b, 'Repairing...');
   try {
-    const bad = showChecks(await window.api.repairProblems());
+    const [results] = await Promise.all([window.api.repairProblems(), wait(700)]);
+    const bad = showChecks(results, true);
     toast(bad.length ? `Repaired what could be fixed. ${plural(bad.length, 'problem')} still need you.` : 'Everything is repaired.', bad.length > 0);
     if (!dirty) loadForm();
     refresh();
-  } finally { $('#btnRepair').disabled = false; }
+  } finally { b.textContent = 'Repair'; b.disabled = false; }
 });
 $('#btnProblems').addEventListener('click', () => show('settings'));
 
